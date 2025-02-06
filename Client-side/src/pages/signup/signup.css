@@ -1,0 +1,221 @@
+/* main container */
+.auth-container {
+  display: flex;
+  max-width: 1100px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* form box */
+.auth-box {
+  flex: 1;
+  padding: 20px 40px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  gap: 10px; 
+}
+
+/* controlled spacing */
+.auth-form h2 {
+  margin-bottom: 20px; 
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px; /* Space between logo and input fields */
+}
+
+/* logo */
+.logo img {
+  width: 400px;
+  height: auto;
+  margin-bottom: 10px;
+}
+/* signup form */
+.auth-form {
+  width: 100%;
+  max-width: 350px;
+}
+/* section heading Create account */
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* input field */
+.input-group {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+/* (username, email address */
+.input-group label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* input field */
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+/* password visibility toggle */
+.password-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+/* password input */
+.password-container input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding-right: 40px; 
+}
+/* show hide password button */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+}
+/* hover effect */
+.toggle-password:hover {
+  color: #21a63b;
+}
+/* styling for error */
+.input-error {
+  border: 1px solid red; 
+  background-color: #ffe6e6; 
+}
+/* styling for error message*/
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  text-align: left;
+}
+/* forgot password */
+.form-options {
+  width: 100%;
+  text-align: center; 
+  margin-bottom: 10px;
+}
+/* styling for hyperlink */
+.form-options a {
+  color: #21a63b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+/* underline the hyperlink */
+.form-options a:hover {
+  text-decoration: underline;
+}
+/* signup button */
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #21a63b;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+/* hover effect */
+.auth-btn:hover {
+  background-color: #18992d;
+}
+/* already have an account */
+.auth-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
+}
+/* login hyperlink */
+.auth-link a {
+  color: #21a63b;
+  text-decoration: none;
+}
+/* login */
+.auth-link a:hover {
+  text-decoration: underline;
+}
+/* image inside container */
+.auth-image {
+  flex: 1;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* right image */
+.auth-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.success-message {
+  background-color: #28a745;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+/* animation success message*/
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* responsive signup style */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-image {
+    height: 250px;
+  }
+}
+/* consistency of of margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* font consistancy */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}

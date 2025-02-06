@@ -1,0 +1,202 @@
+/* main container */
+.auth-container {
+  display: flex; 
+  max-width: 1100px; 
+  margin: 50px auto; 
+  background-color: #ffffff; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px; 
+  overflow: hidden; 
+}
+
+/* whole form adjustments */
+.auth-box {
+  flex: 1; 
+  padding: 40px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 20px; 
+}
+
+/* DDT logo layout */
+.logo img {
+  width: 400px; 
+  height: auto; 
+  margin-bottom: 10px; 
+}
+
+/* whole form styling */
+.auth-form {
+  width: 100%; 
+  max-width: 350px; 
+}
+
+/* heading "Welcome Back" to input container  */
+h2 {
+  font-size: 1.8rem; 
+  font-weight: bold; 
+  color: #333; 
+  margin-bottom: 15px; 
+  text-align: center; 
+}
+
+/* input container spacing */
+.input-group {
+  margin-bottom: 15px; 
+  width: 100%; 
+}
+
+/* email address and password styling label */
+.input-group label {
+  font-weight: bold; 
+}
+
+/* input field container */
+.input-group input {
+  width: 100%; 
+  padding: 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+}
+
+/*  password visible and hide icon */
+.password-container {
+  display: flex; 
+  align-items: center; 
+  position: relative; 
+}
+
+/* password input */
+.password-container input {
+  width: 100%; 
+  padding: 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  padding-right: 40px; 
+}
+
+/* password visible and hide icon */
+.toggle-password {
+  position: absolute; 
+  right: 10px; 
+  background: none; 
+  border: none; 
+  font-size: 1.2rem; 
+  cursor: pointer; 
+  color: #555; 
+}
+
+
+.toggle-password:hover {
+  color: #21a63b;  
+}
+
+/* Forgot password placement  */
+.form-options {
+  width: 100%; 
+  text-align: center; 
+  margin-bottom: 10px; 
+}
+
+/* Forgot Password hyperlink styling */
+.form-options a {
+  color: #21a63b; 
+  text-decoration: none; 
+  font-size: 0.9rem; 
+  font-weight: bold; 
+}
+
+/* forgot password? styling  */
+.form-options a:hover {
+  text-decoration: underline; 
+}
+
+/* button login */
+.auth-btn {
+  width: 100%; 
+  padding: 12px; 
+  background-color: #21a63b; 
+  border: none; 
+  border-radius: 5px; 
+  color: white; 
+  font-size: 1rem; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+/* Button hover login */
+.auth-btn:hover {
+  background-color: #18992d; 
+}
+
+/* Already have an account styling */
+.auth-link {
+  text-align: center; 
+  margin-top: 15px; 
+  font-size: 0.9rem; 
+  color: #555; 
+}
+
+/* "signup here" hyperlink styling */
+.auth-link a {
+  color: #21a63b; 
+  text-decoration: none; 
+}
+
+/* hover effect "signup here" hyperlink */
+.auth-link a:hover {
+  text-decoration: underline; 
+}
+
+/* image in container right*/
+.auth-image {
+  flex: 1; 
+  background-color: #f8f8f8; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+/* image in container right*/
+.auth-image img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 0; 
+}
+
+/* error message style */
+.input-error {
+  border: 1px solid red; 
+  background-color: #ffe6e6; 
+}
+
+/* error for invalid inputs */
+.error {
+  color: red; 
+  font-size: 0.85rem; 
+  margin-top: 5px; 
+  text-align: left; 
+}
+
+/*Success Message  */
+.success-message {
+  background-color: #28a745; 
+  color: white; 
+  padding: 12px; 
+  text-align: center; 
+  font-size: 1rem; 
+  font-weight: bold; 
+  border-radius: 5px; 
+  margin-bottom: 15px; 
+  animation: fadeIn 0.5s ease-in-out; 
+}
+
+/* fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
