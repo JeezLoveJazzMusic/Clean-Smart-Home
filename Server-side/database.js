@@ -190,6 +190,19 @@ async function getRoomDevices(house_id, room_id) {
     throw error;
   }
 }
+//by Hao Chen
+async function addDeviceToRoom(house_id, room_id, device_name, device_type, manufacturer, model){
+  try{
+    await turso.execute({
+      sql: "INSERT INTO devices (house_id, room_id, device_name, device_type, manufacturer, model) VALUES (?, ?, ?, ?, ?, ?)",
+      args: [house_id, room_id,device_name, device_type, manufacturer, model],
+    });
+    console.log("Device added to room successfully!");
+  } catch (error) {
+    console.error("Error adding device to room:", error.message);
+    throw error;
+  }
+}
 
 //exporting functions for routes
-module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList,checkUserExists,getHouseDevices };
+module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices, addDeviceToRoom };

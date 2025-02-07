@@ -1,5 +1,5 @@
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices } = require("./database.js"); 
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser} = require("./middleware.js");
 const express = require("express");
@@ -168,12 +168,26 @@ router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) =
   const house_id = req.params.house_id;
   const room_id = req.params.room_id;
   try {
-    const devices = await getHouseDevices(house_id);
-    res.status(200).send({message: "Routes: Devices successfully retrieved", devices});
+    const devices = await getRoomDevices(house_id, room_id);
+    const deviceIDList = devices.map(device => device.device_id);
+    res.status(200).send({message: "Routes: Devices successfully retrieved", deviceIDList});
   } 
   catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting devices" });
+  }
+});
+
+//add device to room (by Hao Chen) 
+router.post("/add_DeviceToRoom", async (req, res) => {
+  const { house_id, room_id, device_name, device_type, manufacturer, model } = req.body;
+  try {
+    await addDeviceToRoom(house_id, room_id,device_name, device_type, manufacturer, model);
+    res.status(200).send({message: "Routes: Device successfully added to room"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding device to room" });
   }
 });
 
