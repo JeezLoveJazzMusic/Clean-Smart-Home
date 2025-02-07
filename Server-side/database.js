@@ -37,6 +37,22 @@ async function getUserByEmail(email) {
   }
 }
 
+// Function to check if the user exists by email. 
+async function checkUserExists(email) {
+  try {
+    // Query the database to check if a user with the provided email exists.
+    const result = await turso.execute({
+      sql: "SELECT 1 FROM users WHERE email = ?",
+      args: [email],
+    });
+    // Return true if rows are found, otherwise false.
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error("Error checking if user exists:", error.message);
+    throw error;
+  }
+}
+
 // Function to verify if the password is correct.
 async function verifyPassword(email, password) { 
   try { 
@@ -136,18 +152,20 @@ async function removePermission(user_id, device_id) {
 
 async function getHouseList(user_id){
   try{
+    console.log("this is user id"+user_id);
     const result = await turso.execute({
       sql: "SELECT * FROM houses WHERE house_id IN (SELECT house_id FROM house_members WHERE user_id = ?)",
       args: [user_id],
     });
     return result.rows;
   } catch (error) {
-    console.error("Error getting house list:", error.message);
+    console.error("Error getting house list:" +user_id, error.message);
+    console.log("database:this is user id"+user_id);
     throw error;
   }
 }
 
-async function getHosueDevices(house_id){
+async function getHouseDevices(house_id){
   try{
     const result = await turso.execute({
       sql: "SELECT * FROM devices WHERE house_id = ?",
@@ -160,5 +178,18 @@ async function getHosueDevices(house_id){
   }
 }
 
+async function getRoomDevices(house_id, room_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT * FROM devices WHERE house_id = ? AND room_id = ?",
+      args: [house_id, room_id],
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting room devices:", error.message);
+    throw error;
+  }
+}
+
 //exporting functions for routes
-module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList };
+module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList,checkUserExists,getHouseDevices };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './login.css';
+import axios from "axios";
 
 // log in component
 function Login() {
@@ -20,7 +21,7 @@ function Login() {
   };
 
   // handle form submission
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     // check if empty
     let newErrors = {};
@@ -35,14 +36,31 @@ function Login() {
       setErrors(newErrors);
       return;
     }
-    // no error pop out succes message
-    setErrors({});
-    setSuccess(true);
 
-    // clear input fields
-    setEmail("");
-    setPassword("");
+    try {
+      const response = await axios.post('http://localhost:8080/login', {
+        email: email,
+        password: password,
+      });
+      console.log(response.data);
 
+      // no error pop out success message
+      setErrors({});
+      setSuccess(true);
+
+      // clear input after submission
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.error("Error during signup:", error);
+      if(error.status === 400){
+        setErrors({ email: "Email is required", password: "Password is required" });
+      }else if(error.status === 401){
+        setErrors({ email: "Invalid email or password", password: "Invalid email or password" });
+      }else{
+        alert("An error occurred during login");
+      }
+    }
     // succes message timer
     setTimeout(() => setSuccess(false), 10000);
   };

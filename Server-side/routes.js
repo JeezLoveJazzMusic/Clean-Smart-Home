@@ -1,11 +1,11 @@
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUSerToHouse, getUserList, removePermission, getHouseList } = require("./database.js"); 
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser} = require("./middleware.js");
 const express = require("express");
 const router = express.Router();
 
-//signup route by Hao Chen #
+//signup route by Hao Chen ##
 router.post("/signup", async (req, res) => {
     const { username, email, password } = req.body;
     try {
@@ -33,7 +33,7 @@ router.post("/signup", async (req, res) => {
 })
 
 
-// Login route ( by Hao Chen ) #
+// Login route ( by Hao Chen ) ##
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   
@@ -46,19 +46,21 @@ router.post("/login", async (req, res) => {
 
       // Check if user exists
       const user = await getUserByEmail(email);
+      console.log("routes: this is user:",JSON.stringify(user, null, 2));
       if (!user) {
-          return res.status(401).send({ message: "Routes: Invalid email or password" });
+          return res.status(401).send({ message: "Routes: Invalid email" });
       }
 
       // Verify password
       const isValidPassword = await verifyPassword(email, password);
       if (!isValidPassword) {
-          return res.status(401).send({ message: "Routes: Invalid email or password" });
+          return res.status(401).send({ message: "Routes: Invalid password" });
       }
 
       // Login successful
-      homeList = await getHouseList(user.id);
-      houseIDList = homeList.map(home => home.id);
+      homeList = await getHouseList(user.user_id);
+      console.log("routes: this is homeList:",JSON.stringify(homeList, null, 2));
+      houseIDList = homeList.map(home => home.home_id);
       res.status(200).send({ message: "Routes: Login successful", homeList});
 
   } catch (error) {
@@ -67,13 +69,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//check if email exists (by Hao Chen) #
+//check if email exists (by Hao Chen) ##
 router.post("/check_Email", async (req, res) => {
   const { email } = req.body;
   try {
     // Check if email doesn't exist
     const existBool = await checkUserExists(email);
-    if (!user) {
+    if (existBool == false) {
       return res.status(401).send({ message: "Routes: Email does not exist",existBool});
     }
     res.status(200).send({ message: "Routes: Email exists" });
@@ -85,7 +87,7 @@ router.post("/check_Email", async (req, res) => {
 });
   
 
-// Get user list (by Hao Chen ) #
+// Get user list (by Hao Chen ) ##
 router.get("/houses/:house_id/users", async (req, res) => {
   const house_id = req.params.house_id;
   try {
@@ -111,8 +113,8 @@ router.delete("/houses/:house_id/users/:user_id", async (req, res) => {
   }
 });
 
-//Add user to home (by Hao Chen)  #
-router.post("/add_User", async (req, res) => {
+//Add user to home (by Hao Chen)  ##
+router.post("/add_UserToHome", async (req, res) => {
   const { user_id, house_id, device_list } = req.body;
   
   try {
@@ -132,7 +134,7 @@ router.post("/add_User", async (req, res) => {
 });
 
 
-//Add permissions to user (by Hao Chen) #
+//Add permissions to user (by Hao Chen) ##
 //extra: this is adding single permissions. One request is sent per click
 router.post("/add_permission", async (req, res) => {
   const { user_id, device_id } = req.body;
@@ -146,9 +148,11 @@ router.post("/add_permission", async (req, res) => {
   }
 })
 
-//Remove permissions from user (by Hao Chen) #
-router.delete("/remove_permission/:user_id/: device_id", async (req, res) => {
+//Remove permissions from user (by Hao Chen) ##
+router.delete("/remove_permission/:user_id/:device_id", async (req, res) => {
   const { user_id, device_id } = req.params;
+  console.log("routes: this is user_id:",user_id);
+  console.log("routes: this is device_id:",device_id);
   try {
     await removePermission(user_id, device_id);
     res.status(200).send({message: "Routes: Permission successfully removed"});
@@ -159,11 +163,12 @@ router.delete("/remove_permission/:user_id/: device_id", async (req, res) => {
   }
 })
 
-//Get room devices (by Hao Chen) #
-router.get("/getRoomDevices/:house_id/:room_id", async (req, res) => {
+//Get room devices (by Hao Chen) #(dont have getRoomDevices function)
+router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) => {
   const house_id = req.params.house_id;
+  const room_id = req.params.room_id;
   try {
-    const devices = await getDevices(house_id);
+    const devices = await getHouseDevices(house_id);
     res.status(200).send({message: "Routes: Devices successfully retrieved", devices});
   } 
   catch (error) {
