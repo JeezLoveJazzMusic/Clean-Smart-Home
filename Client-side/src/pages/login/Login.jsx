@@ -31,6 +31,7 @@ function Login() {
     if (password && !validatePassword(password)) {
       newErrors.password = "Password must be at least 8 characters & contain a special character (!@#$%^&*_)";
     }
+    
     // check if there is error
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);

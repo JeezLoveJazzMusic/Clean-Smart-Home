@@ -1,5 +1,6 @@
+//REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom } = require("./database.js"); 
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser} = require("./middleware.js");
 const express = require("express");
@@ -87,7 +88,7 @@ router.post("/check_Email", async (req, res) => {
 });
   
 
-// Get user list (by Hao Chen ) ##
+// Get user list in a house(by Hao Chen ) ##
 router.get("/houses/:house_id/users", async (req, res) => {
   const house_id = req.params.house_id;
   try {
@@ -100,7 +101,7 @@ router.get("/houses/:house_id/users", async (req, res) => {
   }
 });
 
-//Remove user from home (by Hao Chen) #
+//Remove user from home (by Hao Chen) # (middleware function calling the loop works, but somehow the database function doesnt excecute the sql query properly) 
 router.delete("/houses/:house_id/users/:user_id", async (req, res) => {
   const { house_id, user_id } = req.params;
   try {
@@ -149,7 +150,7 @@ router.post("/add_permission", async (req, res) => {
 })
 
 //Remove permissions from user (by Hao Chen) ##
-router.delete("/remove_permission/:user_id/:device_id", async (req, res) => {
+router.delete("/remove_permission/user/:user_id/device/:device_id", async (req, res) => {
   const { user_id, device_id } = req.params;
   console.log("routes: this is user_id:",user_id);
   console.log("routes: this is device_id:",device_id);
@@ -163,7 +164,7 @@ router.delete("/remove_permission/:user_id/:device_id", async (req, res) => {
   }
 })
 
-//Get room devices (by Hao Chen) #(dont have getRoomDevices function)
+//Get room devices (by Hao Chen) ##
 router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) => {
   const house_id = req.params.house_id;
   const room_id = req.params.room_id;
@@ -178,7 +179,7 @@ router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) =
   }
 });
 
-//add device to room (by Hao Chen) 
+//add device to room (by Hao Chen) ##
 router.post("/add_DeviceToRoom", async (req, res) => {
   const { house_id, room_id, device_name, device_type, manufacturer, model } = req.body;
   try {
@@ -188,6 +189,59 @@ router.post("/add_DeviceToRoom", async (req, res) => {
   catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while adding device to room" });
+  }
+});
+
+//remove device from room (by Hao Chen) ##
+router.delete("/remove_device/houses/:house_id/room/:room_id/device/:device_id", async (req, res) => {
+  const { house_id, room_id, device_id } = req.params;
+  try {
+    await removeDeviceFromRoom(house_id, room_id, device_id);
+    res.status(200).send({message: "Routes: Device successfully removed from room"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing device from room" });
+  }
+});
+
+//view sensor data (by Hao Chen) ##
+router.get("/viewSensorData/device/:device_id", async (req, res) => {
+  const device_id = req.params.device_id;
+  try {
+    const sensorData = await getSensorData(device_id);
+    res.status(200).send({message: "Routes: Sensor data successfully retrieved", sensorData});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting sensor data" });
+  }
+  
+});
+
+//adding a room to a house (by Hao Chen) ##
+router.post("/addRoom", async (req, res) => {
+  const { house_id, room_name } = req.body;
+  try {
+    await addRoomToHouse(house_id, room_name);
+    res.status(200).send({message: "Routes: Room successfully added to house"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding room to house" });
+  }
+});
+
+//removing a room from a house (by Hao Chen) ##
+router.delete("/removeRoom/houses/:house_id/room/:room_id", async (req, res) => {
+  const { house_id, room_id } = req.params;
+  try {
+    await removeRoomFromHouse(house_id, room_id);
+    res.status(200).send({message: "Routes: Room successfully removed from house"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing room from house" });
   }
 });
 

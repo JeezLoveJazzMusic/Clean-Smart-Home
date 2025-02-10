@@ -136,12 +136,13 @@ async function removeUserFromHouse(user_id, house_id) {
 
 // Code added by: Ahmed Al-Ansi
 // Function to remove a user's permission to use a device/view its data
-async function removePermission(user_id, device_id) {
+async function removePermission(user_id,house_id, device_id) {
+  console.log("this is removing "+device_id);
   try {
     // Remove user's permission from the permissions table.
     await turso.execute({
-      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ?",
-      args: [user_id, device_id],
+      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ? AND device_id IN (SELECT device_id FROM devices WHERE house_id = ?)",
+      args: [user_id, device_id, house_id],
     });
     console.log("Permission removed successfully!");
   } catch (error) {
@@ -204,5 +205,88 @@ async function addDeviceToRoom(house_id, room_id, device_name, device_type, manu
   }
 }
 
+//BY Hao Chen
+async function getUserPermissions(user_id){
+  try{
+    const result = await turso.execute({
+      sql: "SELECT * FROM permissions WHERE user_id = ?",
+      args: [user_id],
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user permissions:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
+async function removeDeviceFromRoom(house_id, room_id, device_id) {
+  try {
+    // First, remove dependent rows from device_states (if any)
+    await turso.execute({
+      sql: "DELETE FROM device_states WHERE device_id = ?",
+      args: [device_id],
+    });
+
+    // Optionally, remove dependent rows from permissions (if any)
+    await turso.execute({
+      sql: "DELETE FROM permissions WHERE device_id = ?",
+      args: [device_id],
+    });
+
+    // Now remove the device from the devices table
+    await turso.execute({
+      sql: "DELETE FROM devices WHERE house_id = ? AND room_id = ? AND device_id = ?",
+      args: [house_id, room_id, device_id],
+    });
+    console.log("Device removed from room successfully!");
+  } catch (error) {
+    console.error("Error removing device from room:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
+async function getSensorData(device_id){
+  try{
+    const result = await turso.execute({
+      sql: "SELECT * FROM device_states WHERE device_id = ?",
+      args: [device_id],
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting sensor data:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen ##
+async function addRoomToHouse(house_id, room_name){
+  try{
+    await turso.execute({
+      sql: "INSERT INTO rooms (house_id, room_name) VALUES (?, ?)",
+      args: [house_id, room_name],
+    });
+    console.log("Room added to house successfully!");
+  } catch (error) {
+    console.error("Error adding room to house:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
+async function removeRoomFromHouse(house_id, room_id){
+  try{
+    await turso.execute({
+      sql: "DELETE FROM rooms WHERE house_id = ? AND room_id = ?",
+      args: [house_id, room_id],
+    });
+    console.log("Room removed from house successfully!");
+  } catch (error) {
+    console.error("Error removing room from house:", error.message);
+    throw error;
+  }
+}
+
 //exporting functions for routes
-module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices, addDeviceToRoom };
+module.exports = { createUser, getUserByEmail, verifyPassword, getUserList, addUserToHouse, addPermission, removeUserFromHouse, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices, addDeviceToRoom, getUserPermissions, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse };
