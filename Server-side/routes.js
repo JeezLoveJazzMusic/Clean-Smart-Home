@@ -1,6 +1,7 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse } = require("./database.js"); 
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,
+   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser} = require("./middleware.js");
 const express = require("express");
@@ -101,8 +102,8 @@ router.get("/houses/:house_id/users", async (req, res) => {
   }
 });
 
-//Remove user from home (by Hao Chen) # (middleware function calling the loop works, but somehow the database function doesnt excecute the sql query properly) 
-router.delete("/houses/:house_id/users/:user_id", async (req, res) => {
+//Remove user from home (by Hao Chen) ##
+router.delete("/removeUserFromHome/houses/:house_id/users/:user_id", async (req, res) => {
   const { house_id, user_id } = req.params;
   try {
     await removeUser(user_id, house_id);
@@ -245,6 +246,186 @@ router.delete("/removeRoom/houses/:house_id/room/:room_id", async (req, res) => 
   }
 });
 
+//get room list (by Hao Chen) ##
+router.get("/getRoomList/houses/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const rooms = await getRoomList(house_id);
+    const roomIDList = rooms.map(room => room.room_id);
+    res.status(200).send({message: "Routes: Rooms successfully retrieved", roomIDList});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting rooms" });
+  }
+});
+
+//get house list (by Hao Chen) ##
+router.get("/getHouseList/user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+  try {
+    const homes = await getHouseList(user_id);
+    const homeIDList = homes.map(home => home.house_id);
+    console.log("routes: this is homeIDList:",homeIDList);
+    res.status(200).send({message: "Routes: Homes successfully retrieved", homeIDList});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting homes" });
+  }
+});
+
+//add house to user (by Hao Chen) ##
+router.post("/addHouseToUser", async (req, res) => {
+  const { user_id, house_name, address } = req.body;
+  try {
+    await addHouseToUser(user_id, house_name, address);
+    res.status(200).send({message: "Routes: House successfully added to user"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding house to user" });
+  }
+});
+
+//remove house from user (by Hao Chen) 
+//this  removes owner from the house. Doing this will remove everything related to the house 
+router.delete("/removeHouse/user/:user_id/house/:house_id", async (req, res) => {
+  const { user_id, house_id } = req.params;
+  try {
+    await removeHouseFromUser(user_id, house_id);
+    res.status(200).send({message: "Routes: House successfully removed from user"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing house from user" });
+  }
+});
+
+//remove house and all related data (by Hao Chen) ##
+//this removes everything related to the house. It is a hard delete
+router.delete("/removeHouse/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    // Remove all permissions associated with this house.
+    await removeHousePermissions(house_id);
+
+    await removeHouseDeviceStates(house_id);
+
+    // Remove all devices in this house.
+    await removeHouseDevices(house_id);
+
+    // Remove all rooms in this house.
+    await removeHouseRooms(house_id);
+
+    // Remove all membership records of the house.
+    await removeHouseMembers(house_id);
+
+    // Optionally, if you still need to remove the owner's record from a mapping table, you could call removeHouseFromUser(user_id, house_id);
+    // Finally, remove the house record itself.
+    await removeHouse(house_id);
+
+    
+
+    res.status(200).send({ message: "Routes: House and all related data successfully removed" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing house data" });
+  }
+});
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//tester functions (by Xiang)
+
+
+// printAllUsers
+router.get("/printAllUsers", async (req, res) => {
+  try {
+    const result = await printAllUsers();
+    res.status(200).send({ message: "Routes: All users printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing users" });
+  }
+});
+
+// printAllHouses
+router.get("/printAllHouses", async (req, res) => {
+  try {
+    const result = await printAllHouses();
+    res.status(200).send({ message: "Routes: All houses printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing houses" });
+  }
+});
+
+// printAllRooms
+router.get("/printAllRooms", async (req, res) => {
+  try {
+    const result = await printAllRooms();
+    res.status(200).send({ message: "Routes: All rooms printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing rooms" });
+  }
+});
+
+// printAllDevices
+router.get("/printAllDevices", async (req, res) => {
+  try {
+    const result = await printAllDevices();
+    res.status(200).send({ message: "Routes: All devices printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing devices" });
+  }
+});
+
+// printAllPermissions
+router.get("/printAllPermissions", async (req, res) => {
+  try {
+    const result = await printAllPermissions();
+    res.status(200).send({ message: "Routes: All permissions printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing permissions" });
+  }
+});
+
+// printAllHouseMembers
+router.get("/printAllHouseMembers", async (req, res) => {
+  try {
+    const result = await printAllHouseMembers();
+    res.status(200).send({ message: "Routes: All house members printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing house members" });
+  }
+});
+
+// printAllDeviceStates
+router.get("/printAllDeviceStates", async (req, res) => {
+  try {
+    const result = await printAllDeviceStates();
+    res.status(200).send({ message: "Routes: All device states printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing device states" });
+  }
+});
 module.exports = router ;

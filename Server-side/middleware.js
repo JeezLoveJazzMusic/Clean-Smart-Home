@@ -17,14 +17,18 @@ async function addUser(user_id, house_id, device_list) {
 
 // Code added by: Ahmed Al-Ansi (device list not defined)
 // Function to remove a user from a home profile with proper permissions settings.
+//removes user from house-member table and removes all permissions for the user
 async function removeUser(user_id, house_id) {
     console.log("Removing user from home:", user_id);
     try {
         device_list = await getUserPermissions(user_id);
+        if (device_list.length === 0) {
+            console.log("No devices to remove permission for.");
+        }
         console.log("This is the device list:", device_list);
         for (let i = 0; i < device_list.length; i++) {
             console.log("Removing permission for device:", device_list[i]);
-            await removePermission(user_id,house_id, device_list[i]);
+            await removePermission(user_id,house_id, device_list[i].device_id);
         }
 
         await removeUserFromHouse(user_id, house_id);
