@@ -2,6 +2,12 @@ import "./App.css";
 import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
 import Signup from "./pages/signup/Signup.jsx";
 import Login from "./pages/login/Login.jsx";
+import Temperature from "./Components/Temperature/Temperature.jsx";
+import LightLevel from "./Components/LightLevel/LightLevel.jsx";
+import Humidity from "./Components/Humidity/Humidity.jsx";
+import EnergyUsage from "./Components/EnergyUsage/EnergyUsage.jsx";
+import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
+
 
 function App() {
   const route = createBrowserRouter([
@@ -17,6 +23,26 @@ function App() {
       path: "/login",
       element: <Login />, // Login page
     },
+    {
+      path: "/Temperature",
+      element: <Temperature />, // Temperature page
+    },
+    {
+      path: "/LightLevel",
+      element: <LightLevel />, // LightLevel page
+  },
+  {
+    path: "/Humidity",
+    element: <Humidity />, // Humidity page
+  },
+{
+  path: "/EnergyUsage",
+  element: <EnergyUsage />, // EnergyUsage page
+},
+{
+  path: "/AddnDltHome",
+  element: <AddnDltHome />, // AddnDltHome page
+} 
   ]);
 
   return (
