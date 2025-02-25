@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    text-align: center;
+  }
+  
+  /* Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Modal Box */
+  .modal-box {
+    background: #fefef5;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  
+  
+  /* Profile Picture Upload */
+  .profile-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .clickable-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #c5e1a5;
+    cursor: pointer;
+  }
+  
+  .upload-text {
+    font-size: 0.9rem;
+    color: #007bff;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  
+  /* Input Groups */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .input-group label {
+    font-weight: normal;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  .input-group input,
+  .input-group select {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+  
+  /* Error Message */
+  .error-message {
+    color: #d9534f;
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin-top: 3px;
+    text-align: left;
+    width: 90%;
+  }
+  
+  /* Buttons */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .auth-btn {
+    padding: 10px 20px;
+    background-color: #21a63b;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .auth-btn:hover {
+    background-color: #18992d;
+  }
+  
+  .backk-btn {
+    padding: 10px 20px;
+    background-color: gray;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .backk-btn:hover {
+    background-color: darkgray;
+  }
+  
+  .input-error {
+    background-color: #ffe6e6; 
+  }
+  
