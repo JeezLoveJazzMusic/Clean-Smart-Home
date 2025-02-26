@@ -7,7 +7,8 @@ import LightLevel from "./Components/LightLevel/LightLevel.jsx";
 import Humidity from "./Components/Humidity/Humidity.jsx";
 import EnergyUsage from "./Components/EnergyUsage/EnergyUsage.jsx";
 import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
-
+import Addndeleteuser from "../components/addndeleteuser/Addndeleteuser.jsx";
+import Userlist from "../components/userlist/Userlist.jsx";
 
 function App() {
   const route = createBrowserRouter([
@@ -30,19 +31,26 @@ function App() {
     {
       path: "/LightLevel",
       element: <LightLevel />, // LightLevel page
-  },
-  {
-    path: "/Humidity",
-    element: <Humidity />, // Humidity page
-  },
-{
-  path: "/EnergyUsage",
-  element: <EnergyUsage />, // EnergyUsage page
-},
-{
-  path: "/AddnDltHome",
-  element: <AddnDltHome />, // AddnDltHome page
-} 
+    },
+    {
+      path: "/Humidity",
+      element: <Humidity />, // Humidity page
+    },
+    {
+      path: "/EnergyUsage",
+      element: <EnergyUsage />, // EnergyUsage page
+    },
+    {
+      path: "/AddnDltHome",
+      element: <AddnDltHome />, // AddnDltHome page
+    } 
+      path: "/addndeleteuser",
+      element: <Addndeleteuser />, 
+    },
+    {
+      path: "/userlist", 
+      element: <Userlist />, 
+    },
   ]);
 
   return (
