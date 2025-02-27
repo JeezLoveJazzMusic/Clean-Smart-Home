@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./components/addndeleteuser/addndeeleteuser.css";  
+import "../addndeleteuser/addndeleteuser.css";
 
-function AddUserModal({ onAddUser, onClose }) {
+function Addndeleteuser({ onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [permission, setPermission] = useState("");
@@ -34,7 +34,7 @@ function AddUserModal({ onAddUser, onClose }) {
       name,
       userType,
       permission,
-      profilePic: profilePic || "/images/Defaultimage.jpg", 
+      profilePic: profilePic || "/images/Defaultimage.jpg",
     });
     onClose();
   };
@@ -47,10 +47,16 @@ function AddUserModal({ onAddUser, onClose }) {
         {/* Profile Picture Upload */}
         <div className="profile-upload">
           <label>Profile Picture:</label>
-          <input type="file" accept="image/*" onChange={handleImageUpload} hidden id="fileUpload" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            hidden
+            id="fileUpload"
+          />
           <label htmlFor="fileUpload">
             <img
-              src={profilePic || "/images/Defaultimage.jpg"} 
+              src={profilePic || "/images/Defaultimage.jpg"}
               alt="Profile"
               className="clickable-avatar"
             />
@@ -84,7 +90,9 @@ function AddUserModal({ onAddUser, onClose }) {
             <option value="Admin">Admin</option>
             <option value="Viewer">Viewer</option>
           </select>
-          {errors.userType && <p className="error-message">{errors.userType}</p>}
+          {errors.userType && (
+            <p className="error-message">{errors.userType}</p>
+          )}
         </div>
 
         {/* Permission Field */}
@@ -99,13 +107,19 @@ function AddUserModal({ onAddUser, onClose }) {
             <option value="Full Access">Full Access</option>
             <option value="Restricted Access">Restricted Access</option>
           </select>
-          {errors.permission && <p className="error-message">{errors.permission}</p>}
+          {errors.permission && (
+            <p className="error-message">{errors.permission}</p>
+          )}
         </div>
 
         {/* Buttons */}
         <div className="button-group">
-          <button className="auth-btn" onClick={handleConfirm}>Confirm</button>
-          <button className="backk-btn" onClick={onClose}>Back</button>
+          <button className="auth-btn" onClick={handleConfirm}>
+            Confirm
+          </button>
+          <button className="backk-btn" onClick={onClose}>
+            Back
+          </button>
         </div>
       </div>
     </div>
