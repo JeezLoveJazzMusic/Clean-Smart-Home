@@ -13,6 +13,8 @@ import EnergyUsage from "./Components/EnergyUsage/EnergyUsage.jsx";
 import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
 import Addndeleteuser from "./Components/addndeleteuser/Addndeleteuser.jsx";
 import Userlist from "./Components/userlist/Userlist.jsx";
+import AddDevicePopup from "./Components/AddDevicePopup/AddDevicePopup.jsx";
+import RemoveDevicePopup from "./Components/RemoveDevicePopup/RemoveDevicePopup.jsx";
 
 function App() {
   const route = createBrowserRouter([
@@ -55,6 +57,14 @@ function App() {
     {
       path: "/userlist",
       element: <Userlist />,
+    },
+    {
+      path: "/AddDevicePopup",
+      element: <AddDevicePopup />,
+    },
+    {
+      path: "/RemoveDevicePopup",
+      element: <RemoveDevicePopup />,
     },
   ]);
 
