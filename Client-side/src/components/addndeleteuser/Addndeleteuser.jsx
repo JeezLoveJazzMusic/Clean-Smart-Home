@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./components/addndeleteuser/addndeeleteuser.css";  
+import "./components/addndeleteuser/addndeeleteuser;  
+
 
 function AddUserModal({ onAddUser, onClose }) {
   const [name, setName] = useState("");
