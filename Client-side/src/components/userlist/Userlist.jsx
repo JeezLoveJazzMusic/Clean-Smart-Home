@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import AddUserModal from "./AddUserModal"; 
-import  "./components/userlist/userlist.css";
-;
+import addndeleteuser from "../addndeleteuser/Addndeleteuser.jsx";
+import "../userlist/userlist.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -25,14 +24,14 @@ function UserList() {
       console.error("Invalid user data:", newUser);
       return;
     }
-    setUsers((prevUsers) => [...prevUsers, newUser]); 
+    setUsers((prevUsers) => [...prevUsers, newUser]);
     setShowModal(false);
   };
 
   // Toggle delete mode
   const toggleDeleteMode = () => {
     setDeleteMode(!deleteMode);
-    setSelectedUsers([]); 
+    setSelectedUsers([]);
   };
 
   // Select users to delete
@@ -53,13 +52,17 @@ function UserList() {
 
   return (
     <>
-      <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
-      <div className="header-container">
-  <h2 className="users-title">Users</h2>
-  <button className="menu-btn" onClick={toggleMenu}>⋯</button>
-</div>
-
-
+      <div
+        className={`user-list-container ${showMenu ? "show-delete" : ""} ${
+          deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""
+        }`}
+      >
+        <div className="header-container">
+          <h2 className="users-title">Users</h2>
+          <button className="menu-btn" onClick={toggleMenu}>
+            ⋯
+          </button>
+        </div>
         <div className="button-container">
           <button className="add-user-btn" onClick={() => setShowModal(true)}>
             Add Users
@@ -71,11 +74,13 @@ function UserList() {
             </button>
           )}
         </div>
-
         <div className="user-grid">
           {users.length > 0 ? (
             users.map((user, index) => (
-              <div key={index} className={`user-item ${deleteMode ? "delete-mode" : ""}`}>
+              <div
+                key={index}
+                className={`user-item ${deleteMode ? "delete-mode" : ""}`}
+              >
                 {deleteMode && (
                   <input
                     type="checkbox"
@@ -84,7 +89,11 @@ function UserList() {
                     onChange={() => handleSelectUser(user.name)}
                   />
                 )}
-                <img src={user.profilePic} alt={user.name} className="user-avatar" />
+                <img
+                  src={user.profilePic}
+                  alt={user.name}
+                  className="user-avatar"
+                />
                 <p>{user.name}</p>
               </div>
             ))
@@ -92,20 +101,21 @@ function UserList() {
             <p className="no-users">No users added yet.</p>
           )}
         </div>
-
-        //Confirm Delete button appears when at least one user is selected 
+        //Confirm Delete button appears when at least one user is selected
         {deleteMode && selectedUsers.length > 0 && (
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
             Confirm Delete
           </button>
         )}
-
         <button className="back-btn">Back</button>
       </div>
 
       {showModal && (
         <div className="modal-overlay">
-          <AddUserModal onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+          <addndeleteuser
+            onAddUser={handleAddUser}
+            onClose={() => setShowModal(false)}
+          />
         </div>
       )}
     </>

@@ -1,0 +1,120 @@
+.card1{
+  width: 1200px;
+  height: 655px;
+  margin: 80px auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 20px;
+  grid-template-areas:
+    "header header"
+    "Temperature info"
+    "chart info";
+}
+
+
+.card-header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.card-header h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333333;
+  margin: 0;
+}
+
+.share-button {
+  padding: 12px 25px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.share-button:hover {
+  background-color: #60A5FA;
+  color: #ffffff;
+}
+.Temperature-info {
+  grid-area: Temperature;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 30px;
+}
+
+.Temperature-info h3 {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.Temperature-info p {
+  font-size: 1.4rem; /* Improved readability */
+  line-height: 1.8; /* Better spacing between lines */
+  margin: 8px 0; /* Consistent spacing */
+  word-spacing: 5px;
+}
+
+.chart-container {
+  grid-area: chart;
+  height: 300px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 60px;
+}
+
+.info-section {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.tips, .energy-alert, .recommendations {
+  background-color: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.tips ul {
+  list-style-type: disc;
+  padding-left: 8px;
+  margin: 10px 0;
+}
+
+.tips ul li {
+  margin-bottom: 0.9px;
+  line-height: 1.5;
+}
+
+.energy-alert {
+  border-left: 8px solid #ff9800;
+  border-right: 8px solid #ff9800;
+  
+}
+
+.recommendations {
+  border-left: 8px solid #2196f3;
+  border-right: 8px solid #2196f3;
+}
+
+.tips {
+  border-left: 8px solid #e54c4c;
+  border-right: 8px solid #e54c4c;
+}

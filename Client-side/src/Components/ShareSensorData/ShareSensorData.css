@@ -1,0 +1,86 @@
+.Modal {
+    width: 1400px; 
+    height: 650px;
+    margin: 80px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+  
+  .Modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%; /* Adjusted width to fill the modal */
+    height: 100%; /* Adjusted height to fill the modal */
+    text-align: center;
+    position: relative;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 3px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .sensor-options {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to fit within the box */
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .sensor-btn {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 45%; /* Adjust width to fit two buttons per row */
+    margin-bottom: 10px; /* Space between rows */
+  }
+  
+  .sensor-btn.selected {
+    background-color: #d0e8ff;
+  }
+  
+  .sensor-btn.selected::after {
+    content: '✔';
+    color: green;
+    font-size: 24px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  
+  .sensor-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: center; /* Center the confirm button */
+  }
+  
+  .action-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
