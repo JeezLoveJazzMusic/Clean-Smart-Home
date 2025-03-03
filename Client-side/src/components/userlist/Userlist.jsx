@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import addndeleteuser from "../addndeleteuser/Addndeleteuser.jsx";
+import addndeleteuser from "../addndeleteuser/Addndeleteuser";
 import "../userlist/userlist.css";
 
 function UserList() {
@@ -101,7 +101,6 @@ function UserList() {
             <p className="no-users">No users added yet.</p>
           )}
         </div>
-        //Confirm Delete button appears when at least one user is selected
         {deleteMode && selectedUsers.length > 0 && (
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
             Confirm Delete
