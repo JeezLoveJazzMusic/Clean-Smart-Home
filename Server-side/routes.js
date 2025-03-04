@@ -1,9 +1,9 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,
-   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates } = require("./database.js"); 
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData,
+   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth } = require("./database.js"); 
 //Middleware imports
-const {addUser, removeUser} = require("./middleware.js");
+const {addUser, removeUser, sensorMap} = require("./middleware.js");
 const express = require("express");
 const router = express.Router();
 
@@ -60,14 +60,43 @@ router.post("/login", async (req, res) => {
       }
 
       // Login successful
+      console.log("routes: this is user.user_id:",user.user_id);
       homeList = await getHouseList(user.user_id);
-      console.log("routes: this is homeList:",JSON.stringify(homeList, null, 2));
-      houseIDList = homeList.map(home => home.home_id);
-      res.status(200).send({ message: "Routes: Login successful", homeList});
+      console.log("Raw homeList:", homeList);
+      houseIDList = homeList.map(home => home.house_id);
+      console.log("houseIDList:", houseIDList);
+      res.status(200).send({ message: "Routes: Login successful",  userID: user.user_id, houseList: houseIDList });
 
   } catch (error) {
       console.error(error);
       res.status(500).send({ message: "Routes: An error occurred during login" });
+  }
+});
+
+//get dashboard data (by Hao Chen) 
+router.get("/dashboard/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
+    const rooms = await getRoomList(house_id);
+    const dwellers = await getUserList(house_id);
+    const houseDevices = await getHouseDevices(house_id);
+    
+    res.status(200).send({
+      message: "Routes: House details retrieved successfully",
+      roomList: rooms,
+      dwellersList: dwellers,
+      devicesList: houseDevices
+    });
+    console.log("routes: this is rooms:",rooms);
+    console.log("routes: this is dwellers:",dwellers);
+    console.log("routes: this is houseDevices:",houseDevices);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: "Routes: An error occurred while retrieving house details"
+    });
   }
 });
 
@@ -171,10 +200,12 @@ router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) =
   const room_id = req.params.room_id;
   try {
     const devices = await getRoomDevices(house_id, room_id);
-    const deviceIDList = devices.map(device => device.device_id);
-    res.status(200).send({message: "Routes: Devices successfully retrieved", deviceIDList});
+    for (let i = 0; i < devices.length; i++) {
+      devices[i].state_value = JSON.parse("false");
   } 
-  catch (error) {
+  res.status(200).send({message: "Routes: Devices successfully retrieved", devices});
+  console.log("routes: this is devices:",devices);
+  }catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting devices" });
   }
@@ -275,16 +306,40 @@ router.get("/getHouseList/user/:user_id", async (req, res) => {
   }
 });
 
-//add house to user (by Hao Chen) ##
-router.post("/addHouseToUser", async (req, res) => {
-  const { user_id, house_name, address } = req.body;
+//get all user house data (by Hao Chen) ##
+router.get("/getAllUserHouseData/user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
   try {
-    await addHouseToUser(user_id, house_name, address);
-    res.status(200).send({message: "Routes: House successfully added to user"});
+    const allUserHouseData = await getAllUserHouseData(user_id);
+    res.status(200).send({message: "Routes: All user house data successfully retrieved", allUserHouseData});
   } 
   catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Routes: An error occurred while adding house to user" });
+    res.status(500).send({ message: "Routes: An error occurred while getting all user house data" });
+  }
+});
+
+//add house to user for owners(by Hao Chen) ##
+router.post("/createHouse", async (req, res) => {
+  const { user_id, house_name, address } = req.body;
+  try {
+    // Check if the house already exists
+    const houseExists = await checkHouseExists(user_id, house_name, address);
+    if (houseExists) {
+      return res.status(409).send({ message: "Routes: House already exists" });
+    }
+    // Attempt both operations
+    await addHouseToUser(user_id, house_name, address);
+    houseIDList = await getHouseList(user_id);
+    newlyCreatedHouseID = await getHouseID(user_id, house_name, address);
+    console.log("routes: this is newlyCreatedHouseID:",newlyCreatedHouseID);
+    await addUserToHouse(user_id, newlyCreatedHouseID);
+
+    // Send only one response once both operations succeed.
+    res.status(200).send({ message: "Routes: House added and user successfully added to house" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding house and user to house" });
   }
 });
 
@@ -334,6 +389,104 @@ router.delete("/removeHouse/house/:house_id", async (req, res) => {
   }
 });
 
+//get current state data (by Hao Chen) 
+router.get("/getCurrentState/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const currentState = await getCurrentState(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Current state data successfully retrieved", currentState});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting current state data" });
+  }
+});
+
+
+//get current month average data (by Hao Chen)
+router.get("/getAverageCurrentMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const averageCurrentMonth = await getAverageCurrentMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Current month average data successfully retrieved", averageCurrentMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting current month average data" });
+  }
+});
+
+//get current month highest data (by Hao Chen)
+router.get("/getHighestCurrentMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const highestCurrentMonth = await getHighestCurrentMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Current month highest data successfully retrieved", highestCurrentMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting current month highest data" });
+  }
+});
+
+//get current month lowest data (by Hao Chen)
+router.get("/getLowestCurrentMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const lowestCurrentMonth = await getLowestCurrentMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Current month lowest data successfully retrieved", lowestCurrentMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting current month lowest data" });
+  }
+});
+
+//get last month average data (by Hao Chen)
+router.get("/getAverageLastMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const averageLastMonth = await getAverageLastMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Last month average data successfully retrieved", averageLastMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting last month average data" });
+  }
+});
+
+//get last month highest data (by Hao Chen)
+router.get("/getHighestLastMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const highestLastMonth = await getHighestLastMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Last month highest data successfully retrieved", highestLastMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting last month highest data" });
+  }
+});
+
+//get last month lowest data (by Hao Chen)
+router.get("/getLowestLastMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const lowestLastMonth = await getLowestLastMonth(house_id, room_id, dvType);
+    res.status(200).send({message: "Routes: Last month lowest data successfully retrieved", lowestLastMonth});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting last month lowest data" });
+  }
+});
 
 
 
@@ -349,7 +502,11 @@ router.delete("/removeHouse/house/:house_id", async (req, res) => {
 
 
 
-//tester functions (by Xiang)
+
+
+
+
+//tester functions (by Xiang Wei)
 
 
 // printAllUsers
