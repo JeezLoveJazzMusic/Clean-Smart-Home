@@ -1,5 +1,9 @@
 import "./App.css";
-import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Navigate,
+} from "react-router-dom";
 import Signup from "./pages/signup/Signup.jsx";
 import Login from "./pages/login/Login.jsx";
 import Temperature from "./Components/Temperature/Temperature.jsx";
@@ -7,8 +11,8 @@ import LightLevel from "./Components/LightLevel/LightLevel.jsx";
 import Humidity from "./Components/Humidity/Humidity.jsx";
 import EnergyUsage from "./Components/EnergyUsage/EnergyUsage.jsx";
 import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
-import Addndeleteuser from "../components/addndeleteuser/Addndeleteuser.jsx";
-import Userlist from "../components/userlist/Userlist.jsx";
+import Addndeleteuser from "./Components/addndeleteuser/Addndeleteuser.jsx";
+import Userlist from "./Components/userlist/Userlist.jsx";
 
 function App() {
   const route = createBrowserRouter([
@@ -43,13 +47,14 @@ function App() {
     {
       path: "/AddnDltHome",
       element: <AddnDltHome />, // AddnDltHome page
-    } 
-      path: "/addndeleteuser",
-      element: <Addndeleteuser />, 
     },
     {
-      path: "/userlist", 
-      element: <Userlist />, 
+      path: "/addndeleteuser",
+      element: <Addndeleteuser />,
+    },
+    {
+      path: "/userlist",
+      element: <Userlist />,
     },
   ]);
 
