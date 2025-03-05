@@ -34,7 +34,7 @@ function Addndeleteuser({ onAddUser, onClose }) {
       name,
       userType,
       permission,
-      profilePic: profilePic || "/images/Defaultimage.jpg",
+      profilePic: profilePic || "/images/Defaultimage.jpg", 
     });
     onClose();
   };
@@ -47,16 +47,10 @@ function Addndeleteuser({ onAddUser, onClose }) {
         {/* Profile Picture Upload */}
         <div className="profile-upload">
           <label>Profile Picture:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            hidden
-            id="fileUpload"
-          />
+          <input type="file" accept="image/*" onChange={handleImageUpload} hidden id="fileUpload" />
           <label htmlFor="fileUpload">
             <img
-              src={profilePic || "/images/Defaultimage.jpg"}
+              src={profilePic || "/images/Defaultimage.jpg"} 
               alt="Profile"
               className="clickable-avatar"
             />
@@ -90,9 +84,7 @@ function Addndeleteuser({ onAddUser, onClose }) {
             <option value="Admin">Admin</option>
             <option value="Viewer">Viewer</option>
           </select>
-          {errors.userType && (
-            <p className="error-message">{errors.userType}</p>
-          )}
+          {errors.userType && <p className="error-message">{errors.userType}</p>}
         </div>
 
         {/* Permission Field */}
@@ -107,19 +99,13 @@ function Addndeleteuser({ onAddUser, onClose }) {
             <option value="Full Access">Full Access</option>
             <option value="Restricted Access">Restricted Access</option>
           </select>
-          {errors.permission && (
-            <p className="error-message">{errors.permission}</p>
-          )}
+          {errors.permission && <p className="error-message">{errors.permission}</p>}
         </div>
 
         {/* Buttons */}
         <div className="button-group">
-          <button className="auth-btn" onClick={handleConfirm}>
-            Confirm
-          </button>
-          <button className="backk-btn" onClick={onClose}>
-            Back
-          </button>
+          <button className="auth-btn" onClick={handleConfirm}>Confirm</button>
+          <button className="backk-btn" onClick={onClose}>Back</button>
         </div>
       </div>
     </div>
