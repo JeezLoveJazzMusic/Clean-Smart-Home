@@ -180,35 +180,18 @@ async function getHouseDevices(house_id) {
   }
 }
 
-//function to get device id, device name, device type and device state
 async function getRoomDevices(house_id, room_id) {
   try {
     const result = await turso.execute({
-      sql: `
-        SELECT 
-          d.device_id, 
-          d.device_name, 
-          d.device_type,
-          (
-            SELECT ds.state_value 
-            FROM device_states ds 
-            WHERE ds.device_id = d.device_id 
-            ORDER BY ds.updated_at DESC 
-            LIMIT 1
-          ) AS state_value
-        FROM devices d
-        WHERE d.house_id = ? AND d.room_id = ?
-      `,
+      sql: "SELECT * FROM devices WHERE house_id = ? AND room_id = ?",
       args: [house_id, room_id],
     });
     return result.rows;
   } catch (error) {
-    console.error("Error getting device list:", error.message);
+    console.error("Error getting room devices:", error.message);
     throw error;
   }
 }
-
-
 //by Hao Chen
 async function addDeviceToRoom(
   house_id,
@@ -470,23 +453,6 @@ async function checkHouseExists(user_id, house_name, address) {
     throw error;
   }
 }
-
-
-// function to get all user house data
-async function getAllUserHouseData(user_id) {
-  try {
-    const result = await turso.execute({
-      sql: "SELECT * FROM houses WHERE house_id IN (SELECT house_id FROM house_members WHERE user_id = ?)",
-      args: [user_id],
-    });
-    return result.rows;
-  } catch (error) {
-    console.error("Error getting all user house data:", error.message);
-    throw error;
-  }
-}
-
-
 
 // Function to parse the data from the HomeIO server.
 function parseHomeIOData(data) {
@@ -797,7 +763,8 @@ async function getHighestLastMonth(houseId, roomId, deviceType) {
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
@@ -818,12 +785,10 @@ async function getAverageLastMonth(houseId, roomId, deviceType) {
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
-    console.log("Arguments:", { houseId, roomId, deviceType });
-    console.log("Argument Types:", { houseId: typeof houseId, roomId: typeof roomId, deviceType: typeof deviceType });
-    
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
       if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
           return result.rows[0].avg_value;
@@ -842,7 +807,8 @@ async function getLowestLastMonth(houseId, roomId, deviceType) {
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
@@ -1075,6 +1041,5 @@ module.exports = {
   getLowestLastMonth,
   getAverageCurrentMonth,
   getHighestCurrentMonth,
-  getLowestCurrentMonth,
-  getAllUserHouseData
+  getLowestCurrentMonth
 };

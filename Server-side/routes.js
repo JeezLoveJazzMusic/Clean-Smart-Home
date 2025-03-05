@@ -450,6 +450,7 @@ router.get("/getLowestCurrentMonth/house/:house_id/room/:room_id/deviceType/:dev
 router.get("/getAverageLastMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
   const { house_id, room_id, deviceType } = req.params;
   dvType = await sensorMap(deviceType);
+  console.log("routes: this is dvType:",dvType);
   try {
     const averageLastMonth = await getAverageLastMonth(house_id, room_id, dvType);
     res.status(200).send({message: "Routes: Last month average data successfully retrieved", averageLastMonth});
