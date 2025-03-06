@@ -1,8 +1,9 @@
+/*Made by Joe */
 .Modal {
     width: 1400px; 
     height: 650px;
     margin: 80px auto;
-    padding: 20px;
+    padding: 0px;
     border-radius: 20px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     background-color: #ffffff;
@@ -15,7 +16,7 @@
   
   .Modal-content {
     background-color: white;
-    padding: 20px;
+    padding: 0px;
     border-radius: 8px;
     width: 100%; /* Adjusted width to fill the modal */
     height: 100%; /* Adjusted height to fill the modal */
@@ -25,8 +26,8 @@
   
   .close-btn {
     position: absolute;
-    top: 10px;
-    right: 3px;
+    top: 2px;
+    right: 10px;
     font-size: 24px;
     cursor: pointer;
   }

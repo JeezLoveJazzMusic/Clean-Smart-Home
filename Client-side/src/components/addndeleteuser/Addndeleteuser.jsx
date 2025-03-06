@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./components/addndeleteuser/addndeeleteuser.css";  
+import "./addndeleteuser.css";
 
-function AddUserModal({ onAddUser, onClose }) {
+function Addndeleteuser({ onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [permission, setPermission] = useState("");
@@ -34,14 +34,14 @@ function AddUserModal({ onAddUser, onClose }) {
       name,
       userType,
       permission,
-      profilePic: profilePic || "/images/Defaultimage.jpg", 
+      profilePic: profilePic || "/images/DDTDefaultimage.jpg", 
     });
     onClose();
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-box">
+    <div className="modal2-overlay">
+      <div className="modal2-box">
         <h2>Add User</h2>
 
         {/* Profile Picture Upload */}
@@ -49,11 +49,7 @@ function AddUserModal({ onAddUser, onClose }) {
           <label>Profile Picture:</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} hidden id="fileUpload" />
           <label htmlFor="fileUpload">
-            <img
-              src={profilePic || "/images/Defaultimage.jpg"} 
-              alt="Profile"
-              className="clickable-avatar"
-            />
+            <img src={profilePic || "/images/DDTDefaultimage.jpg"} alt="Profile" className="clickable-avatar" />
           </label>
           <p className="upload-text">Upload New Photo</p>
         </div>
@@ -104,8 +100,8 @@ function AddUserModal({ onAddUser, onClose }) {
 
         {/* Buttons */}
         <div className="button-group">
-          <button className="auth-btn" onClick={handleConfirm}>Confirm</button>
-          <button className="backk-btn" onClick={onClose}>Back</button>
+          <button className="confirm-btn" onClick={handleConfirm}>Confirm</button>
+          <button className="cancel-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>

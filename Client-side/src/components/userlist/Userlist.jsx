@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import AddUserModal from "./AddUserModal"; 
-import  "./components/userlist/userlist.css";
+import  "./Userlist.css";
+import Addndeleteuser from "../addndeleteuser/addndeleteuser.jsx";
 ;
 
 function UserList() {
   const [users, setUsers] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal1, setShowModal1] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
@@ -26,7 +26,7 @@ function UserList() {
       return;
     }
     setUsers((prevUsers) => [...prevUsers, newUser]); 
-    setShowModal(false);
+    setShowModal1(false);
   };
 
   // Toggle delete mode
@@ -61,7 +61,7 @@ function UserList() {
 
 
         <div className="button-container">
-          <button className="add-user-btn" onClick={() => setShowModal(true)}>
+          <button className="add-user-btn" onClick={() => setShowModal1(true)}>
             Add Users
           </button>
 
@@ -93,7 +93,7 @@ function UserList() {
           )}
         </div>
 
-        //Confirm Delete button appears when at least one user is selected 
+
         {deleteMode && selectedUsers.length > 0 && (
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
             Confirm Delete
@@ -103,9 +103,9 @@ function UserList() {
         <button className="back-btn">Back</button>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <AddUserModal onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+      {showModal1 && (
+        <div className="modal1-overlays">      /*( fix by Joe)*/
+          <Addndeleteuser onAddUser={handleAddUser} onClose={() => setShowModal1(false)} />
         </div>
       )}
     </>

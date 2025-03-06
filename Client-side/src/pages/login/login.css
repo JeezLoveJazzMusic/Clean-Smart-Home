@@ -29,8 +29,11 @@
 
 /* whole form styling */
 .auth-form {
-  width: 100%; 
-  max-width: 350px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+ 
 }
 
 /* heading "Welcome Back" to input container  */
@@ -44,8 +47,10 @@ h2 {
 
 /* input container spacing */
 .input-group {
-  margin-bottom: 15px; 
-  width: 100%; 
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* email address and password styling label */
@@ -54,26 +59,27 @@ h2 {
 }
 
 /* input field container */
-.input-group input {
+.input-group input,
+ .password-container input{
   width: 100%; 
   padding: 12px; 
   border: 1px solid #ccc; 
   border-radius: 5px; 
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 /*  password visible and hide icon */
 .password-container {
-  display: flex; 
-  align-items: center; 
-  position: relative; 
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* password input */
 .password-container input {
-  width: 100%; 
-  padding: 12px; 
-  border: 1px solid #ccc; 
-  border-radius: 5px; 
   padding-right: 40px; 
 }
 
@@ -81,11 +87,18 @@ h2 {
 .toggle-password {
   position: absolute; 
   right: 10px; 
+  top: 50%;
+  transform: translateY(-50%);
   background: none; 
   border: none; 
   font-size: 1.2rem; 
   cursor: pointer; 
   color: #555; 
+  display: flex;
+  align-items: center;
+}
+.toggle-password:focus{
+  outline: none;
 }
 
 
@@ -125,6 +138,7 @@ h2 {
   font-weight: bold; 
   cursor: pointer; 
   transition: background-color 0.3s; 
+  margin-top: 10px;
 }
 
 /* Button hover login */
