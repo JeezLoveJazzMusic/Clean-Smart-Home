@@ -44,7 +44,7 @@ function Sidebar() {
 
         {/* Add Home Button */}
         <div className="add-Sidebar-container">
-          <button onClick={() => navigate("/AddnDltHome")} className="add-Sidebar">   /*made by Joe */
+          <button onClick={() => navigate("/AddnDltHome")} className="add-Sidebar">   
           <button className="add-Sidebar">
             <img src={addButton} alt="Add" className="add-Sidebar-icon" />
             Add Home
