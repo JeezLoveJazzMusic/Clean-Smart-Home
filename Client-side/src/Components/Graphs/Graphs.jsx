@@ -1,9 +1,9 @@
 import React from "react";
-import pieIcon from "../../assets/Pie.png";
-import chartIcon from "../../assets/Chart.png";
+// import pieIcon from "../../assets/Pie.png";
+// import chartIcon from "../../assets/Chart.png";
 import { Doughnut } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+// import { faker } from "@faker-js/faker";
 
 import {
   Chart as ChartJS,
