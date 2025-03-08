@@ -1,6 +1,6 @@
 /*Made by Joe */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate , useLocation} from "react-router-dom"; // Import useNavigate for navigation
 import "./Humidity.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
@@ -16,8 +16,8 @@ const Humidity = () => {
   const [prevMonth, setPrevMonth] = useState([]);
   const [curMonth, setCurMonth] = useState([]);
 
-  const houseId = 27;
-  const roomId = 14;
+  const location = useLocation();
+  const { houseId, roomId } = location.state || {};
 
   const getData = async () => {
     try {

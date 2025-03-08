@@ -1,11 +1,12 @@
 /*Made by Joe */
 import React, { useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate , useLocation} from "react-router-dom"; // Import useNavigate for navigation
 import "./LightLevel.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
 import ShareSensorData from "../ShareSensorData/ShareSensorData";
 import axios from "axios";
+
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 const LightLevel = () => {
@@ -15,8 +16,8 @@ const LightLevel = () => {
   const [prevMonth, setPrevMonth] = useState([]);
   const [curMonth, setCurMonth] = useState([]);
 
-  const houseId = 27;
-  const roomId = 14;
+  const location = useLocation();
+  const { houseId, roomId } = location.state || {};
 
   const getData = async () => {
     try {
@@ -31,9 +32,12 @@ const LightLevel = () => {
       const curAvg = await axios.get(`http://localhost:8080/getAverageCurrentMonth/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
       const curLow = await axios.get(`http://localhost:8080/getLowestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
       tempCurrentMonth.push(curHigh.data.highestCurrentMonth, curAvg.data.averageCurrentMonth, curLow.data.lowestCurrentMonth);
+      
+      console.log("houseId", houseId);
+      console.log("roomId", roomId);
 
-      console.log(tempLastMonth); 
-      console.log(tempCurrentMonth);
+      console.log("last month",tempLastMonth); 
+      console.log("this month", tempCurrentMonth);
       setPrevMonth(tempLastMonth);
       setCurMonth(tempCurrentMonth);
     }catch(error){
