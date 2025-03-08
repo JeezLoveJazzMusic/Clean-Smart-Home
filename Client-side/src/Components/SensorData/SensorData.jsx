@@ -9,7 +9,7 @@ import "./SensorData.css";
 import { useNavigate } from "react-router-dom";  
 const name = "";
 
-function SensorData() {
+function SensorData({houseId, roomId}) {
   const navigate = useNavigate();  
 /*made by Joe */
   return (
@@ -22,7 +22,7 @@ function SensorData() {
       <div className="sensor-data1">
         <div className="grid-container1">
           {/* Humidity */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Humidity")} className="data-box1">  
+          <button onClick={() => navigate("/Humidity", { state : {houseId, roomId} } )} className="data-box">  
             <img src={humidityIcon} alt="Humidity" className="icon" />
             <div className="text-container">
               <p className="label">Humidity</p>
@@ -31,7 +31,7 @@ function SensorData() {
           </button>
 
           {/* Energy */ }
-          <button onClick={() => navigate("/EnergyUsage")} className="data-box1">   
+          <button onClick={() => navigate("/EnergyUsage", { state : {houseId, roomId} })} className="data-box">   
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
@@ -40,7 +40,7 @@ function SensorData() {
           </button>
 
           {/* Temperature */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Temperature")} className="data-box1">   
+          <button onClick={() => navigate("/Temperature", { state : {houseId, roomId} })} className="data-box">   
             <img src={temperatureIcon} alt="Temperature" className="icon" />
             <div className="text-container">
               <p className="label">Temperature</p>
@@ -49,7 +49,7 @@ function SensorData() {
           </button>
 
           {/* Light */  /*Fix by Joe */}
-          <button onClick={() => navigate("/LightLevel")} className="data-box1">   
+          <button onClick={() => navigate("/LightLevel", { state : {houseId, roomId} })} className="data-box">   
             <img src={lightIcon} alt="Light" className="icon" />
             <div className="text-container">
               <p className="label">Light</p>

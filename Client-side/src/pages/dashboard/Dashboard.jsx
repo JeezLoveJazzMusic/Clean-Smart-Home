@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Dashboard.css";
-import DeviceList from "../../Components/DeviceList/DeviceList";
+import DeviceList from "../../components/DeviceList/DeviceList";
 import Users from "../../Components/UserDashboard/UserDashboard";
 import SensorData from "../../Components/SensorData/SensorData";
 import Graphs from "../../Components/Graphs/Graphs";
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-        <SensorData />
+        <SensorData houseId={27} roomId={18} /> {/*temporarily hardcoded room*/}
       </div>
 
       {/* Device List */}
