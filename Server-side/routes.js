@@ -1,8 +1,7 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
 const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData,
-        removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth } = require("./database.js"); 
-
+  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
 const express = require("express");
@@ -99,33 +98,6 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
      message: "Routes: An error occurred while retrieving house details"
    });
  }
-});
-
-//get dashboard data (by Hao Chen) 
-router.get("/dashboard/house/:house_id", async (req, res) => {
-  const { house_id } = req.params;
-  try {
-    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
-    const rooms = await getRoomList(house_id);
-    const dwellers = await getUserList(house_id);
-    const houseDevices = await getHouseDevices(house_id);
-    
-    res.status(200).send({
-      message: "Routes: House details retrieved successfully",
-      roomList: rooms,
-      dwellersList: dwellers,
-      devicesList: houseDevices
-    });
-    console.log("routes: this is rooms:",rooms);
-    console.log("routes: this is dwellers:",dwellers);
-    console.log("routes: this is houseDevices:",houseDevices);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Routes: An error occurred while retrieving house details"
-    });
-  }
 });
 
 //check if email exists (by Hao Chen) ##
@@ -384,7 +356,7 @@ router.post ("/addDwellerToHouse", async (req, res) => {
  }
 });
 
-//remove house from user (by Hao Chen) 
+//remove house from user (by Hao Chen) NOT NEEDED
 //this  removes owner from the house. Doing this will remove everything related to the house 
 router.delete("/removeHouse/user/:user_id/house/:house_id", async (req, res) => {
  const { user_id, house_id } = req.params;
@@ -421,8 +393,7 @@ router.delete("/removeHouse/house/:house_id", async (req, res) => {
    // Finally, remove the house record itself.
    await removeHouse(house_id);
 
-   
-
+   console.log("routes: House"+house_id+ "and all related data successfully removed");
    res.status(200).send({ message: "Routes: House"+house_id+ "and all related data successfully removed" });
  } catch (error) {
    console.error(error);

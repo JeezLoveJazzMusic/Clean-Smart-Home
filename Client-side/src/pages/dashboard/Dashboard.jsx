@@ -16,9 +16,11 @@ const Dashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [sendRoomData, setSendRoomData] = useState({});
+  const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
+  const currentHouseId = 27;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -54,9 +56,12 @@ const Dashboard = () => {
         const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
         const { allUserHouseData} = homeData.data;
         console.log("this user has house data of:", allUserHouseData);
+
+        //fetch this house's users
+        const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
     }
     };
-
+    
     fetchDashboardData();
   }, [houseList]);
 
@@ -94,9 +99,11 @@ const Dashboard = () => {
         <Graphs />
       </div>
 
-      {/* User Dashboard */}
-      <div className="user-dashboard">
-        <Users />
+    {/* User Dashboard */}
+    <div className="user-dashboard">
+        {dashboardData && dashboardData.dwellersList && (
+        <Users dwellersList={dashboardData.dwellersList} />
+        )}
       </div>
 
       {/* Pop-up Overlay */}
@@ -107,7 +114,7 @@ const Dashboard = () => {
       )}
 
       <div>
-        <Sidebar />
+      <Sidebar allHouses = {HouseDataTest}/> 
       </div>
     </div>
   );
