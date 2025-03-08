@@ -22,7 +22,7 @@ function SensorData({houseId, roomId}) {
       <div className="sensor-data1">
         <div className="grid-container1">
           {/* Humidity */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Humidity", { state : {houseId, roomId} } )} className="data-box">  
+          <button onClick={() => navigate("/Humidity", { state : {houseId, roomId} } )} className="data-box1">  
             <img src={humidityIcon} alt="Humidity" className="icon" />
             <div className="text-container">
               <p className="label">Humidity</p>
@@ -31,7 +31,7 @@ function SensorData({houseId, roomId}) {
           </button>
 
           {/* Energy */ }
-          <button onClick={() => navigate("/EnergyUsage", { state : {houseId, roomId} })} className="data-box">   
+          <button onClick={() => navigate("/EnergyUsage", { state : {houseId, roomId} })} className="data-box1">   
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
@@ -40,7 +40,7 @@ function SensorData({houseId, roomId}) {
           </button>
 
           {/* Temperature */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Temperature", { state : {houseId, roomId} })} className="data-box">   
+          <button onClick={() => navigate("/Temperature", { state : {houseId, roomId} })} className="data-box1">   
             <img src={temperatureIcon} alt="Temperature" className="icon" />
             <div className="text-container">
               <p className="label">Temperature</p>
@@ -49,7 +49,7 @@ function SensorData({houseId, roomId}) {
           </button>
 
           {/* Light */  /*Fix by Joe */}
-          <button onClick={() => navigate("/LightLevel", { state : {houseId, roomId} })} className="data-box">   
+          <button onClick={() => navigate("/LightLevel", { state : {houseId, roomId} })} className="data-box1">   
             <img src={lightIcon} alt="Light" className="icon" />
             <div className="text-container">
               <p className="label">Light</p>
