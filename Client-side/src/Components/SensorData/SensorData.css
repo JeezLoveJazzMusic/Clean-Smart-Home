@@ -96,10 +96,9 @@ border-radius: 30px;
 /*Fix by Joe */
 .weather-box1 {
   background-color: #d4edda;
-  padding: 107px;
   border-radius: 30px;
-  width: 140px; /* Make the box take full width of the grid cell */
-  height: 330px; /* Make the box take full height of the grid cell */
+  width: 100%; /* Make the box take full width of the grid cell */
+  height: auto; /* Make the box take full height of the grid cell */
   display: flex;
   justify-content: center;
   align-items: center;
