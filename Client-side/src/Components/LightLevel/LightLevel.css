@@ -1,3 +1,4 @@
+/*Made by Joe */
 .card2{
   width: 1200px;
   height: 655px;
@@ -17,6 +18,7 @@
     "chart info";
 }
 
+/*Made by Joe */
 
 .card-header {
   grid-area: header;
@@ -26,6 +28,7 @@
   margin-bottom: 1px;
 }
 
+/*Made by Joe */
 .card-header h2 {
   font-size: 2rem;
   font-weight: bold;
@@ -33,6 +36,7 @@
   margin: 0;
 }
 
+/*Made by Joe */
 .share-button {
   padding: 12px 25px;
   border: none;
@@ -44,10 +48,13 @@
   transition: background-color 0.3s ease;
 }
 
+/*Made by Joe */
 .share-button:hover {
   background-color: #60A5FA;
   color: #ffffff;
 }
+
+/*Made by Joe */
 .LightLevel-info {
   grid-area: LightLevel;
   padding: 20px;
@@ -55,6 +62,7 @@
   border-radius: 30px;
 }
 
+/*Made by Joe */
 .LightLevel-info h3 {
   font-size: 1.2rem;
   margin-top: 0;
@@ -62,6 +70,7 @@
   color: #333;
 }
 
+/*Made by Joe */
 .LightLevel-info p {
   font-size: 1.4rem; /* Improved readability */
   line-height: 1.8; /* Better spacing between lines */
@@ -69,6 +78,7 @@
   word-spacing: 5px;
 }
 
+/*Made by Joe */
 .chart-container {
   grid-area: chart;
   height: 400px;
@@ -77,6 +87,7 @@
   border-radius: 60px;
 }
 
+/*Made by Joe */
 .info-section {
   grid-area: info;
   display: flex;
@@ -84,6 +95,7 @@
   gap: 30px;
 }
 
+/*Made by Joe */
 .tips, .energy-alert, .recommendations {
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
@@ -92,28 +104,32 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+/*Made by Joe */
 .tips ul {
   list-style-type: disc;
   padding-left: 8px;
   margin: 10px 0;
 }
 
+/*Made by Joe */
 .tips ul li {
   margin-bottom: 0.9px;
   line-height: 1.5;
 }
 
+/*Made by Joe */
 .energy-alert {
   border-left: 8px solid #ff9800;
   border-right: 8px solid #ff9800;
-  
 }
 
+/*Made by Joe */
 .recommendations {
   border-left: 8px solid #2196f3;
   border-right: 8px solid #2196f3;
 }
 
+/*Made by Joe */
 .tips {
   border-left: 8px solid #e54c4c;
   border-right: 8px solid #e54c4c;

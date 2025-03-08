@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../addndeleteuser/addndeleteuser.css";
+import "./addndeleteuser.css";
 
 function Addndeleteuser({ onAddUser, onClose }) {
   const [name, setName] = useState("");
@@ -40,8 +40,8 @@ function Addndeleteuser({ onAddUser, onClose }) {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-box">
+    <div className="modal2-overlay">
+      <div className="modal2-box">
         <h2>Add User</h2>
 
         {/* Profile Picture Upload */}

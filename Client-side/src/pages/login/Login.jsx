@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './login.css';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // log in component
 function Login() {
@@ -13,6 +14,8 @@ function Login() {
   const [success, setSuccess] = useState(false);
   // password visibility
   const [showPassword, setShowPassword] = useState(false); 
+  // navigation
+  const navigate = useNavigate();
 
   // validate password strength
   const validatePassword = (password) => {
@@ -44,6 +47,9 @@ function Login() {
         password: password,
       });
       console.log(response.data);
+      const { userID, houseList } = response.data;
+      console.log("User ID:", userID);
+      console.log("House List:", houseList);
 
       // no error pop out success message
       setErrors({});
@@ -52,20 +58,22 @@ function Login() {
       // clear input after submission
       setEmail("");
       setPassword("");
+
+      // redirect to MainContainer with state
+      navigate("/Dashboard", { state: { userID, houseList } });
     } catch (error) {
-      console.error("Error during signup:", error);
-      if(error.status === 400){
+      console.error("Error during login:", error);
+      if (error.response && error.response.status === 400) {
         setErrors({ email: "Email is required", password: "Password is required" });
-      }else if(error.status === 401){
+      } else if (error.response && error.response.status === 401) {
         setErrors({ email: "Invalid email or password", password: "Invalid email or password" });
-      }else{
+      } else {
         alert("An error occurred during login");
       }
     }
-    // succes message timer
+    // success message timer
     setTimeout(() => setSuccess(false), 10000);
   };
-  
 
   return (
     <div className="auth-container">
@@ -119,8 +127,7 @@ function Login() {
           <div className="form-options">
             <a href="#">Forgot Password?</a>
           </div>
-
-          <button type="submit" className="auth-btn">Login</button>
+          <button type="submit" className="auth-btn">Login</button>  
 
           <p className="auth-link">
             Don't have an account? <a href="/signup">Sign up here</a>

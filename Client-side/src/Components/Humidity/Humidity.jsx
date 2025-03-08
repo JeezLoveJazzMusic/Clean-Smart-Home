@@ -1,3 +1,4 @@
+/*Made by Joe */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Humidity.css";
@@ -145,7 +146,7 @@ const Humidity = () => {
     
 
     {/* Modal */}
-    {isModalOpen && <ShareSensorData closeModal={closeShareSensorData} />}
+    {isModalOpen && <ShareSensorData closeModal6={closeShareSensorData} />}
     </div>
   );
 };

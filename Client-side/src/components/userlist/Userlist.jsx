@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import Addndeleteuser from "../addndeleteuser/Addndeleteuser"; 
-import "../userlist/userlist.css";
+import  "./Userlist.css";
+import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
+;
 
 function UserList() {
   const [users, setUsers] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal1, setShowModal1] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
@@ -14,18 +15,18 @@ function UserList() {
     setShowMenu(!showMenu);
     if (!showMenu) {
       setDeleteMode(false);
-      setSelectedUsers([]); 
+      setSelectedUsers([]); // Reset selection
     }
   };
 
-  // Add a new user 
+  //  Add a new user properly
   const handleAddUser = (newUser) => {
     if (!newUser || !newUser.name || !newUser.profilePic) {
       console.error("Invalid user data:", newUser);
       return;
     }
     setUsers((prevUsers) => [...prevUsers, newUser]); 
-    setShowModal(false);
+    setShowModal1(false);
   };
 
   // Toggle delete mode
@@ -43,7 +44,7 @@ function UserList() {
     );
   };
 
-  // Delete selected users 
+  //Delete selected users properly
   const handleDeleteUsers = () => {
     setUsers(users.filter((user) => !selectedUsers.includes(user.name)));
     setDeleteMode(false);
@@ -53,13 +54,14 @@ function UserList() {
   return (
     <>
       <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
-        <div className="header-container">
-          <h2 className="users-title">Users</h2>
-          <button className="menu-btn" onClick={toggleMenu}>⋯</button>
-        </div>
+      <div className="header-container">
+  <h2 className="users-title">Users</h2>
+  <button className="menu-btn" onClick={toggleMenu}>⋯</button>
+</div>
+
 
         <div className="button-container">
-          <button className="add-user-btn" onClick={() => setShowModal(true)}>
+          <button className="add-user-btn" onClick={() => setShowModal1(true)}>
             Add Users
           </button>
 
@@ -87,9 +89,10 @@ function UserList() {
               </div>
             ))
           ) : (
-            <p className="no-users">No Users Added</p>
+            <p className="no-users">No users added yet.</p>
           )}
         </div>
+
 
         {deleteMode && selectedUsers.length > 0 && (
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
@@ -97,12 +100,12 @@ function UserList() {
           </button>
         )}
 
-        <button className="gay-btn">Back</button>
+        <button className="back-btn">Back</button>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <Addndeleteuser onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+      {showModal1 && (
+        <div className="modal1-overlays">      /*( fix by Joe)*/
+          <Addndeleteuser onAddUser={handleAddUser} onClose={() => setShowModal1(false)} />
         </div>
       )}
     </>
