@@ -26,23 +26,24 @@
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 100vh;
+  width: 45vw;
+  height: auto;
   text-align: center;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .popup-content h2 {
   padding: 10px;
-  font-size: 26px;
+  font-size: 32px;
   color: #1b4332;
   font-weight: bold;
-  margin-bottom: 2vh;
+  margin-bottom: 1vh;
   text-align: left;
 }
 
 /* Input Fields */
 .input-group {
-  padding: 8px;
+  padding: 11px;
   display: grid;
   grid-template-columns: 150px 1fr; /* Label takes 150px, input takes remaining space */
   align-items: center;
@@ -52,7 +53,7 @@
 
 .input-group label {
   color: #1b4332;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
   text-align: left;
@@ -61,13 +62,14 @@
 .input-group input,
 .input-group select {
   font-family: "Inria Serif", serif;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
   background: #d4edda;
   flex-grow: 1;
   padding: 8px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
+  width: 28vw;
 }
 
 /* Buttons */
@@ -82,18 +84,9 @@
   padding: 8px 16px;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
-}
-
-.confirm-btn {
-  font-size: 14px;
-  font-weight: bold;
-  background: #b7e4c7;
-  color: #1b4332;
-}
-
-.cancel-btn {
-  font-size: 14px;
+  border-radius: 20px;
+  font-family: "Inria Serif", serif;
+  font-size: 16px;
   font-weight: bold;
   background: #b7e4c7;
   color: #1b4332;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./DeviceList.css";
 import { FiMoreVertical } from "react-icons/fi";
+import AddDevice from "../AddnDltDevice/AddDevice/AddDevice.jsx";
+import RemoveDevice from "../AddnDltDevice/RemoveDevice/RemoveDevice.jsx";
 
 import lightIcon from "../../assets/devices-light.png";
 import fanIcon from "../../assets/devices-fan.png";
@@ -9,9 +11,8 @@ import tvIcon from "../../assets/devices-television.png";
 import wifiIcon from "../../assets/devices-wifi.png";
 import cctvIcon from "../../assets/devices-cctv.png";
 import compIcon from "../../assets/devices-computer.png";
-import sensorIcon from "../../assets/devices-sensor.png"
+import sensorIcon from "../../assets/devices-sensor.png";
 import axios from "axios";
-
 
 // Room data with respective devices
 // const roomsExample = {
@@ -30,7 +31,7 @@ import axios from "axios";
 //     { id: 10, name: "CCTV", icon: cctvIcon, state: false },
 //     { id: 11, name: "WIFI", icon: wifiIcon, state: true },
 //   ],
-//   "Kitchen": [
+//   Kitchen: [
 //     { id: 12, name: "Lights", icon: lightIcon, state: true },
 //     { id: 13, name: "Fan", icon: fanIcon, state: false },
 //     { id: 14, name: "CCTV", icon: cctvIcon, state: false },
@@ -48,7 +49,7 @@ import axios from "axios";
 //     { id: 22, name: "WIFI", icon: wifiIcon, state: true },
 //     { id: 23, name: "Television", icon: tvIcon, state: true },
 //     { id: 24, name: "EnergySensor", icon: sensorIcon, state: false },
-//   ], 
+//   ],
 //   "Bedroom 2": [
 //     { id: 19, name: "Lights", icon: lightIcon, state: true },
 //     { id: 20, name: "Fan", icon: fanIcon, state: false },
@@ -56,7 +57,7 @@ import axios from "axios";
 //     { id: 22, name: "WIFI", icon: wifiIcon, state: true },
 //     { id: 23, name: "Computer", icon: compIcon, state: true },
 //   ],
-//   "Overview": [
+//   Overview: [
 //     { id: 24, name: "Lights", icon: lightIcon, state: true },
 //     { id: 25, name: "Fan", icon: fanIcon, state: false },
 //     { id: 26, name: "AirCond", icon: acIcon, state: true },
@@ -69,11 +70,14 @@ import axios from "axios";
 //   ],
 // };
 
-const DeviceList = ({rooms, initialRoom}) => {
+const DeviceList = ({ rooms, initialRoom }) => {
   const [selectedRoom, setSelectedRoom] = useState(initialRoom);
   const [deviceStates, setDeviceStates] = useState(rooms[initialRoom]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // States for popups
+  const [addDevice, setAddDevice] = useState(false);
+  const [removeDevice, setRemoveDevice] = useState(false);
 
   // Handle room change and update device list
   const handleRoomChange = (room) => {
@@ -91,17 +95,39 @@ const DeviceList = ({rooms, initialRoom}) => {
     );
   };
 
+  // Function to add a device
+  const handleAddDevice = (newDevice) => {
+    setDeviceStates((prevDevices) => [...prevDevices, newDevice]);
+    // console.log(deviceStates);
+    // console.log(newDevice);
+    setAddDevice(false);
+  };
+
+  // Function to remove a device
+  const handleRemoveDevice = (deviceId) => {
+    setDeviceStates((prevDevices) =>
+      prevDevices.filter((device) => device.id !== deviceId)
+    );
+  };
+
   return (
     <div className="smart-home-container">
       <div className="header">
         <div className="dropdown">
-          <button className="room-button" onClick={() => setDropdownOpen(!dropdownOpen)}>
+          <button
+            className="room-button"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
             {selectedRoom} ▽
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
               {Object.keys(rooms).map((room) => (
-                <div key={room} className="dropdown-option" onClick={() => handleRoomChange(room)}>
+                <div
+                  key={room}
+                  className="dropdown-option"
+                  onClick={() => handleRoomChange(room)}
+                >
                   {room}
                 </div>
               ))}
@@ -111,15 +137,25 @@ const DeviceList = ({rooms, initialRoom}) => {
 
         {/* Menu button with dropdown */}
         <div className="menu-container">
-          <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            className="menu-button"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
             <FiMoreVertical />
           </button>
           {menuOpen && (
             <div className="menu-dropdown">
               <div className="menu-option">Add Room</div>
-              <div className="menu-option">Add Device</div>
+              <div className="menu-option" onClick={() => setAddDevice(true)}>
+                Add Device
+              </div>
               <div className="menu-option">Remove Room</div>
-              <div className="menu-option">Remove Device</div>
+              <div
+                className="menu-option"
+                onClick={() => setRemoveDevice(true)}
+              >
+                Remove Device
+              </div>
             </div>
           )}
         </div>
@@ -141,6 +177,21 @@ const DeviceList = ({rooms, initialRoom}) => {
           </div>
         ))}
       </div>
+      {/* Add Device Popup */}
+      <AddDevice
+        onAddDevice={handleAddDevice}
+        onClose={() => setAddDevice(false)}
+        isOpen={addDevice}
+      />
+
+      {/* Remove Device Popup */}
+      {removeDevice && (
+        <RemoveDevice
+          onClose={() => setRemoveDevice(false)}
+          devices={deviceStates}
+          onRemoveDevice={handleRemoveDevice}
+        />
+      )}
     </div>
   );
 };

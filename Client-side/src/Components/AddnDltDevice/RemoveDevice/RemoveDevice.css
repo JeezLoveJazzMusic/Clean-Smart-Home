@@ -35,6 +35,7 @@
 }
 
 .device-grid-placeholder {
+  background-color: #f4f3ee;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -43,9 +44,11 @@
 }
 
 .back-button {
+  font-family: "Inria Serif", serif;
   display: block;
   margin: 20px auto 0;
   padding: 10px 20px;
+  font-size: 16px;
   font-weight: bold;
   background-color: #b7e4c7;
   border: none;
