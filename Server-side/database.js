@@ -821,7 +821,6 @@ async function getLowestLastMonth(houseId, roomId, deviceType) {
       return null;
   }
 }
-
 // --- Functions for the CURRENT month ---
 async function getHighestCurrentMonth(houseId, roomId, deviceType) {
   const query = `
@@ -904,9 +903,6 @@ async function getAllUserHouseData(user_id) {
     throw error;
   }
 }
-
-
-
 
 //tester functions
 // Function to print all rows in the users table.
