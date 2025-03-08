@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import  "./Userlist.css";
-import Addndeleteuser from "../addndeleteuser/addndeleteuser.jsx";
+import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
 ;
 
 function UserList() {
