@@ -88,12 +88,12 @@ async function getUserList(house_id) {
 
 // Code added by: Ahmed Al-Ansi
 // Function to add a user to a home profile
-async function addUserToHouse(user_id, house_id) {
+async function addUserToHouse(user_id, house_id, member_type) {
   try {
     // Insert the user into the house_members table.
     await turso.execute({
-      sql: "INSERT INTO house_members (user_id, house_id) VALUES (?, ?)",
-      args: [user_id, house_id],
+      sql: "INSERT INTO house_members (user_id, house_id, member_type) VALUES (?, ?, ?)",
+      args: [user_id, house_id, member_type],
     });
     console.log("User added to house successfully!");
   } catch (error) {
@@ -180,35 +180,18 @@ async function getHouseDevices(house_id) {
   }
 }
 
-//function to get device id, device name, device type and device state
 async function getRoomDevices(house_id, room_id) {
   try {
     const result = await turso.execute({
-      sql: `
-        SELECT 
-          d.device_id, 
-          d.device_name, 
-          d.device_type,
-          (
-            SELECT ds.state_value 
-            FROM device_states ds 
-            WHERE ds.device_id = d.device_id 
-            ORDER BY ds.updated_at DESC 
-            LIMIT 1
-          ) AS state_value
-        FROM devices d
-        WHERE d.house_id = ? AND d.room_id = ?
-      `,
+      sql: "SELECT * FROM devices WHERE house_id = ? AND room_id = ?",
       args: [house_id, room_id],
     });
     return result.rows;
   } catch (error) {
-    console.error("Error getting device list:", error.message);
+    console.error("Error getting room devices:", error.message);
     throw error;
   }
 }
-
-
 //by Hao Chen
 async function addDeviceToRoom(
   house_id,
@@ -470,23 +453,6 @@ async function checkHouseExists(user_id, house_name, address) {
     throw error;
   }
 }
-
-
-// function to get all user house data
-async function getAllUserHouseData(user_id) {
-  try {
-    const result = await turso.execute({
-      sql: "SELECT * FROM houses WHERE house_id IN (SELECT house_id FROM house_members WHERE user_id = ?)",
-      args: [user_id],
-    });
-    return result.rows;
-  } catch (error) {
-    console.error("Error getting all user house data:", error.message);
-    throw error;
-  }
-}
-
-
 
 // Function to parse the data from the HomeIO server.
 function parseHomeIOData(data) {
@@ -797,7 +763,8 @@ async function getHighestLastMonth(houseId, roomId, deviceType) {
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
@@ -814,16 +781,14 @@ async function getHighestLastMonth(houseId, roomId, deviceType) {
 // --- Function to get the average state value for a device in the last month ---
 async function getAverageLastMonth(houseId, roomId, deviceType) {
   const query = `
-      SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
+      SELECT ROUND(AVG(CAST(ds.state_value AS REAL)), 3) as avg_value
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
-    console.log("Arguments:", { houseId, roomId, deviceType });
-    console.log("Argument Types:", { houseId: typeof houseId, roomId: typeof roomId, deviceType: typeof deviceType });
-    
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
       if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
           return result.rows[0].avg_value;
@@ -842,7 +807,8 @@ async function getLowestLastMonth(houseId, roomId, deviceType) {
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
-        AND ds.updated_at >= date('now', '-1 month');
+        AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+        AND ds.updated_at < DATE('now', 'start of month');
   `;
   try {
       const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
@@ -879,7 +845,7 @@ async function getHighestCurrentMonth(houseId, roomId, deviceType) {
 
 async function getAverageCurrentMonth(houseId, roomId, deviceType) {
   const query = `
-      SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
+      SELECT ROUND(AVG(CAST(ds.state_value AS REAL)), 3) as avg_value
       FROM device_states ds
       JOIN devices d ON ds.device_id = d.device_id
       WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
@@ -914,6 +880,28 @@ async function getLowestCurrentMonth(houseId, roomId, deviceType) {
   } catch (error) {
       console.error("Database error in getLowestCurrentMonth:", error);
       return null;
+  }
+}
+
+async function getAllUserHouseData(user_id) {
+  try {
+    const sql = `
+      SELECT 
+        hm.house_member_id, 
+        hm.user_id, 
+        h.house_id AS h_house_id, 
+        h.house_name, 
+        h.address, 
+        h.created_at AS house_created_at 
+      FROM house_members hm
+      JOIN houses h ON hm.house_id = h.house_id
+      WHERE hm.user_id = ?
+    `;
+    const result = await turso.execute({ sql, args: [user_id] });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user house data:", error.message);
+    throw error;
   }
 }
 

@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [sendRoomData, setSendRoomData] = useState({});
   const location = useLocation();
   const { userID, houseList } = location.state || {};
-  const houseListTest = [13,14];
+
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -26,7 +26,7 @@ const Dashboard = () => {
         const houseID = houseList[0]; // Use the first entry in the houseIDList
         console.log("Fetching data for houseID:", houseID);
         try {
-          const response = await axios.get(`http://localhost:8080/dashboard/house/${houseID}`);
+          const response = await axios.get(`http://localhost:8080/dashboard/house/27`);
           const { roomList, dwellersList, devicesList } = response.data;
           console.log("rooms:", roomList);
           console.log("dwellers:", dwellersList);
@@ -36,7 +36,7 @@ const Dashboard = () => {
           let roomData = {};
           for (let i = 0; i < roomList.length; i++) {
             try {
-              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/${houseID}/rooms/${roomList[i].room_id}`);
+              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/27/rooms/${roomList[i].room_id}`);
               const { devices } = response1.data;
               console.log("room devices:", devices);
               roomData[roomList[i].room_name] = devices;

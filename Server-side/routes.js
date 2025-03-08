@@ -333,7 +333,7 @@ router.post("/createHouse", async (req, res) => {
    houseIDList = await getHouseList(user_id);
    newlyCreatedHouseID = await getHouseID(user_id, house_name, address);
    console.log("routes: this is newlyCreatedHouseID:",newlyCreatedHouseID);
-   await addUserToHouse(user_id, newlyCreatedHouseID);
+   await addUserToHouse(user_id, newlyCreatedHouseID, "owner");
 
    // Send only one response once both operations succeed.
    res.status(200).send({ message: "Routes: House added and user successfully added to house" });
@@ -343,7 +343,20 @@ router.post("/createHouse", async (req, res) => {
  }
 });
 
-//remove house from user (by Hao Chen) 
+//add dweller to house (by Hao Chen) 
+router.post ("/addDwellerToHouse", async (req, res) => {
+ const { user_id, house_id } = req.body;
+ try {
+   await addUserToHouse(user_id, house_id, "dweller");
+   res.status(200).send({message: "Routes: Dweller successfully added to house"});
+ } 
+ catch (error) {
+   console.error(error);
+   res.status(500).send({ message: "Routes: An error occurred while adding dweller to house" });
+ }
+});
+
+//remove house from user (by Hao Chen) NOT NEEDED
 //this  removes owner from the house. Doing this will remove everything related to the house 
 router.delete("/removeHouse/user/:user_id/house/:house_id", async (req, res) => {
  const { user_id, house_id } = req.params;
@@ -382,7 +395,7 @@ router.delete("/removeHouse/house/:house_id", async (req, res) => {
 
    
 
-   res.status(200).send({ message: "Routes: House and all related data successfully removed" });
+   res.status(200).send({ message: "Routes: House"+house_id+ "and all related data successfully removed" });
  } catch (error) {
    console.error(error);
    res.status(500).send({ message: "Routes: An error occurred while removing house data" });
@@ -450,6 +463,7 @@ router.get("/getLowestCurrentMonth/house/:house_id/room/:room_id/deviceType/:dev
 router.get("/getAverageLastMonth/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
  const { house_id, room_id, deviceType } = req.params;
  dvType = await sensorMap(deviceType);
+ console.log("routes: this is dvType:",dvType);
  try {
    const averageLastMonth = await getAverageLastMonth(house_id, room_id, dvType);
    res.status(200).send({message: "Routes: Last month average data successfully retrieved", averageLastMonth});
