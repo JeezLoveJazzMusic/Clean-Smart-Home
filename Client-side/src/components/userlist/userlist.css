@@ -194,7 +194,7 @@ body {
   }
   
   /* Modal Overlay */
-  .modal-overlay {
+  .modal1-overlays {    /*( fix by Joe)*/
     position: fixed;
     top: 0;
     left: 0;
@@ -207,7 +207,7 @@ body {
   }
   
   /* Modal Content */
-  .modal-content {
+  .modal1-content {      /*( fix by Joe)*/
     background: white;
     padding: 20px;
     border-radius: 10px;

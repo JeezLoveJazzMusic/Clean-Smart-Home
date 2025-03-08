@@ -1,4 +1,4 @@
-.home-container {
+.home-container {/*Made by Joe */
     position: fixed;
     top: 80px;  /* Adjust as needed */
     left: 50%;
@@ -15,18 +15,21 @@
   }
   
   
-  .home-header {
+  .home-header1 { /*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1px;
-    font-size: 2rem;
+    font-size: 5rem;
     font-weight: bold;
     color: #333333;
     margin: 0;
   }
   
-  .add-btn  {
+  .add1-addndltbtn  {/*Made by Joe */
+    position: absolute;
+    top: 80px;
+    left: 8px;
     background: #4CAF50;
     color: white;
     padding: 10px 25px;
@@ -34,12 +37,9 @@
     cursor: pointer;
     border-radius: 10px;
     font-size: 1rem;
-    position: absolute;
-    top: 60px;
-    left: 10px;
   }
   
-  .main-back-btn {
+  .main-back-btn {/*Made by Joe */
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -52,7 +52,7 @@
     cursor: pointer;
   }
   
-   .options-btn{
+   .options-btn{/*Made by Joe */
     position: absolute;
     top: 20px;
     right: 20px;
@@ -65,7 +65,7 @@
     cursor: pointer;
    }
   
-   .delete-btn {
+   .delete-btn {/*Made by Joe */
     position: absolute;
     top: 60px;
     right: 20px;
@@ -78,33 +78,33 @@
     cursor: pointer;
   }
   
-  .home-list {
-    margin-top: 30px;
+  .home-list {/*Made by Joe */
+    margin-top: 80px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
-    
   }
   
-  .home-item {
-    position: absolute;
-    top: 40px;
-    right: 20px;
+  .home-item {/*Made by Joe */
     background-size: cover;
     background-position: center;
     width: 150px;
     height: 150px;
     border: none;
     cursor: pointer;
-    color: rgb(0, 0, 0);
+    color: rgb(2, 2, 2);
     font-weight: bold;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+   opacity: 0.5;
+
+
   }
-  .home-item-container {
+  .home-item-container {/*Made by Joe */
     position: relative;
     width: 150px;
     height: 150px;
@@ -113,10 +113,10 @@
     justify-content: center;
   }
   
-  .delete-icon {
+  .delete-icon {/*Made by Joe */
     position: absolute;
-    top: 40px;
-    right: 25px;
+    top: 5px;
+    right: 5px;
     color: red;
     cursor: pointer;
     font-size: 1.2rem;
@@ -126,7 +126,7 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   }
   
-  .modal {
+  .modal {/*Made by Joe */
     width: 500px;
     padding: 20px;
     border-radius: 20px;
@@ -140,13 +140,13 @@
     text-align: center;
   }
   
-  .modal h3 {
+  .modal h3 {/*Made by Joe */
     color: #333;
     font-size: 22px;
     margin-bottom: 15px;
   }
   
-  .modal label {
+  .modal label {/*Made by Joe */
     display: block;
     font-size: 16px;
     margin-top: 10px;
@@ -154,7 +154,7 @@
     text-align: left;
   }
   
-  .modal input {
+  .modal input {/*Made by Joe */
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -163,7 +163,7 @@
     font-size: 14px;
   }
   
-  .modal-buttons {
+  .modal-buttons {/*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -171,7 +171,7 @@
   }
   
   /* CREATE BUTTON */
-  .create-btn {
+  .create-btn {/*Made by Joe */
     background-color: #6eeb84;
     color: rgb(12, 12, 12);
     border: none;
@@ -182,7 +182,7 @@
   }
   
   /* BACK BUTTON INSIDE MODAL */
-  .modal-back-btn {
+  .modal-back-btn {/*Made by Joe */
     background-color: #ccc;
     color: black;
     border: none;
@@ -193,7 +193,7 @@
   }
   
   /* MAIN BACK BUTTON (For Page) */
-  .back-btn {
+  .back-btn {/*Made by Joe */
     background-color: #ddd;
     color: black;
     border: none;

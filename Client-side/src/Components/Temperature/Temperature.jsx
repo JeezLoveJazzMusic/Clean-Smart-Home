@@ -1,26 +1,61 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+/*made by Joe */
+import React, { useState, useEffect} from "react";
+import { useNavigate , useLocation} from "react-router-dom"; // Import useNavigate for navigation
 import "./Temperature.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
 import ShareSensorData from "../ShareSensorData/ShareSensorData";
+import axios from "axios";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 const Temperature = () => {
   const navigate = useNavigate(); // Initialize navigate function
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   
+  const [prevMonth, setPrevMonth] = useState([]);
+  const [curMonth, setCurMonth] = useState([]);
+
+  const location = useLocation();
+  const { houseId, roomId } = location.state || {};
+
+  const getData = async () => {
+    try {
+      let tempLastMonth = [];
+      let tempCurrentMonth = [];
+      const prevHigh = await axios.get(`http://localhost:8080/getHighestLastMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      const prevAvg = await axios.get(`http://localhost:8080/getAverageLastMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      const prevLow = await axios.get(`http://localhost:8080/getLowestLastMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      tempLastMonth.push(prevHigh.data.highestLastMonth, prevAvg.data.averageLastMonth, prevLow.data.lowestLastMonth);
+
+      const curHigh = await axios.get(`http://localhost:8080/getHighestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      const curAvg = await axios.get(`http://localhost:8080/getAverageCurrentMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      const curLow = await axios.get(`http://localhost:8080/getLowestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/Temperature`);
+      tempCurrentMonth.push(curHigh.data.highestCurrentMonth, curAvg.data.averageCurrentMonth, curLow.data.lowestCurrentMonth);
+
+      console.log(tempLastMonth); 
+      console.log(tempCurrentMonth);
+      setPrevMonth(tempLastMonth);
+      setCurMonth(tempCurrentMonth);
+    }catch(error){
+      console.error("Error during temperature data fetch:", error);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const data = {
     labels: ["High", "Average", "Low"],
     datasets: [
       {
         label: "Previous Month",
-        data: [41, 35, 29],
+        data: prevMonth,
         backgroundColor: "#34D399",
       },
       {
         label: "Current Month",
-        data: [40, 34, 28],
+        data: curMonth,
         backgroundColor: "#60A5FA",
       },
     ],
@@ -76,8 +111,8 @@ const Temperature = () => {
       <div className="Temperature-info">
         <h3>Temperature Comparison</h3>
         <div className="comparison-data">
-          <p><strong>Previous Month:</strong> High: 41°C | Avg: 35°C | Low: 29°C</p>
-          <p><strong>Current Month: </strong> High: 40°C | Avg: 34°C | Low: 28°C</p>
+          <p><strong>Previous Month:</strong> High: {prevMonth[0]}°C | Avg: {prevMonth[1]}°C | Low: {prevMonth[2]}°C</p>
+          <p><strong>Current Month: </strong> High: {curMonth[0]}°C | Avg: {curMonth[1]}°C | Low: {curMonth[2]}°C</p>
         </div>
       </div>
 
