@@ -1,7 +1,7 @@
 /* Main Dashboard Container */ /*( fix by Joe)*/
 .dashboard-container {
   width: 100%; 
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   padding: 5px;
   border-radius: 10px;
@@ -62,33 +62,21 @@
 /* Sensor Data Section */     /*( fix by Joe)*/
 .sensor-data {
   grid-column: 1;
-  padding:20px;
-  border-radius: 5px;
-  font-size: 14px;
-  gap: 10px;
-  padding-left: 100px;
+  padding-left:10%;
 }
 
 /* Device List Section */     /*( fix by Joe)*/
 .device-dashboard {
   grid-column: 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  overflow: auto;
 }
 
 /* Graphs Section */     /*( fix by Joe)*/
 .graph-section {
   grid-column: 1;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  padding-left: 70px;
+  padding-left: 10%;
 }
 
 /* Users Section */     /*( fix by Joe)*/
 .user-dashboard {
   grid-column: 2;
- 
 }

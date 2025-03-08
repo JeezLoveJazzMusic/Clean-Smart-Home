@@ -13,14 +13,14 @@ function SensorData({houseId, roomId}) {
   const navigate = useNavigate();  
 /*made by Joe */
   return (
-    <div className="sensor-data-container">
+    <div className="sensor-data-container1">
       {/* Welcome Text */}
-      <h2 className="welcome-text">
+      <h2 className="welcome-text1">
         Welcome Home, {name === "" ? "Name" : name}!
       </h2>
 
-      <div className="sensor-data">
-        <div className="grid-container">
+      <div className="sensor-data1">
+        <div className="grid-container1">
           {/* Humidity */ /*Fix by Joe */}
           <button onClick={() => navigate("/Humidity", { state : {houseId, roomId} } )} className="data-box">  
             <img src={humidityIcon} alt="Humidity" className="icon" />
@@ -59,7 +59,7 @@ function SensorData({houseId, roomId}) {
         </div>
 
         {/* Weather */ /*Fix by Joe */}
-        <div className="weather-box">
+        <div className="weather-box1">
           <img src={weatherIcon} alt="Weather" className="weather-icon" />
         </div>
       </div>
