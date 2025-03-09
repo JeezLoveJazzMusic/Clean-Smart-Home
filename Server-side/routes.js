@@ -1,6 +1,6 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData,
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -500,6 +500,19 @@ router.get("/getLowestLastMonth/house/:house_id/room/:room_id/deviceType/:device
    res.status(500).send({ message: "Routes: An error occurred while getting last month lowest data" });
  }
 });
+
+//get user data (by Hao Chen)
+router.get("/getUserData/house/:house_id/user/:user_id", async (req, res) => {
+  const { house_id, user_id } = req.params;
+  try {
+    const userData = await getUserData(house_id, user_id);
+    res.status(200).send({message: "Routes: User data successfully retrieved", userData});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user data" });
+  }
+  });
 
 
 

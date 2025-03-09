@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [sendRoomData, setSendRoomData] = useState({});
   const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
+  const [userDetails, setUserData] = useState(null);
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
@@ -58,8 +59,14 @@ const Dashboard = () => {
         console.log("this user has house data of:", allUserHouseData);
         setAllUserHouseData(allUserHouseData);
 
-        //fetch this house's users
-        const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
+        // //fetch this house's users
+        // const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
+
+        const response3 = await axios.get(`http://localhost:8080/getUserData/house/27/user/11`);
+        const{userData} = response3.data;
+        setUserData(userData);
+        console.log("userData:", userData);
+
     }
     };
     
@@ -110,9 +117,11 @@ const Dashboard = () => {
       {/* Pop-up Overlay */}
       {isProfileOpen && (
         <div className="popup-overlay">
-          <UserProfile onClose={() => setIsProfileOpen(false)} />
+          <UserProfile onClose={() => setIsProfileOpen(false)} thisUserID={userID} thisHouse={currentHouseId} userData={userDetails}/>
         </div>
       )}
+
+      
 
       <div>
       <Sidebar allHouses = {HouseDataTest}/> 

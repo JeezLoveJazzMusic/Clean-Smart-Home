@@ -901,6 +901,24 @@ async function getAllUserHouseData(user_id) {
   }
 }
 
+async function getUserData(house_id, user_id) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT hm.*, u.*
+        FROM house_members hm
+        JOIN users u ON hm.user_id = u.user_id
+        WHERE hm.user_id = ? AND hm.house_id = ?
+      `,
+      args: [user_id, house_id], // Now both parameters are used correctly
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user house data:", error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -1060,5 +1078,6 @@ module.exports = {
   getAverageCurrentMonth,
   getHighestCurrentMonth,
   getLowestCurrentMonth,
-  getAllUserHouseData
+  getAllUserHouseData,
+  getUserData
 };
