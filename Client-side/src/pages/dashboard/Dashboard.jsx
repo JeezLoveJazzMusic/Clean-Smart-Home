@@ -56,6 +56,7 @@ const Dashboard = () => {
         const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
         const { allUserHouseData} = homeData.data;
         console.log("this user has house data of:", allUserHouseData);
+        setAllUserHouseData(allUserHouseData);
 
         //fetch this house's users
         const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
