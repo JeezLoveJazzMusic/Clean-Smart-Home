@@ -14,10 +14,10 @@ const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
             <div key={device.id} className="device-card">
               <img
                 src={device.icon}
-                alt={device.name}
+                alt={device.device_name}
                 className="device-icon"
               />
-              <span className="device-name">{device.name}</span>
+              <span className="device-name">{device.device_name}</span>
               <button
                 className="remove-button"
                 onClick={() => onRemoveDevice(device.id)}

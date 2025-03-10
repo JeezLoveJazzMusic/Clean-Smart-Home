@@ -73,7 +73,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
         <h2>Add Device</h2>
 
         {/* Device Name Input */}
-        <div className="input-group">
+        <div className="device-input">
           <label>Device Name:</label>
           <input
             type="text"
@@ -84,7 +84,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
         </div>
 
         {/* Device Type Selection */}
-        <div className="input-group">
+        <div className="device-input">
           <label>Device Type:</label>
           <select
             value={deviceType}
@@ -103,7 +103,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
         </div>
 
         {/* Device No. Input */}
-        <div className="input-group">
+        <div className="device-input">
           <label>Device No.:</label>
           <input
             type="number"
