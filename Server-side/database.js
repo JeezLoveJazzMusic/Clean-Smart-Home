@@ -901,6 +901,22 @@ async function getAllUserHouseData(user_id) {
   }
 }
 
+// Function to get user name
+async function getUserName  (user_id) {
+  console.log("this is user id" + user_id);
+  try {
+    const result = await turso.execute({
+      sql: "SELECT username FROM users WHERE user_id = ?",
+      args: [user_id],
+    });
+    console.log("username:", result.rows[0].username);
+    return result.rows[0].username;
+  } catch (error) {
+    console.error("Error getting user name:", error.message);
+    throw error;
+  }
+} 
+
 async function getUserData(house_id, user_id) {
   try {
     const result = await turso.execute({
@@ -923,6 +939,25 @@ async function getUserData(house_id, user_id) {
 
 
 //tester functions
+// Modify database 
+async function testdb() {
+  try {
+    // Query the database for all users.
+    const result = await turso.execute("INSERT INTO devices (house_id, room_id, device_name, device_type, device_number, created_at) VALUES (27, 18, 'Smart Light 1', 'light', 1, '2025-03-01 10:00:00'), (27, 18, 'Smart Thermostat', 'thermostat', 1, '2025-03-01 10:05:00'), (27, 18, 'Smart Light 2', 'light', 2, '2025-03-01 10:10:00'), (27, 18, 'Smart Speaker', 'speaker', 1, '2025-03-01 10:15:00'), (27, 18, 'Smart Lock', 'lock', 1, '2025-03-01 10:20:00');");
+
+    // Check if there are any rows returned.
+    if (result.rows.length > 0) {
+      // Print the rows in a table format.
+      console.table(result.rows);
+    } else {
+      console.log("No users found in the database.");
+    }
+  } catch (error) {
+    console.error("Error printing all users:", error.message);
+    throw error;
+  }
+}
+
 // Function to print all rows in the users table.
 async function printAllUsers() {
   try {
@@ -1079,5 +1114,7 @@ module.exports = {
   getHighestCurrentMonth,
   getLowestCurrentMonth,
   getAllUserHouseData,
-  getUserData
+  getUserData,
+  getUserName,
+  testdb
 };

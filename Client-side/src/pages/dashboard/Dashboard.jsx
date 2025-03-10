@@ -92,7 +92,7 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-        <SensorData houseId={27} roomId={18} /> {/*temporarily hardcoded room*/}
+        <SensorData houseId={27} roomId={18} userID = {userID}/> {/*temporarily hardcoded room*/}
       </div>
 
       {/* Device List */}
