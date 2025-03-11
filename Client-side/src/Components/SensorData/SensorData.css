@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Inria+Serif:wght@300;400;700&display=swap");
+
+/*Fix by Joe ( change the grid  position and also classname ) */
+.sensor-data-container1 {
+  background-color: rgb(253, 253, 253);  padding: 0px;
+  border-radius: 60px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 20px;
+  align-items: center;
+  }
+
+/*Fix by Joe */
+.welcome-text1 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 1px;
+}
+
+/*Fix by Joe */
+.sensor-data1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+  align-items: stretch; /* Ensures both sections have equal height */
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  margin-right: 5px;
+}
+
+/*Fix by Joe */
+.grid-container1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Ensures 2 columns */
+  grid-template-rows: repeat(1, 1fr); /* 2 rows for the grid */
+  gap: 1px;
+  width: 100%;
+  height: 50%;
+}
+
+/*Fix by Joe */
+.data-box1 {
+  margin-bottom: 10px;
+  display: flex;
+  font-family: "Inria Serif", serif;
+  align-items: left;
+  background-color: #d4edda;
+  padding: 30px;
+  width: 280px ;
+  height: 160px;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+  text-align: left;
+  margin-right : 10px;
+border-radius: 30px;
+}
+
+/*Fix by Joe */
+.data-box:hover {
+  background-color: #c6e2ce;
+}
+
+/*Fix by Joe */
+.icon {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+/*Fix by Joe */
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/*Fix by Joe */
+.label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: -2px;
+}
+
+/*Fix by Joe */
+.value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/*Fix by Joe */
+.weather-box1 {
+  background-color: #d4edda;
+  border-radius: 30px;
+  width: 100%; /* Make the box take full width of the grid cell */
+  height: auto; /* Make the box take full height of the grid cell */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: 2; /* Place the weather box in the third column */
+  gap: 20px;
+ 
+}
+
+/*Fix by Joe */
+.weather-icon {
+  width: 80px;
+  height: 80px;
+}

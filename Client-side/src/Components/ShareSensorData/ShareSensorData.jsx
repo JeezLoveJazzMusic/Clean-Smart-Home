@@ -1,3 +1,4 @@
+/*Made by Joe */
 import React, { useState } from "react";
 import "./ShareSensorData.css";
 import humidityIcon from "../../assets/humidity-icon.png";

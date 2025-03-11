@@ -1,0 +1,181 @@
+/*Fix by Joe */
+.smart-home-container {
+  background-color: #ffffff;
+  border-radius: 60px;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.room-button {
+  background: #b7e4c7;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: Inria, serif;
+}
+
+.menu-button {
+  background: #b7e4c7;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.device-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 15px;
+  column-gap: 10px;
+  margin-top: 15px;
+  max-height: 250px; /* Limit the height for scrollable content */
+  overflow-y: visible; /* Add vertical scrolling */
+  padding-right: 10px;
+}
+
+.device-card {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-align: left;
+  background: white;
+  border-radius: 8px;
+  width: 160px;
+  height: 100px;
+  padding: 5px;
+  border: 2px solid #4caf50;
+}
+
+.device-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 0px;
+  align-items: start;
+  overflow:visible;
+}
+
+.device-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centers content vertically */
+  flex: 1; /* Ensures equal spacing */
+}
+
+.device-name {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 40px;
+  height: 15px;
+  background-color: rgb(82, 82, 82);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+/* Toggle Knob */
+.toggleKnob {
+  position: absolute;
+  width: 20px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 2px 2px 5px rgba(8, 8, 8, 0.26);
+  font-size: 10px;
+  font-weight: bold;
+  align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* When the toggle is ON */
+.toggleSwitch.on {
+  background-color: #26c475;
+}
+
+.toggleSwitch.on .toggleKnob {
+  transform: translateX(20px);
+}
+
+/* When the toggle is OFF */
+.toggleSwitch.off {
+  background-color: grey;
+}
+
+.toggleSwitch.off .toggleKnob {
+  transform: translateX(0);
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  background-color: #b7e4c7;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  z-index: 1000px;
+}
+
+.dropdown-option {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: Inria, serif;
+}
+
+.dropdown-option:hover {
+  background-color: #a1d9b0;
+}
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background-color: #b7e4c7;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.menu-option {
+  padding: 10px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background-color: #b7e4c7;
+}
+
+.menu-option:hover {
+  background-color: #a1d9b0;
+}

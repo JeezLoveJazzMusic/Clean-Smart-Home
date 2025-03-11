@@ -1,0 +1,76 @@
+/* Profile pop-up container */
+.profile-card {   /*( fix by Joe)*/
+  position: absolute;
+  top: 60px; /* Adjusted so it appears below the profile icon */
+  right: 10px;
+  background: #f4f3ee;
+  padding: 20px;
+  border-radius: 10px;
+  width: 320px;
+  text-align: center;
+  border: 2px solid #000000;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 200;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Center the profile image */
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid gold; /* Add a border to match your UI */
+}
+
+/* Input fields */
+.profile-details input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: none;
+  background: #ddd;
+  border-radius: 5px;
+}
+
+/* Fix button styling */   /*( fix by Joe)*/
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.delete-UserProfileMenubtn {     /*( fix by Joe)*/
+  background: #f8d7da;
+  color: black;
+}
+
+.back-UserProfileMenubtn {     /*( fix by Joe)*/
+  background: #f8d7da;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  padding: 7px 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 19.7px;
+  right: 19.7px;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+button:hover {
+  background: #a3d4a3;
+}
