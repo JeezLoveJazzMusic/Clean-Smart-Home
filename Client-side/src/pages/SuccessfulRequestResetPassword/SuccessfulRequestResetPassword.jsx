@@ -8,7 +8,7 @@ function SuccessfulRequestResetPassword() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate("/login"); // Redirects to login page after a few seconds
-    }, 6000); // 8 seconds delay
+    }, 10000); // 10 seconds delay
     return () => clearTimeout(timer);
   }, [navigate]);
 
