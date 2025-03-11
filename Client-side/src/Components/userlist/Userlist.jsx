@@ -107,7 +107,7 @@ function UserList() {
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>Confirm Delete</button>
         )}
 
-        <button className="gay-btn" onClick={() => navigate('/dashboard')}>Back</button>
+        <button className="gay-btn" onClick={() => navigate(-1)}>Back</button>
       </div>
 
       {showModal && (
