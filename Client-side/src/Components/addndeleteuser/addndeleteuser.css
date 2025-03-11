@@ -1,4 +1,4 @@
-/*Fix by Joe ( change every classname*/
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f8f8;
@@ -6,7 +6,7 @@ body {
 }
 
 /* Modal Overlay */
-.modal2-overlay {
+.addndltuser-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -19,7 +19,7 @@ body {
 }
 
 /* Modal Box */
-.modal2-box {
+.addndelete-modal-box {
   background: #fefef5;
   padding: 20px;
   border-radius: 8px;
