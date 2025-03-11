@@ -1081,6 +1081,40 @@ async function printAllDeviceStates() {
   }
 }
 
+//get house name
+async function getHouseName(house_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT house_name FROM houses WHERE house_id = ?",
+      args: [house_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].house_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting house name:", error.message);
+    throw error;
+  }
+}
+
+//get room name
+async function getRoomName(room_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT room_name FROM rooms WHERE room_id = ?",
+      args: [room_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].room_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting room name:", error.message);
+    throw error;
+  }
+}
+
 //exporting functions for routes
 module.exports = {
   createUser,
@@ -1122,6 +1156,8 @@ module.exports = {
   printAllDeviceStates,
   getCurrentState,
   getHighestLastMonth,
+  getHouseName,
+  getRoomName,
   getAverageLastMonth,
   getLowestLastMonth,
   getAverageCurrentMonth,

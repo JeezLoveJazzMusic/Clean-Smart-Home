@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [sendRoomData, setSendRoomData] = useState({});
   const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
   const [userDetails, setUserData] = useState(null);
+  const [currentRoom, setCurrentRoom] = useState("");
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
@@ -41,7 +42,7 @@ const Dashboard = () => {
             try {
               const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/27/rooms/${roomList[i].room_id}`);
               const { devices } = response1.data;
-              console.log("room devices:", devices);
+              // console.log("room devices:", devices);
               roomData[roomList[i].room_name] = devices;
             } catch (error) {
               console.error("Error fetching device data:", error);
@@ -92,13 +93,15 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-        <SensorData houseId={27} roomId={18} userID = {userID}/> {/*temporarily hardcoded room*/}
+        {Object.keys(sendRoomData).length > 0 &&(
+        <SensorData houseId={27} userID = {userID} roomName={currentRoom} roomList={sendRoomData}/>
+      )}
       </div>
 
       {/* Device List */}
       <div className="device-dashboard">
         {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} />
+          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} />
         )}
       </div>
 
