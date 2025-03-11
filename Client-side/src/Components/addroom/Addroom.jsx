@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../addroom/Addroom.css";
+import { useNavigate } from "react-router-dom"
 
 const AddRoom = () => {
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
 
   // Load existing rooms from localStorage on page load
   useEffect(() => {
@@ -46,8 +48,7 @@ const AddRoom = () => {
           </button>
         </div>
 
-        {/* Empty Back Button at Bottom Right */}
-        <button className="addroom-back-btn">
+        <button className="addroom-back-btn" onClick={() => navigate(-1)}>
           Back
         </button>
       </div>

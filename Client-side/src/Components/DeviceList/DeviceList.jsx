@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./DeviceList.css";
 import { FiMoreVertical } from "react-icons/fi";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
 // Import device icons
 import lightIcon from "../../assets/devices-light.png";
@@ -46,19 +47,21 @@ const getDeviceIcon = (deviceType) => {
 };
 
 const DeviceList = ({ rooms, initialRoom }) => {
+  const navigate = useNavigate(); 
+
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
-    return devices.map(device => ({
+    return devices?.map(device => ({
       ...device,
-      // Convert string "true"/"false" to boolean
+       // Convert string "true"/"false" to boolean
       device_power: device.device_power === "true"
-    }));
+    })) || [];
   };
 
   const [selectedRoom, setSelectedRoom] = useState(initialRoom);
   const [deviceStates, setDeviceStates] = useState(() => {
-    // Process the initial devices to convert device_power to boolean
-    return processDevices(rooms[initialRoom]);
+// Process the initial devices to convert device_power to boolean
+    return processDevices(rooms?.[initialRoom] || []);
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,8 +69,8 @@ const DeviceList = ({ rooms, initialRoom }) => {
   // Handle room change and update device list
   const handleRoomChange = (room) => {
     setSelectedRoom(room);
-    // Process devices for the new room
-    setDeviceStates(processDevices(rooms[room]));
+ // Process devices for the new room
+    setDeviceStates(processDevices(rooms?.[room] || []));
     setDropdownOpen(false);
   };
 
@@ -78,7 +81,7 @@ const DeviceList = ({ rooms, initialRoom }) => {
         if (i === index) {
           const newPowerState = !device.device_power;
           
-          // Call the API to toggle the device (moved outside the state update for clarity)
+           // Call the API to toggle the device (moved outside the state update for clarity)
           axios.put("http://localhost:8080/toggleDevice", {
             device_id: device.device_id,
             device_power: newPowerState.toString() // Convert boolean back to string "true"/"false"
@@ -89,13 +92,13 @@ const DeviceList = ({ rooms, initialRoom }) => {
           .catch(error => {
             console.error("Error toggling device:", error);
           });
-          
+
           // Toggle the device_power boolean
           return { ...device, device_power: newPowerState };
         }
         return device;
       });
-      
+
       return updatedDevices;
     });
   };
@@ -125,9 +128,13 @@ const DeviceList = ({ rooms, initialRoom }) => {
           </button>
           {menuOpen && (
             <div className="menu-dropdown">
-              <div className="menu-option">Add Room</div>
+              <div className="menu-option" onClick={() => navigate("/addroom")}>
+                Add Room
+              </div>
               <div className="menu-option">Add Device</div>
-              <div className="menu-option">Remove Room</div>
+              <div className="menu-option" onClick={() => navigate("/removeroom")}>
+                Remove Room
+              </div>
               <div className="menu-option">Remove Device</div>
             </div>
           )}

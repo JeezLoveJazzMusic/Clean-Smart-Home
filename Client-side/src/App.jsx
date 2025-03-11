@@ -12,6 +12,7 @@ import Userlist from "./Components/userlist/Userlist.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import RemoveRoom from "./Components/removeroom/Removeroom";
 import AddRoom from "./Components/addroom/Addroom.jsx";
+import DeviceList from "./Components/DeviceList/DeviceList.jsx";
 
 
 function App() {
@@ -67,6 +68,14 @@ function App() {
   {
     path: "/removeroom", 
     element: <RemoveRoom />, 
+  },
+  {
+    path: "/devicelist",
+    element: <DeviceList />,
+  },
+  {
+    path: "/dashboard",
+    element: <AddRoom />,
   }
  
   ]);
