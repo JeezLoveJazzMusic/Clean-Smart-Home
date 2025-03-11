@@ -10,16 +10,11 @@ import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
 import Addndeleteuser from "./Components/addndeleteuser/Addndeleteuser.jsx";
 import Userlist from "./Components/userlist/Userlist.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
-<<<<<<< HEAD
-import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
-import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx";
-import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"; // Standardized naming
-=======
 import RemoveRoom from "./Components/removeroom/Removeroom";
 import AddRoom from "./Components/addroom/Addroom.jsx";
->>>>>>> 2980564864d7b663168eec3e7f49a6e493567891
-
-
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"
+import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx"
+import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"
 function App() {
   const route = createBrowserRouter([
     {
@@ -64,21 +59,6 @@ function App() {
   },
   {
     path: "/Dashboard", 
-<<<<<<< HEAD
-    element: <Dashboard />, // Dashboard page /*Made by Joe */
-  },
-  {
-    path: "/ResetPassword",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/RequestResetPassword",
-    element: <RequestResetPassword />,
-  },
-  {
-    path: "/SuccessfulRequestResetPassword",
-    element: <SuccessfulRequestResetPassword />, // Add new success page
-=======
     element: <Dashboard />, // Dashboard page 
   },
   {
@@ -88,7 +68,18 @@ function App() {
   {
     path: "/removeroom", 
     element: <RemoveRoom />, 
->>>>>>> 2980564864d7b663168eec3e7f49a6e493567891
+  },
+  {
+    path: "/ResetPassword", 
+    element: <ResetPassword />, 
+  },
+  {
+    path: "/RequestResetPassword",
+    element:<RequestResetPassword />,
+  },
+  {
+    path: "/SuccessfulRequestResetPassword",
+    element:<SuccessfulRequestResetPassword />,
   }
   ]);
 
