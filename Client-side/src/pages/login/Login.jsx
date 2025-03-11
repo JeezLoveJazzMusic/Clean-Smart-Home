@@ -125,7 +125,7 @@ function Login() {
           </div>
 
           <div className="form-options">
-            <a href="#">Forgot Password?</a>
+            <a href="/RequestResetPassword">Forgot Password?</a>
           </div>
           <button type="submit" className="auth-btn">Login</button>  
 

@@ -148,15 +148,18 @@ const AddHome = () => {
           </button>
         )}
         {showOptions && (
-          <button onClick={toggleDeleteMode} className="delete-btn">
-            {isDeleting ? "Cancel" : "Delete Home Profile"}
-          </button>
+          <div>
+            <button onClick={toggleDeleteMode} className="delete-btn">
+              {isDeleting ? "Cancel" : "Delete Home Profile"}
+            </button>
+            <button onClick={() => setIsAdding(true)} className="add1-addndltbtn">
+              Add Home Profile <FaPlusCircle />
+            </button>
+          </div>
         )}
       </div>
 
-      <button onClick={() => setIsAdding(true)} className="add1-addndltbtn">
-        Add Home Profile <FaPlusCircle />
-      </button>
+
 
       <div className="home-list">
         {homes.map((home) => (

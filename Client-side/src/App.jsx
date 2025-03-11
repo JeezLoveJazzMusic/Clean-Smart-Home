@@ -12,8 +12,9 @@ import Userlist from "./Components/userlist/Userlist.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import RemoveRoom from "./Components/removeroom/Removeroom";
 import AddRoom from "./Components/addroom/Addroom.jsx";
-
-
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"
+import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx"
+import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"
 function App() {
   const route = createBrowserRouter([
     {
@@ -67,8 +68,19 @@ function App() {
   {
     path: "/removeroom", 
     element: <RemoveRoom />, 
+  },
+  {
+    path: "/ResetPassword", 
+    element: <ResetPassword />, 
+  },
+  {
+    path: "/RequestResetPassword",
+    element:<RequestResetPassword />,
+  },
+  {
+    path: "/SuccessfulRequestResetPassword",
+    element:<SuccessfulRequestResetPassword />,
   }
- 
   ]);
 
   return (
