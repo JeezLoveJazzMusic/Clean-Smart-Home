@@ -45,7 +45,11 @@ const getDeviceIcon = (deviceType) => {
   }
 };
 
-const DeviceList = ({ rooms, initialRoom }) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
+  useEffect(() => {
+    onRoomChange(initialRoom);
+  }, []);
+
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
     return devices.map(device => ({
@@ -54,7 +58,6 @@ const DeviceList = ({ rooms, initialRoom }) => {
       device_power: device.device_power === "true"
     }));
   };
-
   const [selectedRoom, setSelectedRoom] = useState(initialRoom);
   const [deviceStates, setDeviceStates] = useState(() => {
     // Process the initial devices to convert device_power to boolean
@@ -68,6 +71,7 @@ const DeviceList = ({ rooms, initialRoom }) => {
     setSelectedRoom(room);
     // Process devices for the new room
     setDeviceStates(processDevices(rooms[room]));
+    onRoomChange(room);
     setDropdownOpen(false);
   };
 

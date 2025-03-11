@@ -17,7 +17,7 @@ const Humidity = () => {
   const [curMonth, setCurMonth] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId , roomName} = location.state || {};
 
   const getData = async () => {
     try {
@@ -104,7 +104,7 @@ const Humidity = () => {
 
 
       <div className="card-header">
-        <h2>Humidity</h2>
+        <h2>Room: {roomName} - Humidity</h2>
         <button className="share-button" onClick={openShareSensorData}>
           Share Data
         </button>

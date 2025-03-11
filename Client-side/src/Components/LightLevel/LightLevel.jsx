@@ -17,7 +17,7 @@ const LightLevel = () => {
   const [curMonth, setCurMonth] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId ,roomName } = location.state || {};
 
   const getData = async () => {
     try {
@@ -106,7 +106,7 @@ const LightLevel = () => {
       </button>
 
       <div className="card-header">
-        <h2>Light Level</h2>
+        <h2>Room: {roomName} - Light Level</h2>
         <button className="share-button" onClick={openShareSensorData}>
           Share Data
         </button>

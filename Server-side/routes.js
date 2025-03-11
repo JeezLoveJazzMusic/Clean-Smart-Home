@@ -1,7 +1,9 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
+
 const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType,
-  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb } = require("./database.js"); 
+  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName } = require("./database.js"); 
+
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
 const express = require("express");
@@ -594,6 +596,7 @@ router.put("/toggleDevice", async (req, res) => {
   }
 });
 
+
 //get user list with type (by Hao Chen)
 router.get("/getUserListWithType/house/:house_id", async (req, res) => {
   const house_id = req.params.house_id;
@@ -608,7 +611,38 @@ router.get("/getUserListWithType/house/:house_id", async (req, res) => {
   });
   
 
+//get house name (Dylan)
+router.get("/getHouseName/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    const houseName = await getHouseName(house_id);
+    if (houseName === null) {
+      res.status(404).send({ message: "Routes: House not found" });
+    } else {
+      res.status(200).send({ message: "Routes: House name successfully retrieved", houseName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting house name" });
+  }
+});
 
+
+//get room name (Dylan)
+router.get("/getRoomName/room/:room_id", async (req, res) => {
+  const { room_id } = req.params;
+  try {
+    const roomName = await getRoomName(room_id);
+    if (roomName === null) {
+      res.status(404).send({ message: "Routes: Room not found" });
+    } else {
+      res.status(200).send({ message: "Routes: Room name successfully retrieved", roomName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting room name" });
+  }
+});
 
 
 

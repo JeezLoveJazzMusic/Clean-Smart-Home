@@ -16,9 +16,11 @@ const Temperature = () => {
   const [curMonth, setCurMonth] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId , roomName} = location.state || {};
 
   const getData = async () => {
+    console.log("houseId", houseId);
+    console.log("roomId", roomId);
     try {
       let tempLastMonth = [];
       let tempCurrentMonth = [];
@@ -102,7 +104,7 @@ const Temperature = () => {
       </button>
       
       <div className="card-header">
-        <h2>Temperature</h2>
+        <h2>Room: {roomName} - Temperature</h2>
         <button className="share-button" onClick={openShareSensorData}>
           Share Data
         </button>
