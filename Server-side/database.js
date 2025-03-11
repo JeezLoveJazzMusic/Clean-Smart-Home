@@ -935,6 +935,20 @@ async function getUserData(house_id, user_id) {
   }
 }
 
+//toggle device 
+async function toggleDevice(device_id, device_power) {
+  try {
+    const result = await turso.execute({
+      sql: "UPDATE devices SET device_power = ? WHERE device_id = ?",
+      args: [device_power, device_id],
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error toggling device:", error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -1116,5 +1130,6 @@ module.exports = {
   getAllUserHouseData,
   getUserData,
   getUserName,
-  testdb
+  testdb,
+  toggleDevice
 };

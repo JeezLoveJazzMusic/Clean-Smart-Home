@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./DeviceList.css";
 import { FiMoreVertical } from "react-icons/fi";
+import axios from "axios";
 
+// Import device icons
 import lightIcon from "../../assets/devices-light.png";
 import fanIcon from "../../assets/devices-fan.png";
 import acIcon from "../../assets/devices-aircond.png";
@@ -9,86 +11,93 @@ import tvIcon from "../../assets/devices-television.png";
 import wifiIcon from "../../assets/devices-wifi.png";
 import cctvIcon from "../../assets/devices-cctv.png";
 import compIcon from "../../assets/devices-computer.png";
-import sensorIcon from "../../assets/devices-sensor.png"
-import axios from "axios";
+import sensorIcon from "../../assets/devices-sensor.png";
 
+// Function to map device type to icon
+const getDeviceIcon = (deviceType) => {
+  switch (deviceType) {
+    case 'light':
+      return lightIcon;
+    case 'fan':
+      return fanIcon;
+    case 'aircond':
+    case 'thermostat':
+      return acIcon;
+    case 'television':
+    case 'tv':
+      return tvIcon;
+    case 'wifi':
+      return wifiIcon;
+    case 'cctv':
+      return cctvIcon;
+    case 'computer':
+      return compIcon;
+    case 'sensor':
+    case 'doorsensor':
+    case 'temperaturesensor':
+      return sensorIcon;
+    case 'speaker':
+      return sensorIcon; // Use appropriate icon for speaker
+    case 'lock':
+      return sensorIcon; // Use appropriate icon for lock
+    default:
+      return sensorIcon; // Default icon
+  }
+};
 
-// Room data with respective devices
-// const roomsExample = {
-//   "Living Room": [
-//     { id: 1, name: "Lights", icon: lightIcon, state: true },
-//     { id: 2, name: "Fan", icon: fanIcon, state: false },
-//     { id: 3, name: "AirCond", icon: acIcon, state: true },
-//     { id: 4, name: "CCTV", icon: cctvIcon, state: false },
-//     { id: 5, name: "WIFI", icon: wifiIcon, state: true },
-//     { id: 6, name: "Television", icon: tvIcon, state: true },
-//   ],
-//   "Dining Room": [
-//     { id: 7, name: "Lights", icon: lightIcon, state: true },
-//     { id: 8, name: "Fan", icon: fanIcon, state: false },
-//     { id: 9, name: "AirCond", icon: acIcon, state: true },
-//     { id: 10, name: "CCTV", icon: cctvIcon, state: false },
-//     { id: 11, name: "WIFI", icon: wifiIcon, state: true },
-//   ],
-//   "Kitchen": [
-//     { id: 12, name: "Lights", icon: lightIcon, state: true },
-//     { id: 13, name: "Fan", icon: fanIcon, state: false },
-//     { id: 14, name: "CCTV", icon: cctvIcon, state: false },
-//   ],
-//   "Front Yard": [
-//     { id: 15, name: "Lights", icon: lightIcon, state: true },
-//     { id: 16, name: "Fan", icon: fanIcon, state: false },
-//     { id: 17, name: "CCTV", icon: cctvIcon, state: false },
-//     { id: 18, name: "TempSensor", icon: sensorIcon, state: true },
-//   ],
-//   "Bedroom 1": [
-//     { id: 19, name: "Lights", icon: lightIcon, state: true },
-//     { id: 20, name: "Fan", icon: fanIcon, state: false },
-//     { id: 21, name: "AirCond", icon: acIcon, state: true },
-//     { id: 22, name: "WIFI", icon: wifiIcon, state: true },
-//     { id: 23, name: "Television", icon: tvIcon, state: true },
-//     { id: 24, name: "EnergySensor", icon: sensorIcon, state: false },
-//   ], 
-//   "Bedroom 2": [
-//     { id: 19, name: "Lights", icon: lightIcon, state: true },
-//     { id: 20, name: "Fan", icon: fanIcon, state: false },
-//     { id: 21, name: "AirCond", icon: acIcon, state: true },
-//     { id: 22, name: "WIFI", icon: wifiIcon, state: true },
-//     { id: 23, name: "Computer", icon: compIcon, state: true },
-//   ],
-//   "Overview": [
-//     { id: 24, name: "Lights", icon: lightIcon, state: true },
-//     { id: 25, name: "Fan", icon: fanIcon, state: false },
-//     { id: 26, name: "AirCond", icon: acIcon, state: true },
-//     { id: 27, name: "Television", icon: tvIcon, state: true },
-//     { id: 28, name: "WIFI", icon: wifiIcon, state: true },
-//     { id: 29, name: "CCTV", icon: cctvIcon, state: false },
-//     { id: 30, name: "Computer", icon: compIcon, state: true },
-//     { id: 31, name: "EnergySensor", icon: sensorIcon, state: false },
-//     { id: 32, name: "TempSensor", icon: sensorIcon, state: true },
-//   ],
-// };
+const DeviceList = ({ rooms, initialRoom }) => {
+  // Convert string "true"/"false" to actual boolean values when initializing state
+  const processDevices = (devices) => {
+    return devices.map(device => ({
+      ...device,
+      // Convert string "true"/"false" to boolean
+      device_power: device.device_power === "true"
+    }));
+  };
 
-const DeviceList = ({rooms, initialRoom}) => {
   const [selectedRoom, setSelectedRoom] = useState(initialRoom);
-  const [deviceStates, setDeviceStates] = useState(rooms[initialRoom]);
+  const [deviceStates, setDeviceStates] = useState(() => {
+    // Process the initial devices to convert device_power to boolean
+    return processDevices(rooms[initialRoom]);
+  });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Handle room change and update device list
   const handleRoomChange = (room) => {
     setSelectedRoom(room);
-    setDeviceStates(rooms[room]);
+    // Process devices for the new room
+    setDeviceStates(processDevices(rooms[room]));
     setDropdownOpen(false);
   };
 
   // Toggle the device state
-  const toggleDevice = (id) => {
-    setDeviceStates((prevDevices) =>
-      prevDevices.map((device) =>
-        device.id === id ? { ...device, state: !device.state } : device
-      )
-    );
+  const toggleDevice = async (index) => {
+    setDeviceStates((prevDevices) => {
+      const updatedDevices = prevDevices.map((device, i) => {
+        if (i === index) {
+          const newPowerState = !device.device_power;
+          
+          // Call the API to toggle the device (moved outside the state update for clarity)
+          axios.put("http://localhost:8080/toggleDevice", {
+            device_id: device.device_id,
+            device_power: newPowerState.toString() // Convert boolean back to string "true"/"false"
+          })
+          .then(response => {
+            console.log("Device toggled successfully:", response.data);
+          })
+          .catch(error => {
+            console.error("Error toggling device:", error);
+          });
+          
+          // Toggle the device_power boolean
+          return { ...device, device_power: newPowerState };
+        }
+        return device;
+      });
+      
+      return updatedDevices;
+    });
   };
 
   return (
@@ -126,16 +135,20 @@ const DeviceList = ({rooms, initialRoom}) => {
       </div>
 
       <div className="device-grid">
-        {deviceStates.map((device) => (
-          <div key={device.id} className="device-card">
-            <img src={device.icon} alt={device.name} className="device-icon" />
+        {deviceStates.map((device, index) => (
+          <div key={device.device_id} className="device-card">
+            <img 
+              src={getDeviceIcon(device.device_type)} 
+              alt={device.device_name} 
+              className="device-icon" 
+            />
             <div className="device-info">
               <span className="device-name">{device.device_name}</span>
               <div
-                className={`toggleSwitch ${device.state ? "on" : "off"}`}
-                onClick={() => toggleDevice(device.id)}
+                className={`toggleSwitch ${device.device_power ? "on" : "off"}`}
+                onClick={() => toggleDevice(index)}
               >
-                <div className="toggleKnob">{device.state ? "ON" : "OFF"}</div>
+                <div className="toggleKnob">{device.device_power ? "ON" : "OFF"}</div>
               </div>
             </div>
           </div>

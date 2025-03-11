@@ -1,6 +1,6 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName,
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb } = require("./database.js"); 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -194,19 +194,21 @@ router.delete("/remove_permission/user/:user_id/device/:device_id", async (req, 
 
 //Get room devices (by Hao Chen) ##
 router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) => {
- const house_id = req.params.house_id;
- const room_id = req.params.room_id;
- try {
-   const devices = await getRoomDevices(house_id, room_id);
-   for (let i = 0; i < devices.length; i++) {
-     devices[i].state_value = JSON.parse("false");
- } 
- res.status(200).send({message: "Routes: Devices successfully retrieved", devices});
- console.log("routes: this is devices:",devices);
- }catch (error) {
-   console.error(error);
-   res.status(500).send({ message: "Routes: An error occurred while getting devices" });
- }
+  const house_id = req.params.house_id;
+  const room_id = req.params.room_id;
+
+  try {
+    let devices = await getRoomDevices(house_id, room_id);
+    
+    // Remove sensors by filtering them out
+    devices = devices.filter(device => !["bgs", "temp", "rhm"].includes(device.device_type));
+
+    res.status(200).send({ message: "Routes: Devices successfully retrieved", devices });
+    console.log("routes: this is devices:", devices);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting devices" });
+  }
 });
 
 //add device to room (by Hao Chen) ## !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -539,6 +541,19 @@ router.get("/getUserName/user/:user_id", async (req, res) => {
     res.status(500).send({ message: "Routes: An error occurred while getting user name" });
   }
   });
+
+//toggle device (by Hao Chen)
+router.put("/toggleDevice", async (req, res) => {
+  const { device_id, device_power } = req.body;
+  try {
+    await toggleDevice(device_id, device_power);
+    res.status(200).send({message: "Routes: Device successfully toggled"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while toggling device" });
+  }
+});
 
 
 
