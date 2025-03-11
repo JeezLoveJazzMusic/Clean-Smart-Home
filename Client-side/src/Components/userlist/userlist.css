@@ -165,7 +165,6 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   gap: 20px;
   width: 100%;
   margin-top: 20px;
