@@ -88,12 +88,12 @@ async function getUserList(house_id) {
 
 // Code added by: Ahmed Al-Ansi
 // Function to add a user to a home profile
-async function addUserToHouse(user_id, house_id, member_type) {
+async function addUserToHouse(user_id, house_id, user_type) {
   try {
     // Insert the user into the house_members table.
     await turso.execute({
-      sql: "INSERT INTO house_members (user_id, house_id, member_type) VALUES (?, ?, ?)",
-      args: [user_id, house_id, member_type],
+      sql: "INSERT INTO house_members (user_id, house_id, user_type) VALUES (?, ?, ?)",
+      args: [user_id, house_id, user_type],
     });
     console.log("User added to house successfully!");
   } catch (error) {
@@ -312,11 +312,11 @@ async function getRoomList(house_id) {
 
 //by Hao Chen
 async function addHouseToUser(user_id, house_name, address) {
-  const owner_id = user_id;
+  const creator_id = user_id;
   try {
     await turso.execute({
-      sql: "INSERT INTO houses (owner_id, house_name, address) VALUES (?, ?, ?)",
-      args: [owner_id, house_name, address],
+      sql: "INSERT INTO houses (creator_id, house_name, address) VALUES (?, ?, ?)",
+      args: [creator_id, house_name, address],
     });
     console.log("House added to user successfully!");
   } catch (error) {
@@ -326,11 +326,11 @@ async function addHouseToUser(user_id, house_name, address) {
 }
 
 //by Hao Chen
-async function getHouseID(owner_id, house_name, address) {
+async function getHouseID(creator_id, house_name, address) {
   try {
     result = await turso.execute({
-      sql: "SELECT house_id FROM houses WHERE owner_id = ? AND house_name = ? AND address = ?",
-      args: [owner_id, house_name, address],
+      sql: "SELECT house_id FROM houses WHERE creator_id = ? AND house_name = ? AND address = ?",
+      args: [creator_id, house_name, address],
     });
     console.log("House ID retrieved successfully!");
     console.log("House ID: ", result.rows[0].house_id);
@@ -444,7 +444,7 @@ async function removeHouse(house_id) {
 async function checkHouseExists(user_id, house_name, address) {
   try {
     const result = await turso.execute({
-      sql: "SELECT 1 FROM houses WHERE owner_id = ? AND house_name = ? AND address = ?",
+      sql: "SELECT 1 FROM houses WHERE creator_id = ? AND house_name = ? AND address = ?",
       args: [user_id, house_name, address],
     });
     return result.rows.length > 0;
@@ -821,6 +821,7 @@ async function getLowestLastMonth(houseId, roomId, deviceType) {
       return null;
   }
 }
+
 // --- Functions for the CURRENT month ---
 async function getHighestCurrentMonth(houseId, roomId, deviceType) {
   const query = `
@@ -884,19 +885,15 @@ async function getLowestCurrentMonth(houseId, roomId, deviceType) {
 
 async function getAllUserHouseData(user_id) {
   try {
-    const sql = `
-      SELECT 
-        hm.house_member_id, 
-        hm.user_id, 
-        h.house_id AS h_house_id, 
-        h.house_name, 
-        h.address, 
-        h.created_at AS house_created_at 
-      FROM house_members hm
-      JOIN houses h ON hm.house_id = h.house_id
-      WHERE hm.user_id = ?
-    `;
-    const result = await turso.execute({ sql, args: [user_id] });
+    const result = await turso.execute({
+      sql: `
+        SELECT hm.*, h.*
+        FROM house_members hm
+        JOIN houses h ON hm.house_id = h.house_id
+        WHERE hm.user_id = ?
+      `,
+      args: [user_id],
+    });
     return result.rows;
   } catch (error) {
     console.error("Error getting user house data:", error.message);
@@ -904,7 +901,63 @@ async function getAllUserHouseData(user_id) {
   }
 }
 
+// Function to get user name
+async function getUserName  (user_id) {
+  console.log("this is user id" + user_id);
+  try {
+    const result = await turso.execute({
+      sql: "SELECT username FROM users WHERE user_id = ?",
+      args: [user_id],
+    });
+    console.log("username:", result.rows[0].username);
+    return result.rows[0].username;
+  } catch (error) {
+    console.error("Error getting user name:", error.message);
+    throw error;
+  }
+} 
+
+async function getUserData(house_id, user_id) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT hm.*, u.*
+        FROM house_members hm
+        JOIN users u ON hm.user_id = u.user_id
+        WHERE hm.user_id = ? AND hm.house_id = ?
+      `,
+      args: [user_id, house_id], // Now both parameters are used correctly
+    });
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user house data:", error.message);
+    throw error;
+  }
+}
+
+
+
+
 //tester functions
+// Modify database 
+async function testdb() {
+  try {
+    // Query the database for all users.
+    const result = await turso.execute("INSERT INTO devices (house_id, room_id, device_name, device_type, device_number, created_at) VALUES (27, 18, 'Smart Light 1', 'light', 1, '2025-03-01 10:00:00'), (27, 18, 'Smart Thermostat', 'thermostat', 1, '2025-03-01 10:05:00'), (27, 18, 'Smart Light 2', 'light', 2, '2025-03-01 10:10:00'), (27, 18, 'Smart Speaker', 'speaker', 1, '2025-03-01 10:15:00'), (27, 18, 'Smart Lock', 'lock', 1, '2025-03-01 10:20:00');");
+
+    // Check if there are any rows returned.
+    if (result.rows.length > 0) {
+      // Print the rows in a table format.
+      console.table(result.rows);
+    } else {
+      console.log("No users found in the database.");
+    }
+  } catch (error) {
+    console.error("Error printing all users:", error.message);
+    throw error;
+  }
+}
+
 // Function to print all rows in the users table.
 async function printAllUsers() {
   try {
@@ -1060,5 +1113,8 @@ module.exports = {
   getAverageCurrentMonth,
   getHighestCurrentMonth,
   getLowestCurrentMonth,
-  getAllUserHouseData
+  getAllUserHouseData,
+  getUserData,
+  getUserName,
+  testdb
 };

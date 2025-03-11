@@ -8,7 +8,7 @@ import addButton from "../../assets/add-button.png";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";  /*made by Joe */
 
-function Sidebar() {
+function Sidebar({allHouses}) {
   const navigate = useNavigate();  /*made by Joe */
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,7 +44,7 @@ function Sidebar() {
 
         {/* Add Home Button */}
         <div className="add-Sidebar-container">
-          <button onClick={() => navigate("/AddnDltHome")} className="add-Sidebar">   
+          <button onClick={() => navigate("/AddnDltHome",{state:{allHouses}})} className="add-Sidebar">   
           <button className="add-Sidebar">
             <img src={addButton} alt="Add" className="add-Sidebar-icon" />
             Add Home

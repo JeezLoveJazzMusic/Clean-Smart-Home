@@ -16,9 +16,12 @@ const Dashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [sendRoomData, setSendRoomData] = useState({});
+  const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
+  const [userDetails, setUserData] = useState(null);
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
+  const currentHouseId = 27;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -54,9 +57,19 @@ const Dashboard = () => {
         const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
         const { allUserHouseData} = homeData.data;
         console.log("this user has house data of:", allUserHouseData);
+        setAllUserHouseData(allUserHouseData);
+
+        // //fetch this house's users
+        // const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
+
+        const response3 = await axios.get(`http://localhost:8080/getUserData/house/27/user/11`);
+        const{userData} = response3.data;
+        setUserData(userData);
+        console.log("userData:", userData);
+
     }
     };
-
+    
     fetchDashboardData();
   }, [houseList]);
 
@@ -79,7 +92,7 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-        <SensorData houseId={27} roomId={18} /> {/*temporarily hardcoded room*/}
+        <SensorData houseId={27} roomId={18} userID = {userID}/> {/*temporarily hardcoded room*/}
       </div>
 
       {/* Device List */}
@@ -94,20 +107,24 @@ const Dashboard = () => {
         <Graphs />
       </div>
 
-      {/* User Dashboard */}
-      <div className="user-dashboard">
-        <Users />
+    {/* User Dashboard */}
+    <div className="user-dashboard">
+        {dashboardData && dashboardData.dwellersList && (
+        <Users dwellersList={dashboardData.dwellersList} />
+        )}
       </div>
 
       {/* Pop-up Overlay */}
       {isProfileOpen && (
         <div className="popup-overlay">
-          <UserProfile onClose={() => setIsProfileOpen(false)} />
+          <UserProfile onClose={() => setIsProfileOpen(false)} thisUserID={userID} thisHouse={currentHouseId} userData={userDetails}/>
         </div>
       )}
 
+      
+
       <div>
-        <Sidebar />
+      <Sidebar allHouses = {HouseDataTest}/> 
       </div>
     </div>
   );
