@@ -10,6 +10,9 @@ import AddnDltHome from "./Components/AddnDltHome/AddnDltHome.jsx";
 import Addndeleteuser from "./Components/addndeleteuser/addndeleteuser.jsx";
 import Userlist from "./components/userlist/Userlist.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx";
+import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"; // Standardized naming
 
 
 function App() {
@@ -57,8 +60,19 @@ function App() {
   {
     path: "/Dashboard", 
     element: <Dashboard />, // Dashboard page /*Made by Joe */
+  },
+  {
+    path: "/ResetPassword",
+    element: <ResetPassword />,
+  },
+  {
+    path: "/RequestResetPassword",
+    element: <RequestResetPassword />,
+  },
+  {
+    path: "/SuccessfulRequestResetPassword",
+    element: <SuccessfulRequestResetPassword />, // Add new success page
   }
- 
   ]);
 
   return (

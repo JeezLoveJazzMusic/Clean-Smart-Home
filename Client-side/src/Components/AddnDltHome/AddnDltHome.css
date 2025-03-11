@@ -4,7 +4,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 1200px;
-    height: 600px;
+    height: 700px;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
@@ -29,7 +29,7 @@
   .add1-addndltbtn  {/*Made by Joe */
     position: absolute;
     top: 80px;
-    left: 8px;
+    LEFT: 10px;
     background: #4CAF50;
     color: white;
     padding: 10px 25px;
@@ -79,7 +79,7 @@
   }
   
   .home-list {/*Made by Joe */
-    margin-top: 80px;
+    margin-top: 120px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;

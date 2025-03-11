@@ -43,8 +43,8 @@
   row-gap: 15px;
   column-gap: 10px;
   margin-top: 15px;
-  max-height: 250px; /* Limit the height for scrollable content */
-  overflow-y: visible; /* Add vertical scrolling */
+  max-height: 340px; /* Limit the height for scrollable content */
+  overflow-y: auto; /* Add vertical scrolling */
   padding-right: 10px;
 }
 
