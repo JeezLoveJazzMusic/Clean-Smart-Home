@@ -40,3 +40,23 @@ app.all("*", function(req, res)
 
 //Ensuring server is up
 app.listen(8080, () => console.log("Server is online!"));
+
+async function getPrediction(temperature, occupancy, energyUsage) {
+    const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            temperature: temperature,
+            occupancy: occupancy,
+            energy_usage: energyUsage
+        })
+    });
+
+    const data = await response.json();
+    console.log("Prediction:", data.prediction);
+    return data.prediction;
+}
+
+getPrediction(34,1,500);
