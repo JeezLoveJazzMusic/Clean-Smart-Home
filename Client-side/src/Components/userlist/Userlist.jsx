@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Addndeleteuser from "../addndeleteuser/Addndeleteuser"; 
+import { useNavigate } from "react-router-dom";
+import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
 import "../userlist/userlist.css";
 
 function UserList() {
@@ -9,6 +10,7 @@ function UserList() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
 
+  const navigate = useNavigate(); 
   const DEFAULT_PROFILE_PIC = "/images/DDTDefaultimage.jpg";
 
   // Toggle menu visibility
@@ -16,35 +18,34 @@ function UserList() {
     setShowMenu(!showMenu);
     if (!showMenu) {
       setDeleteMode(false);
-      setSelectedUsers([]); 
+      setSelectedUsers([]);
     }
   };
 
-  // Add a new user 
+  // Add a new user
   const handleAddUser = (newUser) => {
     if (!newUser || !newUser.name || !newUser.userType) {
       console.error("Invalid user data:", newUser);
       return;
     }
 
-    // Create a JSON object for the new user
     const userObject = {
-      id: Date.now(), // Generate unique ID
+      id: Date.now(), 
       name: newUser.name,
       userType: newUser.userType,
-      profilePic: DEFAULT_PROFILE_PIC 
+      profilePic: DEFAULT_PROFILE_PIC,
     };
 
-    console.log("User Object:", JSON.stringify(userObject, null, 2)); 
+    console.log("User Object:", JSON.stringify(userObject, null, 2));
 
-    setUsers((prevUsers) => [...prevUsers, userObject]); 
+    setUsers((prevUsers) => [...prevUsers, userObject]);
     setShowModal(false);
   };
 
   // Toggle delete mode
   const toggleDeleteMode = () => {
     setDeleteMode(!deleteMode);
-    setSelectedUsers([]); 
+    setSelectedUsers([]);
   };
 
   // Select users to delete
@@ -56,7 +57,7 @@ function UserList() {
     );
   };
 
-  // Delete selected users 
+  // Delete selected users
   const handleDeleteUsers = () => {
     setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
     setDeleteMode(false);
@@ -72,9 +73,7 @@ function UserList() {
         </div>
 
         <div className="button-container">
-          <button className="add-user-btn" onClick={() => setShowModal(true)}>
-            Add Users
-          </button>
+          <button className="add-user-btn" onClick={() => setShowModal(true)}>Add Users</button>
 
           {showMenu && (
             <button className="delete-user-btn" onClick={toggleDeleteMode}>
@@ -105,12 +104,10 @@ function UserList() {
         </div>
 
         {deleteMode && selectedUsers.length > 0 && (
-          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
-            Confirm Delete
-          </button>
+          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>Confirm Delete</button>
         )}
 
-        <button className="gay-btn">Back</button>
+        <button className="gay-btn" onClick={() => navigate('/dashboard')}>Back</button>
       </div>
 
       {showModal && (
@@ -121,6 +118,5 @@ function UserList() {
     </>
   );
 }
-
 
 export default UserList;
