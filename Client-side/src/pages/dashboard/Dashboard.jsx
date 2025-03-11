@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Dashboard.css";
-import DeviceList from "../../components/DeviceList/DeviceList";
+import DeviceList from "../../Components/DeviceList/DeviceList";
 import Users from "../../Components/UserDashboard/UserDashboard";
 import SensorData from "../../Components/SensorData/SensorData";
 import Graphs from "../../Components/Graphs/Graphs";
@@ -30,7 +30,7 @@ const Dashboard = () => {
         const houseID = houseList[0]; // Use the first entry in the houseIDList
         console.log("Fetching data for houseID:", houseID);
         try {
-          const response = await axios.get(`http://localhost:8080/dashboard/house/27`);
+          const response = await axios.get(`http://localhost:8080/dashboard/house/${currentHouseId}`);
           const { roomList, dwellersList, devicesList } = response.data;
           console.log("rooms:", roomList);
           console.log("dwellers:", dwellersList);
@@ -40,7 +40,7 @@ const Dashboard = () => {
           let roomData = {};
           for (let i = 0; i < roomList.length; i++) {
             try {
-              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/27/rooms/${roomList[i].room_id}`);
+              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/${currentHouseId}/rooms/${roomList[i].room_id}`);
               const { devices } = response1.data;
               // console.log("room devices:", devices);
               roomData[roomList[i].room_name] = devices;
@@ -113,7 +113,7 @@ const Dashboard = () => {
     {/* User Dashboard */}
     <div className="user-dashboard">
         {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} />
+        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId}/>
         )}
       </div>
 

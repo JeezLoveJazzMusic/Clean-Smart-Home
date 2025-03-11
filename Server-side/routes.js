@@ -1,7 +1,9 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice,
+
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName } = require("./database.js"); 
+
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
 const express = require("express");
@@ -79,7 +81,7 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  try {
    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
    const rooms = await getRoomList(house_id);
-   const dwellers = await getUserList(house_id);
+   const dwellers = await getUserListWithType(house_id);
    const houseDevices = await getHouseDevices(house_id);
    
    res.status(200).send({
@@ -98,16 +100,29 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  }
 });
 
+//get user by email
+router.post("/getUserByEmail", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await getUserByEmail(email);
+    res.status(200).send({ message: "Routes: User successfully retrieved", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user" });
+  }
+});
+
 //check if email exists (by Hao Chen) ##
 router.post("/check_Email", async (req, res) => {
  const { email } = req.body;
  try {
    // Check if email doesn't exist
    const existBool = await checkUserExists(email);
+   console.log("routes: this is existBool:",existBool);
    if (existBool == false) {
      return res.status(401).send({ message: "Routes: Email does not exist",existBool});
    }
-   res.status(200).send({ message: "Routes: Email exists" });
+   res.status(200).send({ message: "Routes: Email exists", existBool});
  } 
  catch (error) {
    console.error(error);
@@ -370,6 +385,32 @@ router.post ("/addDwellerToHouse", async (req, res) => {
  }
 });
 
+//add owner to house (by Hao Chen)
+router.post ("/addOwnerToHouse", async (req, res) => {
+  const { user_id, house_id } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, "owner");
+    res.status(200).send({message: "Routes: Owner successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding owner to house" });
+  }
+});
+
+router.post("/addUserToHouse", async (req, res) => { 
+  const { user_id, house_id, user_type } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, user_type);
+    res.status(200).send({message: "Routes: User successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding user to house" });
+  }
+});
+
+
 //remove house from user (by Hao Chen) NOT NEEDED
 //this  removes owner from the house. Doing this will remove everything related to the house 
 router.delete("/removeHouse/user/:user_id/house/:house_id", async (req, res) => {
@@ -555,6 +596,21 @@ router.put("/toggleDevice", async (req, res) => {
   }
 });
 
+
+//get user list with type (by Hao Chen)
+router.get("/getUserListWithType/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const users = await getUserListWithType(house_id);
+    res.status(200).send({message: "Routes: Users successfully retrieved", users});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting users" });
+  }
+  });
+  
+
 //get house name (Dylan)
 router.get("/getHouseName/house/:house_id", async (req, res) => {
   const { house_id } = req.params;
@@ -570,6 +626,7 @@ router.get("/getHouseName/house/:house_id", async (req, res) => {
     res.status(500).send({ message: "Routes: An error occurred while getting house name" });
   }
 });
+
 
 //get room name (Dylan)
 router.get("/getRoomName/room/:room_id", async (req, res) => {

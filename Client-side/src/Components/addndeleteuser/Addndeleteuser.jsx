@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../addndeleteuser/addndeleteuser.css";
 
-function Addndeleteuser({ onAddUser, onClose }) {
+function Addndeleteuser({ users, onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [errors, setErrors] = useState({});
@@ -33,10 +33,10 @@ function Addndeleteuser({ onAddUser, onClose }) {
 
         {/* Username Field */}
         <div className="input-group">
-          <label>User Name:</label>
+          <label>User Email:</label>
           <input
             type="text"
-            placeholder="Enter username"
+            placeholder="Enter the user's email"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className={errors.name ? "input-error" : ""}
