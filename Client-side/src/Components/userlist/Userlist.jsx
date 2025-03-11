@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
+import axios from "axios";
 import "../userlist/userlist.css";
 
 function UserList() {
@@ -10,8 +11,29 @@ function UserList() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const location = useLocation();
   const DEFAULT_PROFILE_PIC = "/images/DDTDefaultimage.jpg";
+  const dwellersList = location.state?.dwellersList || [];
+  const currentHouse = location.state?.currentHouse;
+  const houseId = currentHouse
+
+  // Initialize users with dwellersList when component mounts
+  useEffect(() => {
+    console.log("UserList Dwellers List:", dwellersList);
+    console.log("UserList House ID:", houseId);
+    if (dwellersList && dwellersList.length > 0) {
+      // Transform dwellers into the user format if needed
+      const formattedDwellers = dwellersList.map(dweller => ({
+        id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
+        name: dweller.username || "Unknown",
+        userType: dweller.user_type || "Dweller",
+        profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
+      }));
+      
+      setUsers(formattedDwellers);
+    }
+  }, [dwellersList]);
 
   // Toggle menu visibility
   const toggleMenu = () => {
@@ -23,23 +45,52 @@ function UserList() {
   };
 
   // Add a new user
-  const handleAddUser = (newUser) => {
+  const handleAddUser = async (newUser) => {
     if (!newUser || !newUser.name || !newUser.userType) {
       console.error("Invalid user data:", newUser);
       return;
     }
+    console.log("New User:", newUser);
+    
+    try {
+      // Step 1: Check if the user exists in the database
+      const checkResponse = await axios.post(`http://localhost:8080/getUserByEmail`, {
+        email: newUser.name
+      });
+      
+      const returnedUser = checkResponse.data;
+      console.log("Returned User:", returnedUser.user);
 
-    const userObject = {
-      id: Date.now(), 
-      name: newUser.name,
-      userType: newUser.userType,
-      profilePic: DEFAULT_PROFILE_PIC,
-    };
 
-    console.log("User Object:", JSON.stringify(userObject, null, 2));
+      if (!returnedUser || !returnedUser.user) {
+        alert("User does not exist in the system\nEmail address entered might be invalid or user has not registered yet");
+        return;
+    }
 
-    setUsers((prevUsers) => [...prevUsers, userObject]);
-    setShowModal(false);
+      // Step 2: If user exists, send API request to add them to the house
+      const addResponse = await axios.post("http://localhost:8080/addUserToHouse", {
+        house_id: houseId,
+        user_id: returnedUser.user.user_id,
+        user_type: newUser.userType,
+      });
+      console.log("Add User Response:", addResponse.data);
+
+
+      const userObject = {
+        id: returnedUser.user.user_id,
+        name: returnedUser.user.username, // Use username if available, fall back to email
+        userType: newUser.userType,
+        profilePic: returnedUser.profilePic || DEFAULT_PROFILE_PIC,
+      };
+
+      console.log("User Object:", JSON.stringify(userObject, null, 3));
+
+      setUsers((prevUsers) => [...prevUsers, userObject]);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error adding user:", error);
+      alert("Failed to add user: " + (error.response?.data?.message || error.message));
+    }
   };
 
   // Toggle delete mode
@@ -58,10 +109,21 @@ function UserList() {
   };
 
   // Delete selected users
-  const handleDeleteUsers = () => {
-    setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
-    setDeleteMode(false);
-    setSelectedUsers([]);
+  const handleDeleteUsers = async () => {
+    try {
+      // Call API to delete users from the house
+      for (const userId of selectedUsers) {
+        await axios.delete(`http://localhost:8080/removeUserFromHome/houses/${houseId}/users/${userId}`); 
+      }
+      
+      // Update the UI after successful deletion
+      setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
+      setDeleteMode(false);
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error("Error deleting users:", error);
+      alert("Failed to delete users: " + (error.response?.data?.message || error.message));
+    }
   };
 
   return (
@@ -96,6 +158,7 @@ function UserList() {
                 )}
                 <img src={user.profilePic || DEFAULT_PROFILE_PIC} alt="User Profile" className="user-avatar" />
                 <p><strong>{user.name}</strong></p>
+                <p>{user.userType}</p>
               </div>
             ))
           ) : (
@@ -112,7 +175,7 @@ function UserList() {
 
       {showModal && (
         <div className="modal-overlay">
-          <Addndeleteuser onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
         </div>
       )}
     </>

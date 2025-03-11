@@ -86,6 +86,22 @@ async function getUserList(house_id) {
   }
 }
 
+
+async function getUserListWithType(house_id) {
+  try {
+    // Query the database for all users in the house, including their user_type.
+    const result = await turso.execute({
+      sql: "SELECT u.user_id, u.username, u.email, hm.user_type FROM house_members hm JOIN users u ON hm.user_id = u.user_id WHERE hm.house_id = ?",
+      args: [house_id],
+    });
+    // Return the list of users with their user_type
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user list with type:", error.message);
+    throw error;
+  }
+}
+
 // Code added by: Ahmed Al-Ansi
 // Function to add a user to a home profile
 async function addUserToHouse(user_id, house_id, user_type) {
@@ -1131,5 +1147,6 @@ module.exports = {
   getUserData,
   getUserName,
   testdb,
-  toggleDevice
+  toggleDevice,
+  getUserListWithType
 };
