@@ -4,7 +4,6 @@ import { useNavigate , useLocation} from "react-router-dom"; // Import useNaviga
 import "./Humidity.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
-import ShareSensorData from "../ShareSensorData/ShareSensorData";
 import axios from "axios";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
@@ -17,7 +16,7 @@ const Humidity = () => {
   const [curMonth, setCurMonth] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId , roomName} = location.state || {};
 
   const getData = async () => {
     try {
@@ -104,7 +103,7 @@ const Humidity = () => {
 
 
       <div className="card-header">
-        <h2>Humidity</h2>
+        <h2>Room: {roomName} - Humidity</h2>
         <button className="share-button" onClick={openShareSensorData}>
           Share Data
         </button>

@@ -3,7 +3,7 @@
   background-color: #ffffff;
   border-radius: 60px;
   padding: 20px;
-  width: 550px;
+  width: 100%;
   height: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow: visible;
@@ -43,8 +43,8 @@
   row-gap: 15px;
   column-gap: 10px;
   margin-top: 15px;
-  max-height: 250px; /* Limit the height for scrollable content */
-  overflow-y: visible; /* Add vertical scrolling */
+  max-height: 340px; /* Limit the height for scrollable content */
+  overflow-y: auto; /* Add vertical scrolling */
   padding-right: 10px;
 }
 

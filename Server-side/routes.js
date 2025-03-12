@@ -1,7 +1,8 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData,
-        removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth } = require("./database.js"); 
+
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType,
+  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -80,7 +81,7 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  try {
    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
    const rooms = await getRoomList(house_id);
-   const dwellers = await getUserList(house_id);
+   const dwellers = await getUserListWithType(house_id);
    const houseDevices = await getHouseDevices(house_id);
    
    res.status(200).send({
@@ -89,9 +90,7 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
      dwellersList: dwellers,
      devicesList: houseDevices
    });
-   console.log("routes: this is rooms:",rooms);
-   console.log("routes: this is dwellers:",dwellers);
-   console.log("routes: this is houseDevices:",houseDevices);
+ 
 
  } catch (error) {
    console.error(error);
@@ -101,30 +100,15 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  }
 });
 
-//get dashboard data (by Hao Chen) 
-router.get("/dashboard/house/:house_id", async (req, res) => {
-  const { house_id } = req.params;
+//get user by email
+router.post("/getUserByEmail", async (req, res) => {
+  const { email } = req.body;
   try {
-    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
-    const rooms = await getRoomList(house_id);
-    const dwellers = await getUserList(house_id);
-    const houseDevices = await getHouseDevices(house_id);
-    
-    res.status(200).send({
-      message: "Routes: House details retrieved successfully",
-      roomList: rooms,
-      dwellersList: dwellers,
-      devicesList: houseDevices
-    });
-    console.log("routes: this is rooms:",rooms);
-    console.log("routes: this is dwellers:",dwellers);
-    console.log("routes: this is houseDevices:",houseDevices);
-
+    const user = await getUserByEmail(email);
+    res.status(200).send({ message: "Routes: User successfully retrieved", user });
   } catch (error) {
     console.error(error);
-    res.status(500).send({
-      message: "Routes: An error occurred while retrieving house details"
-    });
+    res.status(500).send({ message: "Routes: An error occurred while getting user" });
   }
 });
 
@@ -134,10 +118,11 @@ router.post("/check_Email", async (req, res) => {
  try {
    // Check if email doesn't exist
    const existBool = await checkUserExists(email);
+   console.log("routes: this is existBool:",existBool);
    if (existBool == false) {
      return res.status(401).send({ message: "Routes: Email does not exist",existBool});
    }
-   res.status(200).send({ message: "Routes: Email exists" });
+   res.status(200).send({ message: "Routes: Email exists", existBool});
  } 
  catch (error) {
    console.error(error);
@@ -224,26 +209,28 @@ router.delete("/remove_permission/user/:user_id/device/:device_id", async (req, 
 
 //Get room devices (by Hao Chen) ##
 router.get("/getRoomDevices/houses/:house_id/rooms/:room_id", async (req, res) => {
- const house_id = req.params.house_id;
- const room_id = req.params.room_id;
- try {
-   const devices = await getRoomDevices(house_id, room_id);
-   for (let i = 0; i < devices.length; i++) {
-     devices[i].state_value = JSON.parse("false");
- } 
- res.status(200).send({message: "Routes: Devices successfully retrieved", devices});
- console.log("routes: this is devices:",devices);
- }catch (error) {
-   console.error(error);
-   res.status(500).send({ message: "Routes: An error occurred while getting devices" });
- }
+  const house_id = req.params.house_id;
+  const room_id = req.params.room_id;
+
+  try {
+    let devices = await getRoomDevices(house_id, room_id);
+    
+    // Remove sensors by filtering them out
+    devices = devices.filter(device => !["bgs", "temp", "rhm"].includes(device.device_type));
+
+    res.status(200).send({ message: "Routes: Devices successfully retrieved", devices });
+    console.log("routes: this is devices:", devices);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting devices" });
+  }
 });
 
-//add device to room (by Hao Chen) ##
+//add device to room (by Hao Chen) ## !!!!!!!!!!!!!!!!!!!!!!!!!
 router.post("/add_DeviceToRoom", async (req, res) => {
- const { house_id, room_id, device_name, device_type, manufacturer, model } = req.body;
+ const { house_id, room_id, device_name, device_type } = req.body;
  try {
-   await addDeviceToRoom(house_id, room_id,device_name, device_type, manufacturer, model);
+   await addDeviceToRoom(house_id, room_id,device_name, device_type);
    res.status(200).send({message: "Routes: Device successfully added to room"});
  } 
  catch (error) {
@@ -252,6 +239,20 @@ router.post("/add_DeviceToRoom", async (req, res) => {
  }
 });
 
+//testing
+router.post("/addDeviceTemp", async (req, res) => {
+  const { house_id, room_id, device_name, device_type, device_num } = req.body;
+  try {
+    await addDeviceTemp(house_id, room_id,device_name, device_type, device_num);
+    res.status(200).send({message: "Routes: Device successfully added to room"});
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding device to room" });
+  }
+ });
+
+ 
 //remove device from room (by Hao Chen) ##
 router.delete("/remove_device/houses/:house_id/room/:room_id/device/:device_id", async (req, res) => {
  const { house_id, room_id, device_id } = req.params;
@@ -384,7 +385,33 @@ router.post ("/addDwellerToHouse", async (req, res) => {
  }
 });
 
-//remove house from user (by Hao Chen) 
+//add owner to house (by Hao Chen)
+router.post ("/addOwnerToHouse", async (req, res) => {
+  const { user_id, house_id } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, "owner");
+    res.status(200).send({message: "Routes: Owner successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding owner to house" });
+  }
+});
+
+router.post("/addUserToHouse", async (req, res) => { 
+  const { user_id, house_id, user_type } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, user_type);
+    res.status(200).send({message: "Routes: User successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding user to house" });
+  }
+});
+
+
+//remove house from user (by Hao Chen) NOT NEEDED
 //this  removes owner from the house. Doing this will remove everything related to the house 
 router.delete("/removeHouse/user/:user_id/house/:house_id", async (req, res) => {
  const { user_id, house_id } = req.params;
@@ -421,8 +448,7 @@ router.delete("/removeHouse/house/:house_id", async (req, res) => {
    // Finally, remove the house record itself.
    await removeHouse(house_id);
 
-   
-
+   console.log("routes: House"+house_id+ "and all related data successfully removed");
    res.status(200).send({ message: "Routes: House"+house_id+ "and all related data successfully removed" });
  } catch (error) {
    console.error(error);
@@ -530,7 +556,93 @@ router.get("/getLowestLastMonth/house/:house_id/room/:room_id/deviceType/:device
  }
 });
 
+//get user data (by Hao Chen)
+router.get("/getUserData/house/:house_id/user/:user_id", async (req, res) => {
+  const { house_id, user_id } = req.params;
+  try {
+    const userData = await getUserData(house_id, user_id);
+    res.status(200).send({message: "Routes: User data successfully retrieved", userData});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user data" });
+  }
+  });
 
+  //get user name (by Hao Chen)
+router.get("/getUserName/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const userName = await getUserName(user_id);
+    res.status(200).send({message: "Routes: User name successfully retrieved", userName});
+    console.log("routes: this is userName:",userName);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user name" });
+  }
+  });
+
+//toggle device (by Hao Chen)
+router.put("/toggleDevice", async (req, res) => {
+  const { device_id, device_power } = req.body;
+  try {
+    await toggleDevice(device_id, device_power);
+    res.status(200).send({message: "Routes: Device successfully toggled"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while toggling device" });
+  }
+});
+
+
+//get user list with type (by Hao Chen)
+router.get("/getUserListWithType/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const users = await getUserListWithType(house_id);
+    res.status(200).send({message: "Routes: Users successfully retrieved", users});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting users" });
+  }
+  });
+  
+
+//get house name (Dylan)
+router.get("/getHouseName/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    const houseName = await getHouseName(house_id);
+    if (houseName === null) {
+      res.status(404).send({ message: "Routes: House not found" });
+    } else {
+      res.status(200).send({ message: "Routes: House name successfully retrieved", houseName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting house name" });
+  }
+});
+
+
+//get room name (Dylan)
+router.get("/getRoomName/room/:room_id", async (req, res) => {
+  const { room_id } = req.params;
+  try {
+    const roomName = await getRoomName(room_id);
+    if (roomName === null) {
+      res.status(404).send({ message: "Routes: Room not found" });
+    } else {
+      res.status(200).send({ message: "Routes: Room name successfully retrieved", roomName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting room name" });
+  }
+});
 
 
 
@@ -550,6 +662,16 @@ router.get("/getLowestLastMonth/house/:house_id/room/:room_id/deviceType/:device
 
 //tester functions (by Xiang Wei)
 
+// Modify Database
+router.get("/testdb", async (req, res) => {
+  try {
+    const result = await testdb();
+    res.status(200).send({ message: "Routes: All users printed to server console" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while printing users" });
+  }
+ });
 
 // printAllUsers
 router.get("/printAllUsers", async (req, res) => {

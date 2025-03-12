@@ -4,7 +4,6 @@ import { useNavigate , useLocation} from "react-router-dom"; // Import useNaviga
 import "./Temperature.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
-import ShareSensorData from "../ShareSensorData/ShareSensorData";
 import axios from "axios";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
@@ -16,9 +15,11 @@ const Temperature = () => {
   const [curMonth, setCurMonth] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId , roomName} = location.state || {};
 
   const getData = async () => {
+    console.log("houseId", houseId);
+    console.log("roomId", roomId);
     try {
       let tempLastMonth = [];
       let tempCurrentMonth = [];
@@ -102,7 +103,7 @@ const Temperature = () => {
       </button>
       
       <div className="card-header">
-        <h2>Temperature</h2>
+        <h2>Room: {roomName} - Temperature</h2>
         <button className="share-button" onClick={openShareSensorData}>
           Share Data
         </button>
