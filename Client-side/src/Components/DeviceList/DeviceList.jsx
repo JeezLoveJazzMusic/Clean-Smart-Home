@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./DeviceList.css";
 import { FiMoreVertical } from "react-icons/fi";
+import AddDevice from "../AddnDltDevice/AddDevice/AddDevice.jsx";
+import RemoveDevice from "../AddnDltDevice/RemoveDevice/RemoveDevice.jsx";
 import axios from "axios";
 
 // Import device icons
@@ -43,7 +45,7 @@ const getDeviceIcon = (deviceType) => {
     default:
       return sensorIcon; // Default icon
   }
-};
+};  
 
 const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
   useEffect(() => {
@@ -58,6 +60,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
       device_power: device.device_power === "true"
     }));
   };
+
   const [selectedRoom, setSelectedRoom] = useState(initialRoom);
   const [deviceStates, setDeviceStates] = useState(() => {
     // Process the initial devices to convert device_power to boolean
@@ -65,6 +68,9 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // States for popups
+  const [addDevice, setAddDevice] = useState(false);
+  const [removeDevice, setRemoveDevice] = useState(false);
 
   // Handle room change and update device list
   const handleRoomChange = (room) => {
@@ -104,17 +110,39 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
     });
   };
 
+  // Function to add a device
+  const handleAddDevice = (newDevice) => {
+    setDeviceStates((prevDevices) => [...prevDevices, newDevice]);
+    // console.log(deviceStates);
+    // console.log(newDevice);
+    setAddDevice(false);
+  };
+
+  // Function to remove a device
+  const handleRemoveDevice = (deviceId) => {
+    setDeviceStates((prevDevices) =>
+      prevDevices.filter((device) => device.id !== deviceId)
+    );
+  };
+
   return (
     <div className="smart-home-container">
       <div className="header">
         <div className="dropdown">
-          <button className="room-button" onClick={() => setDropdownOpen(!dropdownOpen)}>
+          <button
+            className="room-button"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
             {selectedRoom} ▽
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
               {Object.keys(rooms).map((room) => (
-                <div key={room} className="dropdown-option" onClick={() => handleRoomChange(room)}>
+                <div
+                  key={room}
+                  className="dropdown-option"
+                  onClick={() => handleRoomChange(room)}
+                >
                   {room}
                 </div>
               ))}
@@ -124,15 +152,25 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
 
         {/* Menu button with dropdown */}
         <div className="menu-container">
-          <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            className="menu-button"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
             <FiMoreVertical />
           </button>
           {menuOpen && (
             <div className="menu-dropdown">
               <div className="menu-option">Add Room</div>
-              <div className="menu-option">Add Device</div>
+              <div className="menu-option" onClick={() => setAddDevice(true)}>
+                Add Device
+              </div>
               <div className="menu-option">Remove Room</div>
-              <div className="menu-option">Remove Device</div>
+              <div
+                className="menu-option"
+                onClick={() => setRemoveDevice(true)}
+              >
+                Remove Device
+              </div>
             </div>
           )}
         </div>
@@ -158,6 +196,21 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
           </div>
         ))}
       </div>
+      {/* Add Device Popup */}
+      <AddDevice
+        onAddDevice={handleAddDevice}
+        onClose={() => setAddDevice(false)}
+        isOpen={addDevice}
+      />
+
+      {/* Remove Device Popup */}
+      {removeDevice && (
+        <RemoveDevice
+          onClose={() => setRemoveDevice(false)}
+          devices={deviceStates}
+          onRemoveDevice={handleRemoveDevice}
+        />
+      )}
     </div>
   );
 };

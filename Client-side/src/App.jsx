@@ -1,4 +1,3 @@
-
 import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
 import Signup from "./pages/signup/Signup.jsx";
 import Login from "./pages/login/Login.jsx";
@@ -15,6 +14,7 @@ import AddRoom from "./Components/addroom/Addroom.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"
 import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx"
 import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"
+
 function App() {
   const route = createBrowserRouter([
     {
@@ -56,31 +56,31 @@ function App() {
     {
       path: "/userlist", 
       element: <Userlist />,  // Userlist page 
-  },
-  {
-    path: "/Dashboard", 
-    element: <Dashboard />, // Dashboard page 
-  },
-  {
-    path: "/addroom", 
-    element: <AddRoom />, 
-  },
-  {
-    path: "/removeroom", 
-    element: <RemoveRoom />, 
-  },
-  {
-    path: "/ResetPassword", 
-    element: <ResetPassword />, 
-  },
-  {
-    path: "/RequestResetPassword",
-    element:<RequestResetPassword />,
-  },
-  {
-    path: "/SuccessfulRequestResetPassword",
-    element:<SuccessfulRequestResetPassword />,
-  }
+    },
+    {
+      path: "/Dashboard", 
+      element: <Dashboard />, // Dashboard page 
+    },
+    {
+      path: "/addroom", 
+      element: <AddRoom />, 
+    },
+    {
+      path: "/removeroom", 
+      element: <RemoveRoom />, 
+    },
+    {
+      path: "/ResetPassword", 
+      element: <ResetPassword />, 
+    },
+    {
+      path: "/RequestResetPassword",
+      element:<RequestResetPassword />,
+    },
+    {
+      path: "/SuccessfulRequestResetPassword",
+      element:<SuccessfulRequestResetPassword />,
+    }
   ]);
 
   return (
