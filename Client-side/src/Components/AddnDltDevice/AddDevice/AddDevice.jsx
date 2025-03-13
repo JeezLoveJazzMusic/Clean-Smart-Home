@@ -1,28 +1,6 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
-// Icon imports
-import lightIcon from "../../../assets/devices-light.png";
-import fanIcon from "../../../assets/devices-fan.png";
-import acIcon from "../../../assets/devices-aircond.png";
-import tvIcon from "../../../assets/devices-television.png";
-import wifiIcon from "../../../assets/devices-wifi.png";
-import cctvIcon from "../../../assets/devices-cctv.png";
-import compIcon from "../../../assets/devices-computer.png";
-import sensorIcon from "../../../assets/devices-sensor.png";
-
-// Mapping device type to icon
-const deviceIconMapping = {
-  light: lightIcon,
-  fan: fanIcon,
-  aircond: acIcon,
-  tv: tvIcon,
-  wifi: wifiIcon,
-  cctv: cctvIcon,
-  computer: compIcon,
-  sensor: sensorIcon,
-};
-
 // Main Function
 const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   const [deviceName, setDeviceName] = useState("");
@@ -51,7 +29,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     const newDevice = {
       id: Date.now(), // Unique ID based on timestamp
       device_name: deviceName,
-      icon: deviceIconMapping[deviceType] || "", // Use mapping to select icon
+      device_type: deviceType, // Use mapping to select icon
       state: false,
     };
 
