@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../removeroom/RemoveRoom.css";
 
-const RemoveRoom = () => {
+const RemoveRoom = ({ isOpen, onClose }) => {
   const [rooms, setRooms] = useState([]);
 
   // Load rooms from localStorage when component mounts
@@ -13,16 +13,20 @@ const RemoveRoom = () => {
   // Function to remove a room
   const removeRoom = (roomId) => {
     const updatedRooms = rooms.filter((room) => room.id !== roomId);
-    setRooms(updatedRooms); 
-    localStorage.setItem("rooms", JSON.stringify(updatedRooms)); 
+    setRooms(updatedRooms);
+    localStorage.setItem("rooms", JSON.stringify(updatedRooms));
   };
 
+  if (!isOpen) return null; // Hide modal when not open
+
   return (
-    <div className="removeroom-modal-overlay">
-      <div className="removeroom-modal">
-      <div className="removeroom-title-container">
-  <h2 className="removeroom-title">Rooms</h2>
-</div>
+    <div className="removeroom-modal-overlay" onClick={onClose}>
+      <div className="removeroom-modal" onClick={(e) => e.stopPropagation()}>
+        
+        
+        <div className="removeroom-title-container">
+          <h2 className="removeroom-title">Remove Room</h2>
+        </div>
 
         <div className="removeroom-list">
           {rooms.length > 0 ? (
@@ -43,7 +47,9 @@ const RemoveRoom = () => {
         </div>
 
         {/* Back Button */}
-        <button className="removeroom-back-btn">Back</button>
+        <button className="removeroom-back-btn" onClick={onClose}>
+          Back
+        </button>
       </div>
     </div>
   );
