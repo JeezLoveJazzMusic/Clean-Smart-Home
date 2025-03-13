@@ -4,6 +4,8 @@ import { FiMoreVertical } from "react-icons/fi";
 import AddDevice from "../AddnDltDevice/AddDevice/AddDevice.jsx";
 import RemoveDevice from "../AddnDltDevice/RemoveDevice/RemoveDevice.jsx";
 import axios from "axios";
+import AddRoom from "../addroom/Addroom.jsx";
+import RemoveRoom from "../Removeroom/RemoveRoom";
 
 // Import device icons
 import lightIcon from "../../assets/devices-light.png";
@@ -71,6 +73,10 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
   // States for popups
   const [addDevice, setAddDevice] = useState(false);
   const [removeDevice, setRemoveDevice] = useState(false);
+
+  // States for popups
+  const [addRoom, setAddRoom] = useState(false);
+  const [removeRoom, setRemoveRoom] = useState(false);
 
   // Handle room change and update device list
   const handleRoomChange = (room) => {
@@ -160,11 +166,14 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
           </button>
           {menuOpen && (
             <div className="menu-dropdown">
-              <div className="menu-option">Add Room</div>
+              <div className="menu-option" onClick={() => setAddRoom(true)}>
+                Add Room
+              </div>
               <div className="menu-option" onClick={() => setAddDevice(true)}>
                 Add Device
               </div>
-              <div className="menu-option">Remove Room</div>
+              <div className="menu-option" onClick={() => setRemoveRoom(true)}>
+                Remove Room</div>
               <div
                 className="menu-option"
                 onClick={() => setRemoveDevice(true)}
@@ -201,6 +210,17 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange}) => {
         onAddDevice={handleAddDevice}
         onClose={() => setAddDevice(false)}
         isOpen={addDevice}
+      />
+      {/* Add Room Popup */}
+      <AddRoom
+        onClose={() => setAddRoom(false)}
+        isOpen={addRoom}
+      />
+
+      {/* Remove Room Popup */}
+      <RemoveRoom
+        onClose={() => setRemoveRoom(false)}
+        isOpen={removeRoom}
       />
 
       {/* Remove Device Popup */}
