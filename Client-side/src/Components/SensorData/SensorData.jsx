@@ -83,7 +83,7 @@ function SensorData({houseId, userID, roomName, roomList}) {
       {/* Welcome Text */}
       {houseName&&roomName ? (
       <h2 className="welcome-text1">
-        Home: {houseName} Room: {roomName}
+        {houseName}, {roomName}
       </h2>
       ) : (
         <p>Loading user name...</p>
