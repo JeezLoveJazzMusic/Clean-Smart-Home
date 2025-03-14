@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
-// Icon imports
-import lightIcon from "../../../assets/devices-light.png";
-import fanIcon from "../../../assets/devices-fan.png";
-import acIcon from "../../../assets/devices-aircond.png";
-import tvIcon from "../../../assets/devices-television.png";
-import wifiIcon from "../../../assets/devices-wifi.png";
-import cctvIcon from "../../../assets/devices-cctv.png";
-import compIcon from "../../../assets/devices-computer.png";
-import sensorIcon from "../../../assets/devices-sensor.png";
-
 // Mapping device type to icon
 const deviceIconMapping = {
   light: lightIcon,
@@ -28,7 +18,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [deviceNo, setDeviceNo] = useState("");
-  
+
   if (!isOpen) return null; // Hide if not open
 
   // Function to handle numeric input for device number
