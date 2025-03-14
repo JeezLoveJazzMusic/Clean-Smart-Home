@@ -1,7 +1,7 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
 
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType,
+const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName } = require("./database.js"); 
 
 //Middleware imports
@@ -641,6 +641,23 @@ router.get("/getRoomName/room/:room_id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting room name" });
+  }
+});
+
+//get user type (hao chen)
+router.get("/getUserType/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const userType = await getUserType(user_id);
+    if (userType === null) {
+      res.status(404).send({ message: "Routes: User not found" });
+    }
+    else {
+      res.status(200).send({ message: "Routes: User type successfully retrieved", userType });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user type" });
   }
 });
 

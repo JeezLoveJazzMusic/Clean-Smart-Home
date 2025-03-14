@@ -49,10 +49,29 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID}) => {
+  const [currentUserType, setCurrentUserType] = useState(null);
   useEffect(() => {
-    onRoomChange(initialRoom);
-  }, []);
+    const fetchUserType = async () => {
+      if (!TheUserID) {
+        console.error("UserID is undefined - cannot fetch user type");
+        setCurrentUserType("dweller"); // Set default
+        return;
+      }
+  
+      try {
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${TheUserID}`);
+        console.log("User type response:", userTypeResponse.data);
+        const { userType } = userTypeResponse.data;
+        setCurrentUserType(userType?.toLowerCase() );
+      } catch (error) {
+        console.error("Error fetching user type:", error);
+        setCurrentUserType("dweller");
+      }
+    };
+  
+    fetchUserType();
+  }, [TheUserID]); // Remove dwellersList dependency
 
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
@@ -183,6 +202,8 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
     });
   };
   
+  const isOwner = (userType) => userType && userType.toLowerCase() === 'owner';
+
   return (
     <div className="smart-home-container">
       <div className="header">
@@ -210,32 +231,33 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
 
         {/* Menu button with dropdown */}
         <div className="menu-container">
-          <button
-            className="menu-button"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <FiMoreVertical />
-          </button>
-          {menuOpen && (
-            <div className="menu-dropdown">
-
-              <div className="menu-option" onClick={() => setAddRoom(true)}>
-                Add Room
-              </div>
-              <div className="menu-option" onClick={() => setAddDevice(true)}>
-
-                Add Device
-              </div>
-              <div className="menu-option" onClick={() => setRemoveRoom(true)}>
-                Remove Room</div>
-              <div
-                className="menu-option"
-                onClick={() => setRemoveDevice(true)} >
-                Remove Device
-              </div>
+          {currentUserType === "owner" && (
+      <>
+        <button
+          className="menu-button"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <FiMoreVertical />
+        </button>
+        {menuOpen && (
+          <div className="menu-dropdown">
+            <div className="menu-option" onClick={() => setAddRoom(true)}>
+              Add Room
             </div>
-          )}
-        </div>
+            <div className="menu-option" onClick={() => setAddDevice(true)}>
+              Add Device
+            </div>
+            <div className="menu-option" onClick={() => setRemoveRoom(true)}>
+              Remove Room
+            </div>
+            <div className="menu-option" onClick={() => setRemoveDevice(true)}>
+              Remove Device
+            </div>
+          </div>
+        )}
+      </>
+    )}
+  </div>
       </div>
 
       <div className="device-grid">
@@ -271,6 +293,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
       <AddRoom
         onClose={() => setAddRoom(false)}
         isOpen={addRoom}
+        currentHouse={currentHouse}
       />
 
       {/* Remove Room Popup */}

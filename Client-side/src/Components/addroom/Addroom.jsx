@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../addroom/Addroom.css";
 
-const AddRoom = ({ isOpen, onClose }) => {
+const AddRoom = ({ isOpen, onClose, currentHouse }) => {
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
   const [error, setError] = useState("");

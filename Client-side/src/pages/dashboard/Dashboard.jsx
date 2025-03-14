@@ -101,7 +101,7 @@ const Dashboard = () => {
       {/* Device List */}
       <div className="device-dashboard">
         {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} currentHouse={currentHouseId}/>
+          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} currentHouse={currentHouseId} TheUserID={userID}/>
         )}
       </div>
 
@@ -113,7 +113,7 @@ const Dashboard = () => {
     {/* User Dashboard */}
     <div className="user-dashboard">
         {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId}/>
+        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID}/>
         )}
       </div>
 

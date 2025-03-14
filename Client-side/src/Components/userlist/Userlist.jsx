@@ -10,30 +10,49 @@ function UserList() {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
+  const [currentUserType, setCurrentUserType] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   const DEFAULT_PROFILE_PIC = "/images/DDTDefaultimage.jpg";
   const dwellersList = location.state?.dwellersList || [];
   const currentHouse = location.state?.currentHouse;
+  const UserID = location.state?.UserID;
   const houseId = currentHouse
 
   // Initialize users with dwellersList when component mounts
   useEffect(() => {
-    console.log("UserList Dwellers List:", dwellersList);
-    console.log("UserList House ID:", houseId);
-    if (dwellersList && dwellersList.length > 0) {
-      // Transform dwellers into the user format if needed
-      const formattedDwellers = dwellersList.map(dweller => ({
-        id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
-        name: dweller.username || "Unknown",
-        userType: dweller.user_type || "Dweller",
-        profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
-      }));
-      
-      setUsers(formattedDwellers);
-    }
-  }, [dwellersList]);
+    const fetchUserType = async () => {
+      if(!UserID){
+        console.log("User ID not found");
+      }
+      console.log("UserList Dwellers List:", dwellersList);
+      console.log("UserList House ID:", houseId);
+
+      try {
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}`);
+        const { userType } = userTypeResponse.data;
+        console.log("User Type:", userType);
+        setCurrentUserType(userType.toLowerCase()); // Normalize the case
+      } catch (error) {
+        console.error("Error fetching user type:", error);
+      }
+
+      if (dwellersList && dwellersList.length > 0) {
+        // Transform dwellers into the user format if needed
+        const formattedDwellers = dwellersList.map(dweller => ({
+          id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
+          name: dweller.username || "Unknown",
+          userType: dweller.user_type || "Dweller",
+          profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
+        }));
+        
+        setUsers(formattedDwellers);
+      }
+    };
+
+    fetchUserType();
+  }, [UserID, dwellersList]);
 
   // Toggle menu visibility
   const toggleMenu = () => {
@@ -131,16 +150,24 @@ function UserList() {
       <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
         <div className="header-container">
           <h2 className="users-title">Users</h2>
-          <button className="menu-btn" onClick={toggleMenu}>⋯</button>
+          {currentUserType === "owner" && (
+            <button className="menu-btn" onClick={toggleMenu}>⋯</button>
+          )}
         </div>
 
         <div className="button-container">
-          <button className="add-user-btn" onClick={() => setShowModal(true)}>Add Users</button>
+          {currentUserType === "owner" && (
+            <>
+              <button className="add-user-btn" onClick={() => setShowModal(true)}>
+                Add Users
+              </button>
 
-          {showMenu && (
-            <button className="delete-user-btn" onClick={toggleDeleteMode}>
-              {deleteMode ? "Cancel" : "Delete Users"}
-            </button>
+              {showMenu && (
+                <button className="delete-user-btn" onClick={toggleDeleteMode}>
+                  {deleteMode ? "Cancel" : "Delete Users"}
+                </button>
+              )}
+            </>
           )}
         </div>
 
@@ -166,16 +193,24 @@ function UserList() {
           )}
         </div>
 
-        {deleteMode && selectedUsers.length > 0 && (
-          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>Confirm Delete</button>
+        {/* Modify delete confirmation button to check user type */}
+        {deleteMode && selectedUsers.length > 0 && currentUserType === "owner" && (
+          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
+            Confirm Delete
+          </button>
         )}
 
         <button className="gay-btn" onClick={() => navigate(-1)}>Back</button>
       </div>
 
-      {showModal && (
+      {/* Only show modal if user is owner */}
+      {showModal && currentUserType === "owner" && (
         <div className="modal-overlay">
-          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+          <Addndeleteuser 
+            users={dwellersList} 
+            onAddUser={handleAddUser} 
+            onClose={() => setShowModal(false)} 
+          />
         </div>
       )}
     </>
