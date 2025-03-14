@@ -46,6 +46,7 @@ const AddHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { allHouses } = location.state || {};
+  const MAX_LENGTH = 20; // Maximum character limit
 
   // Use the data passed in as props (if available) to populate homes.
   const [homes, setHomes] = useState(() => {
@@ -194,9 +195,11 @@ const AddHome = () => {
           <label>Home Name:</label>
           <input
             type="text"
-            placeholder="Enter Home Name"
+            placeholder="Enter House Name (max 20 characters)"
             value={newHomeName}
             onChange={(e) => setNewHomeName(e.target.value)}
+            maxLength={MAX_LENGTH}
+            required
           />
           <label>Home Address:</label>
           <input

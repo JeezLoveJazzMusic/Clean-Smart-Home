@@ -102,4 +102,15 @@
     
 }
 
+.character-count {
+    display: block;
+    text-align: right;
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 4px;
+  }
+  
+  .addroom-input-group input {
+    margin-bottom: 0;  /* Adjust if needed to accommodate character counter */
+  }
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
+
 export const getDeviceIcon = (deviceType) => {
   switch (deviceType.toLowerCase()) {
     case 'light':
@@ -30,6 +31,7 @@ export const getDeviceIcon = (deviceType) => {
     default:
       return sensorIcon;
   }
+
 };
 
 // Main Function
@@ -37,7 +39,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [deviceNo, setDeviceNo] = useState("");
-
+  
   if (!isOpen) return null; // Hide if not open
 
   // Function to handle numeric input for device number
@@ -49,7 +51,12 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     }
   };
 
-  // Function to handle text input
+  // Function to handle text input with max length 20
+  const handleDeviceNameChange = (event) => {
+    const value = event.target.value.slice(0, 20);
+    setDeviceName(value);
+  };
+
   const handleConfirm = () => {
     if (!deviceName || !deviceType) {
       alert("Please enter both Device Name and Device Type.");
@@ -64,6 +71,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
       icon: getDeviceIcon[deviceType] || "", // Use mapping to select icon
       device_type: deviceType,
       device_no: deviceNo,
+
       state: false,
     };
 
@@ -77,8 +85,6 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     onClose();
   };
 
-  //if (!isOpen) return null; // Hide if not open
-
   return (
     <div className="popup-overlay">
       <div className="popup-content">
@@ -89,9 +95,10 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
           <label>Device Name:</label>
           <input
             type="text"
-            placeholder="Enter device name"
+            placeholder="Enter device name (max 20 characters)"
             value={deviceName}
-            onChange={(e) => setDeviceName(e.target.value)}
+            onChange={handleDeviceNameChange}
+            maxLength="20"
           />
         </div>
 

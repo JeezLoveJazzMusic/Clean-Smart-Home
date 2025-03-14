@@ -5,6 +5,7 @@ const AddRoom = ({ isOpen, onClose, currentHouse }) => {
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
   const [error, setError] = useState("");
+  const MAX_LENGTH = 20; // Maximum character limit
 
   // Load existing rooms from localStorage on page load
   useEffect(() => {
@@ -12,10 +13,24 @@ const AddRoom = ({ isOpen, onClose, currentHouse }) => {
     setRooms(storedRooms);
   }, []);
 
+  // Function to handle input change with character limit
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    if (input.length <= MAX_LENGTH) {
+      setRoomName(input);
+      setError(""); // Clear error when user starts typing
+    }
+  };
+
   // Function to add a new room
   const handleConfirm = () => {
     if (roomName.trim() === "") {
       setError("Please enter a valid room name.");
+      return;
+    }
+
+    if (roomName.length > MAX_LENGTH) {
+      setError(`Room name cannot exceed ${MAX_LENGTH} characters.`);
       return;
     }
     
@@ -46,8 +61,9 @@ const AddRoom = ({ isOpen, onClose, currentHouse }) => {
           <input
             type="text"
             value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            placeholder="Enter room name"
+            onChange={handleInputChange}
+            placeholder="Enter room name (max 20 characters)"
+            maxLength={MAX_LENGTH}
             required
           />
         </div>
