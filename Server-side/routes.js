@@ -243,7 +243,7 @@ router.post("/add_DeviceToRoom", async (req, res) => {
 router.post("/addDeviceTemp", async (req, res) => {
   const { house_id, room_id, device_name, device_type, device_num } = req.body;
   try {
-    await addDeviceTemp(house_id, room_id,device_name, device_type, device_num);
+    await addDeviceToRoom(house_id, room_id,device_name, device_type, device_num);
     res.status(200).send({message: "Routes: Device successfully added to room"});
   } 
   catch (error) {

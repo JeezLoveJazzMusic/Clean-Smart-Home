@@ -29,7 +29,9 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     const newDevice = {
       id: Date.now(), // Unique ID based on timestamp
       device_name: deviceName,
-      device_type: deviceType, // Use mapping to select icon
+      icon: deviceIconMapping[deviceType] || "", // Use mapping to select icon
+      device_type: deviceType,
+      device_no: deviceNo,
       state: false,
     };
 
