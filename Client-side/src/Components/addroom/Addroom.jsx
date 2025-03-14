@@ -66,9 +66,6 @@ const AddRoom = ({ isOpen, onClose }) => {
             maxLength={MAX_LENGTH}
             required
           />
-          <small className="character-count">
-            {roomName.length}/{MAX_LENGTH} characters
-          </small>
         </div>
 
         <div className="addroom-button-group">
