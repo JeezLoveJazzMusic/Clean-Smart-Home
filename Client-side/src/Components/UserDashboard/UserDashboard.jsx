@@ -15,7 +15,7 @@ const Users = ({ dwellersList = [], currentHouse }) => {
   console.log("houseHEHEHEHEH", currentHouse);
   return (
     <div className="container">
-      <h3>Users</h3>
+      <h6>Users</h6>
       <div className="user-list">
         {dwellersList.slice(0, 4).map(user => {
           // Use modulus to choose an icon deterministically

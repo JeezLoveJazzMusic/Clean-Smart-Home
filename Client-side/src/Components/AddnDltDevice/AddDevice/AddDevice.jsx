@@ -43,7 +43,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   // Function to handle text input
   const handleConfirm = () => {
     if (!deviceName || !deviceType) {
-      alert("Please enter both Device Name and Device Type.");
+      alert("Please enter both Device Name( maximum 20 characters) and Device Type.");
       return;
     }
 

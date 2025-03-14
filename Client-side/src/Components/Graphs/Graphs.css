@@ -19,6 +19,7 @@
 
 /* Chart Container */
 .chart-container1{
+  font-family: "Inria serif", serif;
   font-size: 10px;
   display: flex;
   justify-content: space-around;
@@ -39,6 +40,7 @@
 
 /* Chart Text */
 .chart-text {
+  font-family: "Inria serif", serif;
   font-size: 10px;
   font-weight: bold;
   align-items: top;

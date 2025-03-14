@@ -28,7 +28,7 @@
   
   .add1-addndltbtn  {/*Made by Joe */
     position: absolute;
-    top: 80px;
+    top: 70px;
     LEFT: 10px;
     background: #4CAF50;
     color: white;
@@ -69,7 +69,7 @@
     position: absolute;
     top: 60px;
     right: 20px;
-    padding: 10px 15px;
+    padding: 10px 25px;
     font-size: 14px;
     background-color: #f87171;
     color: white;
