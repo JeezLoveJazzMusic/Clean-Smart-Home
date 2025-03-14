@@ -258,6 +258,21 @@ async function getUserType(user_id){
 }
 
 //by Hao Chen
+async function removeAllDevicesFromRoom(house_id, room_id) {
+  try {
+    await turso.execute({
+      sql: "DELETE FROM devices WHERE house_id = ? AND room_id = ?",
+      args: [house_id, room_id],
+    });
+    console.log("All devices removed from room successfully!");
+  }
+  catch (error) {
+    console.error("Error removing all devices from room:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
 async function removeDeviceFromRoom(house_id, room_id, device_id) {
   try {
     // First, remove dependent rows from device_states (if any)
@@ -1199,5 +1214,6 @@ module.exports = {
   testdb,
   toggleDevice,
   getUserListWithType,
-  getUserType
+  getUserType,
+  removeAllDevicesFromRoom
 };

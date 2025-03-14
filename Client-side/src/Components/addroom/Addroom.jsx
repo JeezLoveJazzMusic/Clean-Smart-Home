@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../addroom/Addroom.css";
+import axios from "axios";
 
 const AddRoom = ({ isOpen, onClose, currentHouse }) => {
   const [roomName, setRoomName] = useState("");
@@ -23,27 +24,40 @@ const AddRoom = ({ isOpen, onClose, currentHouse }) => {
   };
 
   // Function to add a new room
-  const handleConfirm = () => {
-    if (roomName.trim() === "") {
-      setError("Please enter a valid room name.");
-      return;
-    }
 
-    if (roomName.length > MAX_LENGTH) {
-      setError(`Room name cannot exceed ${MAX_LENGTH} characters.`);
-      return;
-    }
+const handleConfirm = async () => {
+  // ... existing validation code ...
+
+  try {
+    const response = await axios.post("http://localhost:8080/addRoom", {
+      house_id: currentHouse,
+      room_name: roomName
+    });
+
+    console.log("Room creation response:", response.data); // Debug log
+
     
-    setError(""); // Clear error message if input is valid
 
-    const newRoom = { id: Date.now(), name: roomName }; // Unique ID
-    const updatedRooms = [...rooms, newRoom];
+    // Initialize the new room with the room_id from the response
+    const newRoom = {
+      room_id: response.data.room_id,
+      room_name: roomName,
+      devices: [] // Initialize empty devices array
+    };
 
-    setRooms(updatedRooms); // Update local state
-    localStorage.setItem("rooms", JSON.stringify(updatedRooms)); // Save to localStorage
-    setRoomName(""); // Clear input
-    onClose(); // Close modal
-  };
+    // Notify parent component of the new room
+    if (typeof onRoomAdded === 'function') {
+      onRoomAdded(newRoom);
+    }
+
+    setRoomName("");
+    onClose();
+    window.location.reload();
+  } catch (error) {
+    console.error("Error adding room:", error);
+    setError("Failed to add room. Please try again.");
+  }
+};
 
   if (!isOpen) return null; // Hide modal if not open
 

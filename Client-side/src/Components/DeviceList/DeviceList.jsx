@@ -49,7 +49,7 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID}) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
   useEffect(() => {
     const fetchUserType = async () => {
@@ -136,29 +136,34 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   };
 
   // Function to add a device
-  // Function to add a device
   const handleAddDevice = (newDevice) => {
-    // Get the room object for the selected room
-    const selectedRoomData = rooms[selectedRoom];
-    
-    // Make sure we have the room_id
-    if (!selectedRoomData || !selectedRoomData[0]?.room_id) {
+    console.log("Selected Room:", selectedRoom);
+    console.log("Full rooms data:", rooms);
+  
+    // Get room ID from dashboard data
+    const dashboardRoomData = dashboardData?.roomList?.find(room => room.room_name === selectedRoom);
+    let room_id = dashboardRoomData?.room_id;
+  
+    // If not found in dashboard data, try getting from devices array
+    if (!room_id) {
+      const selectedRoomData = rooms[selectedRoom];
+      if (Array.isArray(selectedRoomData) && selectedRoomData.length > 0) {
+        room_id = selectedRoomData[0].room_id;
+      }
+    }
+  
+    if (!room_id) {
       console.error("Room ID not found for room:", selectedRoom);
-      alert("Error: Room ID not found. Cannot add device.");
+      console.log("Full rooms object:", rooms);
+      alert("Error: Room ID not found. Please refresh the page and try again.");
       return;
     }
     
-    // Get the room_id from the first device in the room (assuming all devices in a room have the same room_id)
-    const room_id = selectedRoomData[0].room_id;
-    console.log("Adding device to room:", room_id);
-    console.log("house_id:", currentHouse);
-    console.log("device_name:", newDevice.device_name);
-    console.log("device_type:", newDevice.device_type);
-    console.log("device_no:", newDevice.device_no);
-    // Create API request to add device
+  
+    // Make the API call with the found room_id
     axios.post("http://localhost:8080/addDeviceTemp", {
       house_id: currentHouse,
-      room_id: room_id, // Use the room_id from the first device in the room
+      room_id: room_id,
       device_name: newDevice.device_name,
       device_type: newDevice.device_type,
       device_num: newDevice.device_no
@@ -168,10 +173,15 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       if (response.data && response.data.device_id) {
         const processedDevice = {
           ...response.data,
-          device_power: response.data.device_power === "true" // Ensure consistent boolean conversion
+          device_power: response.data.device_power === "true"
         };
         setDeviceStates(prevDevices => [...prevDevices, processedDevice]);
-        rooms[selectedRoom] = [...(rooms[selectedRoom] || []), processedDevice];
+        
+        // Initialize the room array if it doesn't exist
+        if (!rooms[selectedRoom]) {
+          rooms[selectedRoom] = [];
+        }
+        rooms[selectedRoom] = [...rooms[selectedRoom], processedDevice];
       }
     })
     .catch(error => {
@@ -185,7 +195,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   // Function to remove a device
   const handleRemoveDevice = (deviceId) => {
     const selectedRoomData = rooms[selectedRoom];
-    const room_id = selectedRoomData[0].room_id;
+    let room_id = selectedRoomData[0].room_id;
     console.log("Removing device from room:", room_id);
     console.log("removing device house_id:", currentHouse);
     console.log("removing device device_id:", deviceId);
@@ -300,6 +310,8 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       <RemoveRoom
         onClose={() => setRemoveRoom(false)}
         isOpen={removeRoom}
+        currentHouse={currentHouse}
+        rooms={dashboardData?.roomList || []}
       />
 
       {/* Remove Device Popup */}
