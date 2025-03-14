@@ -1,12 +1,34 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
+// Icon imports
+import lightIcon from "../../../assets/devices-light.png";
+import fanIcon from "../../../assets/devices-fan.png";
+import acIcon from "../../../assets/devices-aircond.png";
+import tvIcon from "../../../assets/devices-television.png";
+import wifiIcon from "../../../assets/devices-wifi.png";
+import cctvIcon from "../../../assets/devices-cctv.png";
+import compIcon from "../../../assets/devices-computer.png";
+import sensorIcon from "../../../assets/devices-sensor.png";
+
+// Mapping device type to icon
+const deviceIconMapping = {
+  light: lightIcon,
+  fan: fanIcon,
+  aircond: acIcon,
+  tv: tvIcon,
+  wifi: wifiIcon,
+  cctv: cctvIcon,
+  computer: compIcon,
+  sensor: sensorIcon,
+};
+
 // Main Function
 const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [deviceNo, setDeviceNo] = useState("");
-
+  
   if (!isOpen) return null; // Hide if not open
 
   // Function to handle numeric input for device number
@@ -18,7 +40,12 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     }
   };
 
-  // Function to handle text input
+  // Function to handle text input with max length 20
+  const handleDeviceNameChange = (event) => {
+    const value = event.target.value.slice(0, 20);
+    setDeviceName(value);
+  };
+
   const handleConfirm = () => {
     if (!deviceName || !deviceType) {
       alert("Please enter both Device Name and Device Type.");
@@ -30,8 +57,6 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
       id: Date.now(), // Unique ID based on timestamp
       device_name: deviceName,
       icon: deviceIconMapping[deviceType] || "", // Use mapping to select icon
-      device_type: deviceType,
-      device_no: deviceNo,
       state: false,
     };
 
@@ -45,8 +70,6 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     onClose();
   };
 
-  //if (!isOpen) return null; // Hide if not open
-
   return (
     <div className="popup-overlay">
       <div className="popup-content">
@@ -57,9 +80,10 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
           <label>Device Name:</label>
           <input
             type="text"
-            placeholder="Enter device name"
+            placeholder="Enter device name (max 20 characters)"
             value={deviceName}
-            onChange={(e) => setDeviceName(e.target.value)}
+            onChange={handleDeviceNameChange}
+            maxLength="20"
           />
         </div>
 
