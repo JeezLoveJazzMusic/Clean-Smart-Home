@@ -214,16 +214,16 @@ async function addDeviceToRoom(
   room_id,
   device_name,
   device_type,
-  manufacturer,
-  model
+  device_number
 ) {
   try {
     await turso.execute({
-      sql: "INSERT INTO devices (house_id, room_id, device_name, device_type, manufacturer, model) VALUES (?, ?, ?, ?, ?, ?)",
-      args: [house_id, room_id, device_name, device_type, manufacturer, model],
+      sql: "INSERT INTO devices (house_id, room_id, device_name, device_type, device_number) VALUES (?, ?, ?, ?, ?)",
+      args: [house_id, room_id, device_name, device_type, device_number],
     });
     console.log("Device added to room successfully!");
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error adding device to room:", error.message);
     throw error;
   }
