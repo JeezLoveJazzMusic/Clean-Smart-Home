@@ -645,10 +645,10 @@ router.get("/getRoomName/room/:room_id", async (req, res) => {
 });
 
 //get user type (hao chen)
-router.get("/getUserType/user/:user_id", async (req, res) => {
-  const { user_id } = req.params;
+router.get("/getUserType/user/:user_id/house/:house_id", async (req, res) => {
+  const { user_id, house_id } = req.params;
   try {
-    const userType = await getUserType(user_id);
+    const userType = await getUserType(user_id, house_id);
     if (userType === null) {
       res.status(404).send({ message: "Routes: User not found" });
     }

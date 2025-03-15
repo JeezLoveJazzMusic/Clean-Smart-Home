@@ -46,6 +46,7 @@ const AddHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { allHouses } = location.state || {};
+  const { currentUserID } = location.state || {};
   const MAX_LENGTH = 20; // Maximum character limit
 
   // Use the data passed in as props (if available) to populate homes.
@@ -81,7 +82,6 @@ const AddHome = () => {
     }
   }, []);
 
-  const currentUserId = localStorage.getItem("userID");
   const [isAdding, setIsAdding] = useState(false);
   const [newHomeName, setNewHomeName] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -97,13 +97,13 @@ const AddHome = () => {
       try {
         // Send POST request to create a new house
         const response = await axios.post("http://localhost:8080/createHouse", {
-          user_id: 11,
+          user_id: currentUserID,
           house_name: newHomeName,
           address: newHomeAddress,
         });
         console.log("newHomeName: ", newHomeName);
         console.log("newHomeAddress: ", newHomeAddress);
-        console.log("currentUserId: ", currentUserId);
+        console.log("currentUserId: ", currentUserID);
         // Assuming the created house is returned in response.data.house
         const createdHouse = response.data.house;
         // Map the response to your local house shape

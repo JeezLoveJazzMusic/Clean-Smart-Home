@@ -30,7 +30,7 @@ function UserList() {
       console.log("UserList House ID:", houseId);
 
       try {
-        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}`);
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}/house/${houseId}`);
         const { userType } = userTypeResponse.data;
         console.log("User Type:", userType);
         setCurrentUserType(userType.toLowerCase()); // Normalize the case
@@ -120,6 +120,12 @@ function UserList() {
 
   // Select users to delete
   const handleSelectUser = (id) => {
+    // Prevent selecting yourself if you're the owner
+    if (id === parseInt(UserID)) {
+      alert("You cannot delete yourself from the house");
+      return;
+    }
+    
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((userId) => userId !== id)

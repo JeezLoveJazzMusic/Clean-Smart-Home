@@ -244,11 +244,11 @@ async function getUserPermissions(user_id) {
 }
 
 //by hao chen
-async function getUserType(user_id){
+async function getUserType(user_id, house_id){
   try {
     const result = await turso.execute({
-      sql: "SELECT user_type FROM house_members WHERE user_id = ?",
-      args: [user_id],
+      sql: "SELECT user_type FROM house_members WHERE user_id = ? AND house_id = ?",
+      args: [user_id, house_id],
     });
     return result.rows[0].user_type;
   } catch (error) {

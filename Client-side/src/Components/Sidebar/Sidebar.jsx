@@ -8,7 +8,7 @@ import addButton from "../../assets/add-button.png";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom"; /*made by Joe */
 
-function Sidebar({ allHouses }) {
+function Sidebar({ allHouses, onHouseSelect, currentUserID }) {
   const navigate = useNavigate(); /*made by Joe */
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,12 +16,20 @@ function Sidebar({ allHouses }) {
     setIsOpen(!isOpen);
   };
 
+  const handleHouseClick = (houseId) => {
+    if (onHouseSelect) {
+      onHouseSelect(houseId);
+    }
+  };
+
   /* Temporary Home Data */
-  const homes = [
+  const testhomes = [
     { id: 1, name: "Home 1", image: addHome1 },
     { id: 2, name: "Home 2", image: addHome2 },
     { id: 3, name: "Home 3", image: addHome3 },
   ];
+
+  console.log("Sidebar received houses:", allHouses);
 
   return (
     <div className="sidebar-container">
@@ -34,14 +42,14 @@ function Sidebar({ allHouses }) {
 
         {/* Home List */}
         <div className="sidebar-list">
-          {homes.map((home) => (
+          {allHouses && allHouses.map((home) => (
             <button
-              key={home.id}
+              key={home.house_id}
               className="sidebar-container"
-              onClick={() => navigate(`/home/${home.id}`)}
+              onClick={() => handleHouseClick(home.house_id)}
             >
               <img src={home.image} alt={home.name} className="sidebar-image" />
-              <span className="sidebar-home-name">{home.name}</span>
+              <span className="sidebar-home-name">{home.house_name}</span>
             </button>
           ))}
         </div>
@@ -49,13 +57,11 @@ function Sidebar({ allHouses }) {
         {/* Add Home Button */}
         <div className="add-sidebar-container">
           <button
-            onClick={() => navigate("/AddnDltHome", { state: { allHouses } })}
+            onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
             className="add-sidebar"
           >
-            <button className="add-sidebar">
-              <img src={addButton} alt="Add" className="add-sidebar-icon" />
-              Add Home
-            </button>
+            <img src={addButton} alt="Add" className="add-sidebar-icon" />
+            Add Home
           </button>
         </div>
       </div>

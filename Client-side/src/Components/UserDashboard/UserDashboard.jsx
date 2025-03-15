@@ -12,7 +12,7 @@ const userIcons = [user1, user2, user3, user4];
 
 const Users = ({ dwellersList = [], currentHouse, UserID }) => {
   const navigate = useNavigate();
-  console.log("houseHEHEHEHEH", currentHouse);
+  console.log("house currently in: ", currentHouse);
   return (
     <div className="container">
       <h6>Users</h6>

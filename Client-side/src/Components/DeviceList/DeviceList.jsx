@@ -65,7 +65,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       }
   
       try {
-        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${TheUserID}`);
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${TheUserID}/house/${currentHouse}`);
         console.log("User type response:", userTypeResponse.data);
         const { userType } = userTypeResponse.data;
         setCurrentUserType(userType?.toLowerCase() );
