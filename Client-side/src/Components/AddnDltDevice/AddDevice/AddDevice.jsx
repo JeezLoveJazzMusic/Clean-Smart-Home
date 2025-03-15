@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
-// Mapping device type to icon
-const deviceIconMapping = {
-  light: lightIcon,
-  fan: fanIcon,
-  aircond: acIcon,
-  tv: tvIcon,
-  wifi: wifiIcon,
-  cctv: cctvIcon,
-  computer: compIcon,
-  sensor: sensorIcon,
+export const getDeviceIcon = (deviceType) => {
+  switch (deviceType.toLowerCase()) {
+    case 'light':
+      return lightIcon;
+    case 'fan':
+      return fanIcon;
+    case 'aircond':
+    case 'thermostat':
+      return acIcon;
+    case 'television':
+    case 'tv':
+      return tvIcon;
+    case 'wifi':
+      return wifiIcon;
+    case 'cctv':
+      return cctvIcon;
+    case 'computer':
+      return compIcon;
+    case 'sensor':
+    case 'doorsensor':
+    case 'temperaturesensor':
+      return sensorIcon;
+    case 'speaker':
+      return sensorIcon;
+    case 'lock':
+      return sensorIcon;
+    default:
+      return sensorIcon;
+  }
 };
 
 // Main Function
@@ -40,13 +59,17 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
     if (!deviceName || !deviceType) {
       alert("Please enter both Device Name and Device Type.");
       return;
+      
     }
 
     // Create a new device object
     const newDevice = {
       id: Date.now(), // Unique ID based on timestamp
       device_name: deviceName,
-      icon: deviceIconMapping[deviceType] || "", // Use mapping to select icon
+      icon: getDeviceIcon[deviceType] || "", // Use mapping to select icon
+      device_type: deviceType,
+      device_no: deviceNo,
+
       state: false,
     };
 
