@@ -51,6 +51,11 @@ const getDeviceIcon = (deviceType) => {
 
 const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
+
+  useEffect(() => {
+    onRoomChange(initialRoom);
+  }, []);
+
   useEffect(() => {
     const fetchUserType = async () => {
       if (!TheUserID) {
