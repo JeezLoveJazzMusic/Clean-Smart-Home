@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./AddDevice.css";
 
-
 export const getDeviceIcon = (deviceType) => {
   switch (deviceType.toLowerCase()) {
     case 'light':
@@ -31,7 +30,6 @@ export const getDeviceIcon = (deviceType) => {
     default:
       return sensorIcon;
   }
-
 };
 
 // Main Function
@@ -39,7 +37,7 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [deviceNo, setDeviceNo] = useState("");
-  
+
   if (!isOpen) return null; // Hide if not open
 
   // Function to handle numeric input for device number
