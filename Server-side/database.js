@@ -1224,6 +1224,24 @@ async function getHouseCreator(house_id) {
   } catch (error) {
     console.error("Error getting house creator:", error.message);
     throw error;
+
+//from ing ji
+//get all info about the sensor needed for exporting csv.
+async function getAllDeviceData(houseId, roomId, deviceType) {
+  const query = `
+    SELECT ds.state_value, ds.updated_at
+    FROM device_states ds
+    JOIN devices d ON ds.device_id = d.device_id
+    WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
+    ORDER BY ds.updated_at ASC;
+  `;
+  try {
+    const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
+    return result.rows;
+  } catch (error) {
+    console.error("Database error in getAllDeviceData:", error);
+    return [];
+
   }
 }
 
@@ -1281,6 +1299,7 @@ module.exports = {
   testdb,
   toggleDevice,
   getUserListWithType,
+  getAllDeviceData,
   getUserType,
   removeAllDevicesFromRoom,
   addAllPermission,
