@@ -243,6 +243,35 @@ async function getUserPermissions(user_id) {
   }
 }
 
+//by hao chen
+async function getUserType(user_id){
+  try {
+    const result = await turso.execute({
+      sql: "SELECT user_type FROM house_members WHERE user_id = ?",
+      args: [user_id],
+    });
+    return result.rows[0].user_type;
+  } catch (error) {
+    console.error("Error getting user type:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
+async function removeAllDevicesFromRoom(house_id, room_id) {
+  try {
+    await turso.execute({
+      sql: "DELETE FROM devices WHERE house_id = ? AND room_id = ?",
+      args: [house_id, room_id],
+    });
+    console.log("All devices removed from room successfully!");
+  }
+  catch (error) {
+    console.error("Error removing all devices from room:", error.message);
+    throw error;
+  }
+}
+
 //by Hao Chen
 async function removeDeviceFromRoom(house_id, room_id, device_id) {
   try {
@@ -1204,5 +1233,7 @@ module.exports = {
   testdb,
   toggleDevice,
   getUserListWithType,
-  getAllDeviceData
+  getAllDeviceData,
+  getUserType,
+  removeAllDevicesFromRoom
 };
