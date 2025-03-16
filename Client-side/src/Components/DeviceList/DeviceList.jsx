@@ -49,10 +49,34 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData }) => {
+  const [currentUserType, setCurrentUserType] = useState(null);
+
   useEffect(() => {
     onRoomChange(initialRoom);
   }, []);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      if (!TheUserID) {
+        console.error("UserID is undefined - cannot fetch user type");
+        setCurrentUserType("dweller"); // Set default
+        return;
+      }
+  
+      try {
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${TheUserID}/house/${currentHouse}`);
+        console.log("User type response:", userTypeResponse.data);
+        const { userType } = userTypeResponse.data;
+        setCurrentUserType(userType?.toLowerCase() );
+      } catch (error) {
+        console.error("Error fetching user type:", error);
+        setCurrentUserType("dweller");
+      }
+    };
+  
+    fetchUserType();
+  }, [TheUserID]); // Remove dwellersList dependency
 
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
@@ -91,6 +115,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
   const toggleDevice = async (index) => {
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
+        console.log("Device object:", device);
         if (i === index) {
           const newPowerState = !device.device_power;
           
@@ -105,6 +130,22 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
           .catch(error => {
             console.error("Error toggling device:", error);
           });
+
+          // If this is a light, send the command to Home.IO to physically toggle it
+        if (device.device_type.toLowerCase() === "light") {
+          console.log("Toggling light:", device.device_number + " in room " + selectedRoom);
+          // Determine action based on the new state
+          const action = newPowerState ? "turn_on" : "turn_off";
+          const homeIOControlUrl = `http://IP.Home.IO:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
+          
+          axios.get(homeIOControlUrl)
+            .then(() => {
+              console.log(`Light command sent: ${homeIOControlUrl}`);
+            })
+            .catch(err => {
+              console.error("Error sending light command:", err);
+            });
+        }
           
           // Toggle the device_power boolean
           return { ...device, device_power: newPowerState };
@@ -117,29 +158,34 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
   };
 
   // Function to add a device
-  // Function to add a device
   const handleAddDevice = (newDevice) => {
-    // Get the room object for the selected room
-    const selectedRoomData = rooms[selectedRoom];
-    
-    // Make sure we have the room_id
-    if (!selectedRoomData || !selectedRoomData[0]?.room_id) {
+    console.log("Selected Room:", selectedRoom);
+    console.log("Full rooms data:", rooms);
+  
+    // Get room ID from dashboard data
+    const dashboardRoomData = dashboardData?.roomList?.find(room => room.room_name === selectedRoom);
+    let room_id = dashboardRoomData?.room_id;
+  
+    // If not found in dashboard data, try getting from devices array
+    if (!room_id) {
+      const selectedRoomData = rooms[selectedRoom];
+      if (Array.isArray(selectedRoomData) && selectedRoomData.length > 0) {
+        room_id = selectedRoomData[0].room_id;
+      }
+    }
+  
+    if (!room_id) {
       console.error("Room ID not found for room:", selectedRoom);
-      alert("Error: Room ID not found. Cannot add device.");
+      console.log("Full rooms object:", rooms);
+      alert("Error: Room ID not found. Please refresh the page and try again.");
       return;
     }
     
-    // Get the room_id from the first device in the room (assuming all devices in a room have the same room_id)
-    const room_id = selectedRoomData[0].room_id;
-    console.log("Adding device to room:", room_id);
-    console.log("house_id:", currentHouse);
-    console.log("device_name:", newDevice.device_name);
-    console.log("device_type:", newDevice.device_type);
-    console.log("device_no:", newDevice.device_no);
-    // Create API request to add device
+  
+    // Make the API call with the found room_id
     axios.post("http://localhost:8080/addDeviceTemp", {
       house_id: currentHouse,
-      room_id: room_id, // Use the room_id from the first device in the room
+      room_id: room_id,
       device_name: newDevice.device_name,
       device_type: newDevice.device_type,
       device_num: newDevice.device_no
@@ -149,10 +195,15 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
       if (response.data && response.data.device_id) {
         const processedDevice = {
           ...response.data,
-          device_power: response.data.device_power === "true" // Ensure consistent boolean conversion
+          device_power: response.data.device_power === "true"
         };
         setDeviceStates(prevDevices => [...prevDevices, processedDevice]);
-        rooms[selectedRoom] = [...(rooms[selectedRoom] || []), processedDevice];
+        
+        // Initialize the room array if it doesn't exist
+        if (!rooms[selectedRoom]) {
+          rooms[selectedRoom] = [];
+        }
+        rooms[selectedRoom] = [...rooms[selectedRoom], processedDevice];
       }
     })
     .catch(error => {
@@ -166,7 +217,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
   // Function to remove a device
   const handleRemoveDevice = (deviceId) => {
     const selectedRoomData = rooms[selectedRoom];
-    const room_id = selectedRoomData[0].room_id;
+    let room_id = selectedRoomData[0].room_id;
     console.log("Removing device from room:", room_id);
     console.log("removing device house_id:", currentHouse);
     console.log("removing device device_id:", deviceId);
@@ -183,6 +234,8 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
     });
   };
   
+  const isOwner = (userType) => userType && userType.toLowerCase() === 'owner';
+
   return (
     <div className="smart-home-container">
       <div className="header">
@@ -210,32 +263,33 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
 
         {/* Menu button with dropdown */}
         <div className="menu-container">
-          <button
-            className="menu-button"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <FiMoreVertical />
-          </button>
-          {menuOpen && (
-            <div className="menu-dropdown">
-
-              <div className="menu-option" onClick={() => setAddRoom(true)}>
-                Add Room
-              </div>
-              <div className="menu-option" onClick={() => setAddDevice(true)}>
-
-                Add Device
-              </div>
-              <div className="menu-option" onClick={() => setRemoveRoom(true)}>
-                Remove Room</div>
-              <div
-                className="menu-option"
-                onClick={() => setRemoveDevice(true)} >
-                Remove Device
-              </div>
+          {currentUserType === "owner" && (
+      <>
+        <button
+          className="menu-button"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <FiMoreVertical />
+        </button>
+        {menuOpen && (
+          <div className="menu-dropdown">
+            <div className="menu-option" onClick={() => setAddRoom(true)}>
+              Add Room
             </div>
-          )}
-        </div>
+            <div className="menu-option" onClick={() => setAddDevice(true)}>
+              Add Device
+            </div>
+            <div className="menu-option" onClick={() => setRemoveRoom(true)}>
+              Remove Room
+            </div>
+            <div className="menu-option" onClick={() => setRemoveDevice(true)}>
+              Remove Device
+            </div>
+          </div>
+        )}
+      </>
+    )}
+  </div>
       </div>
 
       <div className="device-grid">
@@ -271,12 +325,15 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse}) => {
       <AddRoom
         onClose={() => setAddRoom(false)}
         isOpen={addRoom}
+        currentHouse={currentHouse}
       />
 
       {/* Remove Room Popup */}
       <RemoveRoom
         onClose={() => setRemoveRoom(false)}
         isOpen={removeRoom}
+        currentHouse={currentHouse}
+        rooms={dashboardData?.roomList || []}
       />
 
       {/* Remove Device Popup */}

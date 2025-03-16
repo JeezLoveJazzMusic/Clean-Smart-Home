@@ -10,30 +10,65 @@ function UserList() {
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
+  const [currentUserType, setCurrentUserType] = useState(null);
+  const [creatorId, setCreatorId] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   const DEFAULT_PROFILE_PIC = "/images/DDTDefaultimage.jpg";
   const dwellersList = location.state?.dwellersList || [];
   const currentHouse = location.state?.currentHouse;
+  const UserID = location.state?.UserID;
   const houseId = currentHouse
 
+  useEffect(() => {
+    const fetchCreatorId = async () => {
+      if (!houseId) return;
+      try {
+        const res = await axios.get(`http://localhost:8080/getHouseCreator/house/${houseId}`);
+        // Use res.data.creator since that's what is returned.
+        setCreatorId(res.data.creator);
+        console.log("Creator ID:", res.data.creator);
+      } catch (error) {
+        console.error("Error fetching house details:", error);
+      }
+    };
+    fetchCreatorId();
+  }, [houseId]);
+  
   // Initialize users with dwellersList when component mounts
   useEffect(() => {
-    console.log("UserList Dwellers List:", dwellersList);
-    console.log("UserList House ID:", houseId);
-    if (dwellersList && dwellersList.length > 0) {
-      // Transform dwellers into the user format if needed
-      const formattedDwellers = dwellersList.map(dweller => ({
-        id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
-        name: dweller.username || "Unknown",
-        userType: dweller.user_type || "Dweller",
-        profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
-      }));
-      
-      setUsers(formattedDwellers);
-    }
-  }, [dwellersList]);
+    const fetchUserType = async () => {
+      if(!UserID){
+        console.log("User ID not found");
+      }
+      console.log("UserList Dwellers List:", dwellersList);
+      console.log("UserList House ID:", houseId);
+
+      try {
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}/house/${houseId}`);
+        const { userType } = userTypeResponse.data;
+        console.log("User Type:", userType);
+        setCurrentUserType(userType.toLowerCase()); // Normalize the case
+      } catch (error) {
+        console.error("Error fetching user type:", error);
+      }
+
+      if (dwellersList && dwellersList.length > 0) {
+        // Transform dwellers into the user format if needed
+        const formattedDwellers = dwellersList.map(dweller => ({
+          id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
+          name: dweller.username || "Unknown",
+          userType: dweller.user_type || "Dweller",
+          profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
+        }));
+        
+        setUsers(formattedDwellers);
+      }
+    };
+
+    fetchUserType();
+  }, [UserID, dwellersList]);
 
   // Toggle menu visibility
   const toggleMenu = () => {
@@ -101,6 +136,18 @@ function UserList() {
 
   // Select users to delete
   const handleSelectUser = (id) => {
+    const currentId = parseInt(UserID);
+    const creator = creatorId ? parseInt(creatorId) : null;
+    
+    if (id === currentId) {
+      alert("You cannot delete yourself from the house");
+      return;
+    }
+    if (creator && id === creator) {
+      alert("You cannot delete the creator of the house");
+      return;
+    }
+    
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((userId) => userId !== id)
@@ -127,35 +174,56 @@ function UserList() {
   };
   return (
     <>
-      <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
+      <div
+        className={`user-list-container ${
+          showMenu ? "show-delete" : ""
+        } ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}
+      >
         <div className="header-container">
           <h2 className="users-title">Users</h2>
-          <button className="menu-btn" onClick={toggleMenu}>⋯</button>
+          {currentUserType === "owner" && (
+            <button className="menu-btn" onClick={toggleMenu}>
+              ⋯
+            </button>
+          )}
         </div>
 
-        {showMenu && (
-          <div className="button-container">
-            <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>Add Users</button>
-            <button className="delete-user-btn" onClick={toggleDeleteMode}>
-              {deleteMode ? "Cancel" : "Delete Users"}
-            </button>
-          </div>
-        )}
+        <div className="button-container">
+          {currentUserType === "owner" && (
+            <>
+              <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>
+                Add Users
+              </button>
+
+              {showMenu && (
+                <button className="delete-user-btn" onClick={toggleDeleteMode}>
+                  {deleteMode ? "Cancel" : "Delete Users"}
+                </button>
+              )}
+            </>
+          )}
+        </div>
 
         <div className="user-grid">
           {users.length > 0 ? (
             users.map((user) => (
               <div key={user.id} className={`user-item ${deleteMode ? "delete-mode" : ""}`}>
                 {deleteMode && (
-                  <input
-                    type="checkbox"
-                    className="delete-checkbox"
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() => handleSelectUser(user.id)}
-                  />
+                  user.id !== parseInt(UserID) &&
+                  (creatorId ? user.id !== parseInt(creatorId) : true) && (
+                    <input
+                      type="checkbox"
+                      className="delete-checkbox"
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={() => handleSelectUser(user.id)}
+                    />
+                  )
                 )}
-                <img src={user.profilePic} alt="User Profile" className="user-avatar" />
-                <p><strong>{user.name}</strong></p>
+                <img src={user.profilePic || DEFAULT_PROFILE_PIC} alt="User Profile" className="user-avatar" />
+                <p>
+                  <strong>{user.name}</strong>
+                  {creatorId && user.id === creatorId}
+                </p>
                 <p>{user.userType}</p>
               </div>
             ))
@@ -164,18 +232,22 @@ function UserList() {
           )}
         </div>
 
-        {deleteMode && selectedUsers.length > 0 && (
-          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>Confirm Delete</button>
+        {deleteMode && selectedUsers.length > 0 && currentUserType === "owner" && (
+          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
+            Confirm Delete
+          </button>
         )}
 
-        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>Back</button>
-
-        {showModal && (
-          <div className="modal-overlay">
-            <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
-          </div>
-        )}
+        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>
+          Back
+        </button>
       </div>
+
+      {showModal && currentUserType === "owner" && (
+        <div className="modal-overlay">
+          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+        </div>
+      )}
     </>
   );
 }

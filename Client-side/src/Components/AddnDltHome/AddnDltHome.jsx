@@ -16,8 +16,8 @@ const selectImage = (house_id) => {
 const AddHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { allHouses } = location.state || {};
-  const MAX_LENGTH = 20;
+  const { allHouses , currentUserID} = location.state || {};
+  const MAX_LENGTH = 20; // Maximum character limit
 
   const [homes, setHomes] = useState(() => {
     if (allHouses && allHouses.length) {
@@ -49,7 +49,6 @@ const AddHome = () => {
     }
   }, []);
 
-  const currentUserId = localStorage.getItem("userID");
   const [isAdding, setIsAdding] = useState(false);
   const [newHomeName, setNewHomeName] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -64,10 +63,14 @@ const AddHome = () => {
     if (newHomeName.trim() && newHomeAddress.trim()) {
       try {
         const response = await axios.post("http://localhost:8080/createHouse", {
-          user_id: 11,
+          user_id: currentUserID,
           house_name: newHomeName,
           address: newHomeAddress,
         });
+        console.log("newHomeName: ", newHomeName);
+        console.log("newHomeAddress: ", newHomeAddress);
+        console.log("currentUserId: ", currentUserID);
+        // Assuming the created house is returned in response.data.house
         const createdHouse = response.data.house;
         const newHouse = {
           id: createdHouse.house_id,

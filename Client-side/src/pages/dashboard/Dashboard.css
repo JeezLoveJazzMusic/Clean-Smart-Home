@@ -24,12 +24,12 @@
   grid-column: span 2;
   padding: 2px;
   background-color: #ffffff;
-  height: 80px;
+  height: 100px;
   box-sizing: border-box;
 }
 
 .logo-image {
-  height: 80px;
+  height: 70px;
 }
 
 .logo1 {        /*( fix by Joe)*/

@@ -1,41 +1,65 @@
 import React, { useState, useEffect } from "react";
 import "./RemoveRoom.css";
+import axios from "axios";
 
-const RemoveRoom = ({ isOpen, onClose }) => {
-  const [rooms, setRooms] = useState([]);
+const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
+  const [error, setError] = useState("");
 
-  // Load rooms from localStorage when component mounts
-  useEffect(() => {
-    const storedRooms = JSON.parse(localStorage.getItem("rooms")) || [];
-    setRooms(storedRooms);
-  }, []);
+  const handleRemoveRoom = async (room_id, room_name) => {
+    try {
+      if (!room_id || !currentHouse) {
+        setError("Missing room ID or house ID");
+        return;
+      }
 
-  // Function to remove a room
-  const removeRoom = (roomId) => {
-    const updatedRooms = rooms.filter((room) => room.id !== roomId);
-    setRooms(updatedRooms);
-    localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+      // First remove all devices
+      try {
+        await axios.delete(`http://localhost:8080/removeAllDevicesFromRoom/houses/${currentHouse}/rooms/${room_id}`);
+        console.log("All devices removed from room");
+        
+        // Then remove the room
+        await axios.delete(`http://localhost:8080/removeRoom/houses/${currentHouse}/room/${room_id}`);
+        console.log("Room removed successfully");
+        
+        // Clear any existing errors
+        setError("");
+        if (typeof onRoomRemoved === 'function') {
+          onRoomRemoved(room_id); // Trigger parent component update
+        }
+        onClose();
+        
+        // Refresh the room list if needed
+        window.location.reload(); // This will refresh the page to update the room list
+
+      } catch (apiError) {
+        console.error("API Error:", apiError);
+        setError(apiError.response?.data?.message || "Failed to remove room. Please try again.");
+      }
+
+    } catch (error) {
+      console.error("Error in handleRemoveRoom:", error);
+      setError(error.message || "Failed to remove room. Please try again.");
+    }
   };
-
-  if (!isOpen) return null; // Hide modal when not open
+  if (!isOpen) return null;
 
   return (
     <div className="removeroom-modal-overlay" onClick={onClose}>
       <div className="removeroom-modal" onClick={(e) => e.stopPropagation()}>
-        
-        
         <div className="removeroom-title-container">
           <h2 className="removeroom-title">Remove Room</h2>
         </div>
 
+        {error && <p className="error-message">{error}</p>}
+
         <div className="removeroom-list">
-          {rooms.length > 0 ? (
+          {rooms && rooms.length > 0 ? (
             rooms.map((room) => (
-              <div key={room.id} className="removeroom-item">
-                <span>{room.name}</span>
+              <div key={room.room_id} className="removeroom-item">
+                <span>{room.room_name}</span>
                 <button
                   className="removeroom-delete-btn"
-                  onClick={() => removeRoom(room.id)}
+                  onClick={() => handleRemoveRoom(room.room_id, room.room_name)}
                 >
                   ⦻
                 </button>
@@ -46,7 +70,6 @@ const RemoveRoom = ({ isOpen, onClose }) => {
           )}
         </div>
 
-        {/* Back Button */}
         <button className="removeroom-back-btn" onClick={onClose}>
           Back
         </button>

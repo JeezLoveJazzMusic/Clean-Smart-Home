@@ -10,9 +10,9 @@ import addUser from "../../assets/add-button.png";
 // Array of icons to select from
 const userIcons = [user1, user2, user3, user4];
 
-const Users = ({ dwellersList = [], currentHouse }) => {
+const Users = ({ dwellersList = [], currentHouse, UserID }) => {
   const navigate = useNavigate();
-  console.log("houseHEHEHEHEH", currentHouse);
+  console.log("house currently in: ", currentHouse);
   return (
     <div className="container">
       <h6>Users</h6>
@@ -26,7 +26,7 @@ const Users = ({ dwellersList = [], currentHouse }) => {
             </div>
           );
         })}
-        <button onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse} })  } className="add-user1">
+        <button onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="add-user1">
           <img src={addUser} alt="Add User" />
         </button>
       </div>

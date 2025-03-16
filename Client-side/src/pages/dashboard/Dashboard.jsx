@@ -22,57 +22,69 @@ const Dashboard = () => {
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
-  const currentHouseId = 27;
+  const [currentHouseId, setCurrentHouseId] = useState(() => {
+    const savedHouseId = localStorage.getItem('currentHouseId');
+    return savedHouseId ? parseInt(savedHouseId) : (houseList?.[0] || null);
+  });
+  
+  // Update handleHouseSelect to save to localStorage
+  const handleHouseSelect = async (houseId) => {
+    await fetchDashboardData(houseId);
+    setCurrentHouseId(houseId);
+    localStorage.setItem('currentHouseId', houseId.toString());
+  };  
+
+  const fetchDashboardData = async () => {
+    if (houseList && houseList.length > 0) {
+      const houseID = houseList[0]; // Use the first entry in the houseIDList
+      console.log("Fetching data for houseID:", houseID);
+      try {
+        const response = await axios.get(`http://localhost:8080/dashboard/house/${currentHouseId}`);
+        const { roomList, dwellersList, devicesList } = response.data;
+        console.log("rooms:", roomList);
+        console.log("dwellers:", dwellersList);
+        console.log("devices:", devicesList);
+        setDashboardData({ roomList, dwellersList, devicesList });
+
+        let roomData = {};
+        for (let i = 0; i < roomList.length; i++) {
+          try {
+            const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/${currentHouseId}/rooms/${roomList[i].room_id}`);
+            const { devices } = response1.data;
+            // console.log("room devices:", devices);
+            roomData[roomList[i].room_name] = devices;
+          } catch (error) {
+            console.error("Error fetching device data:", error);
+          }
+        }
+        setSendRoomData(roomData);
+        console.log("sendRoomData:", roomData);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+
+      // Fetch user houses data
+      const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
+      const { allUserHouseData} = homeData.data;
+      console.log("this user has house data of:", allUserHouseData);
+      setAllUserHouseData(allUserHouseData);
+
+      // //fetch this house's users
+      // const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
+
+      const response3 = await axios.get(`http://localhost:8080/getUserData/house/27/user/11`);
+      const{userData} = response3.data;
+      setUserData(userData);
+      console.log("userData:", userData);
+
+  }
+  };
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      if (houseList && houseList.length > 0) {
-        const houseID = houseList[0]; // Use the first entry in the houseIDList
-        console.log("Fetching data for houseID:", houseID);
-        try {
-          const response = await axios.get(`http://localhost:8080/dashboard/house/${currentHouseId}`);
-          const { roomList, dwellersList, devicesList } = response.data;
-          console.log("rooms:", roomList);
-          console.log("dwellers:", dwellersList);
-          console.log("devices:", devicesList);
-          setDashboardData({ roomList, dwellersList, devicesList });
-
-          let roomData = {};
-          for (let i = 0; i < roomList.length; i++) {
-            try {
-              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/${currentHouseId}/rooms/${roomList[i].room_id}`);
-              const { devices } = response1.data;
-              // console.log("room devices:", devices);
-              roomData[roomList[i].room_name] = devices;
-            } catch (error) {
-              console.error("Error fetching device data:", error);
-            }
-          }
-          setSendRoomData(roomData);
-          console.log("sendRoomData:", roomData);
-        } catch (error) {
-          console.error("Error fetching dashboard data:", error);
-        }
-
-        // Fetch user houses data
-        const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
-        const { allUserHouseData} = homeData.data;
-        console.log("this user has house data of:", allUserHouseData);
-        setAllUserHouseData(allUserHouseData);
-
-        // //fetch this house's users
-        // const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
-
-        const response3 = await axios.get(`http://localhost:8080/getUserData/house/27/user/11`);
-        const{userData} = response3.data;
-        setUserData(userData);
-        console.log("userData:", userData);
-
+    if (houseList && houseList.length > 0) {
+      fetchDashboardData(currentHouseId);
     }
-    };
-    
-    fetchDashboardData();
-  }, [houseList]);
+  }, [houseList, currentHouseId]);
 
   return (
     <div className="dashboard-container">
@@ -101,7 +113,8 @@ const Dashboard = () => {
       {/* Device List */}
       <div className="device-dashboard">
         {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} currentHouse={currentHouseId}/>
+          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} 
+          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData}/>
         )}
       </div>
 
@@ -113,7 +126,7 @@ const Dashboard = () => {
     {/* User Dashboard */}
     <div className="user-dashboard">
         {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId}/>
+        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID}/>
         )}
       </div>
 
@@ -127,7 +140,11 @@ const Dashboard = () => {
       
 
       <div>
-      <Sidebar allHouses = {HouseDataTest}/> 
+      <Sidebar 
+      allHouses = {HouseDataTest}
+      currentUserID = {userID}
+      setCurrentHouseId={setCurrentHouseId}
+      /> 
       </div>
     </div>
   );
