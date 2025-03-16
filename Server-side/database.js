@@ -1224,6 +1224,8 @@ async function getHouseCreator(house_id) {
   } catch (error) {
     console.error("Error getting house creator:", error.message);
     throw error;
+  }
+}
 
 //from ing ji
 //get all info about the sensor needed for exporting csv.
