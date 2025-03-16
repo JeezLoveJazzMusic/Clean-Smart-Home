@@ -115,6 +115,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   const toggleDevice = async (index) => {
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
+        console.log("Device object:", device);
         if (i === index) {
           const newPowerState = !device.device_power;
           
@@ -129,6 +130,22 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
           .catch(error => {
             console.error("Error toggling device:", error);
           });
+
+          // If this is a light, send the command to Home.IO to physically toggle it
+        if (device.device_type.toLowerCase() === "light") {
+          console.log("Toggling light:", device.device_number + " in room " + selectedRoom);
+          // Determine action based on the new state
+          const action = newPowerState ? "turn_on" : "turn_off";
+          const homeIOControlUrl = `http://IP.Home.IO:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
+          
+          axios.get(homeIOControlUrl)
+            .then(() => {
+              console.log(`Light command sent: ${homeIOControlUrl}`);
+            })
+            .catch(err => {
+              console.error("Error sending light command:", err);
+            });
+        }
           
           // Toggle the device_power boolean
           return { ...device, device_power: newPowerState };

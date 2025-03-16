@@ -53,7 +53,7 @@ function Addndeleteuser({ users, onAddUser, onClose }) {
             className={errors.userType ? "input-error" : ""}
           >
             <option value="">Select User Type</option>
-            <option value="Home Owner">Home Owner</option>
+            <option value="Owner">Home Owner</option>
             <option value="Dweller">Dweller</option>
           </select>
           {errors.userType && <p className="error-message">{errors.userType}</p>}

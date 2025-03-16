@@ -29,9 +29,9 @@ const Dashboard = () => {
   
   // Update handleHouseSelect to save to localStorage
   const handleHouseSelect = async (houseId) => {
+    await fetchDashboardData(houseId);
     setCurrentHouseId(houseId);
     localStorage.setItem('currentHouseId', houseId.toString());
-    await fetchDashboardData(houseId);
   };  
 
   const fetchDashboardData = async () => {
@@ -143,7 +143,8 @@ const Dashboard = () => {
       <Sidebar 
       allHouses = {HouseDataTest}
       currentUserID = {userID}
-      onHouseSelect={handleHouseSelect}/> 
+      setCurrentHouseId={setCurrentHouseId}
+      /> 
       </div>
     </div>
   );

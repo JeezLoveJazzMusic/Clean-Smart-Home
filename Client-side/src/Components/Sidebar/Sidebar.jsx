@@ -8,7 +8,7 @@ import addButton from "../../assets/add-button.png";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom"; /*made by Joe */
 
-function Sidebar({ allHouses, onHouseSelect, currentUserID }) {
+function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
   const navigate = useNavigate(); /*made by Joe */
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,11 +16,6 @@ function Sidebar({ allHouses, onHouseSelect, currentUserID }) {
     setIsOpen(!isOpen);
   };
 
-  const handleHouseClick = (houseId) => {
-    if (onHouseSelect) {
-      onHouseSelect(houseId);
-    }
-  };
 
   /* Temporary Home Data */
   const testhomes = [
@@ -46,7 +41,7 @@ function Sidebar({ allHouses, onHouseSelect, currentUserID }) {
             <button
               key={home.house_id}
               className="sidebar-container"
-              onClick={() => handleHouseClick(home.house_id)}
+              onClick={() => setCurrentHouseId(home.house_id)}
             >
               <img src={home.image} alt={home.name} className="sidebar-image" />
               <span className="sidebar-home-name">{home.house_name}</span>
