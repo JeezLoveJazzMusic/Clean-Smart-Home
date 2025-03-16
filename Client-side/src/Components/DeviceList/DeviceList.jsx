@@ -4,8 +4,8 @@ import { FiMoreVertical } from "react-icons/fi";
 import AddDevice from "../AddnDltDevice/AddDevice/AddDevice.jsx";
 import RemoveDevice from "../AddnDltDevice/RemoveDevice/RemoveDevice.jsx";
 import axios from "axios";
-import AddRoom from "../addroom/Addroom.jsx";
-import RemoveRoom from "../Removeroom/RemoveRoom";
+import AddRoom from "../AddRoom/AddRoom.jsx";
+import RemoveRoom from "../RemoveRoom/RemoveRoom.jsx";
 
 // Import device icons
 import lightIcon from "../../assets/devices-light.png";

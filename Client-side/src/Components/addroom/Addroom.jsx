@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../addroom/Addroom.css";
+import "./Addroom.css";
 
 const AddRoom = ({ isOpen, onClose }) => {
   const [roomName, setRoomName] = useState("");

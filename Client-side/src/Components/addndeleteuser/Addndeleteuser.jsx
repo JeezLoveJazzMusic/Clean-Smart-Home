@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../addndeleteuser/addndeleteuser.css";
+import "./AddnDeleteUser.css";
 
-function Addndeleteuser({ users, onAddUser, onClose }) {
+function AddnDeleteUser({ users, onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [errors, setErrors] = useState({});
@@ -69,4 +69,4 @@ function Addndeleteuser({ users, onAddUser, onClose }) {
   );
 }
 
-export default Addndeleteuser;
+export default AddnDeleteUser;

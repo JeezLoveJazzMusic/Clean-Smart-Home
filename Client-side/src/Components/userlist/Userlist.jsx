@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
+import Addndeleteuser from "../AddnDeleteUser/AddnDeleteUser";
 import axios from "axios";
-import "../userlist/userlist.css";
+import "./userlist.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -125,7 +125,6 @@ function UserList() {
       alert("Failed to delete users: " + (error.response?.data?.message || error.message));
     }
   };
-
   return (
     <>
       <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
@@ -134,15 +133,14 @@ function UserList() {
           <button className="menu-btn" onClick={toggleMenu}>⋯</button>
         </div>
 
-        <div className="button-container">
-          <button className="add-user-btn" onClick={() => setShowModal(true)}>Add Users</button>
-
-          {showMenu && (
+        {showMenu && (
+          <div className="button-container">
+            <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>Add Users</button>
             <button className="delete-user-btn" onClick={toggleDeleteMode}>
               {deleteMode ? "Cancel" : "Delete Users"}
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="user-grid">
           {users.length > 0 ? (
@@ -156,7 +154,7 @@ function UserList() {
                     onChange={() => handleSelectUser(user.id)}
                   />
                 )}
-                <img src={user.profilePic || DEFAULT_PROFILE_PIC} alt="User Profile" className="user-avatar" />
+                <img src={user.profilePic} alt="User Profile" className="user-avatar" />
                 <p><strong>{user.name}</strong></p>
                 <p>{user.userType}</p>
               </div>
@@ -170,14 +168,14 @@ function UserList() {
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>Confirm Delete</button>
         )}
 
-        <button className="gay-btn" onClick={() => navigate(-1)}>Back</button>
-      </div>
+        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>Back</button>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
-        </div>
-      )}
+        {showModal && (
+          <div className="modal-overlay">
+            <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+          </div>
+        )}
+      </div>
     </>
   );
 }

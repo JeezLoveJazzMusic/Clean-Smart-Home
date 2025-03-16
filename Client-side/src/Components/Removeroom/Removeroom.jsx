@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../removeroom/RemoveRoom.css";
+import "./RemoveRoom.css";
 
 const RemoveRoom = ({ isOpen, onClose }) => {
   const [rooms, setRooms] = useState([]);

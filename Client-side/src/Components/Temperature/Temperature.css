@@ -1,7 +1,7 @@
 /*made by Joe */
 .card1{
   width: 1200px;
-  height: 660px;
+  height: 720px;
   margin: 80px auto;
   padding: 20px;
   border-radius: 20px;
@@ -12,6 +12,10 @@
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto auto auto;
   gap: 20px;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
   grid-template-areas:
     "header header"
     "Temperature info"
@@ -59,6 +63,8 @@
   padding: 20px;
   background: #f9f9f9;
   border-radius: 30px;
+
+
 }
 
 /*made by Joe */
@@ -84,6 +90,10 @@
   padding: 10px;
   background: #f9f9f9;
   border-radius: 60px;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 /*made by Joe */
@@ -96,7 +106,7 @@
 
 /*made by Joe */
 .tips, .energy-alert, .recommendations {
-  background-color: #f9f9f9;
+  background-color: #e5e5e5;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 15px;

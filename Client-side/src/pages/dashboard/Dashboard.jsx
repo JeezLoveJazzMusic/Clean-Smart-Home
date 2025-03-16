@@ -82,7 +82,7 @@ const Dashboard = () => {
           <img
             src={DDTlogo}
             alt="Durian Dev Technologies"
-            className="logo-image"
+            className="logo1-image"
           />
         </div>
         {/* Profile Icon with Click Event */}
