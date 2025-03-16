@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
+import Addndeleteuser from "../AddnDeleteUser/AddnDeleteUser";
 import axios from "axios";
-import "../userlist/userlist.css";
+import "./userlist.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -11,6 +11,7 @@ function UserList() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [currentUserType, setCurrentUserType] = useState(null);
+  const [creatorId, setCreatorId] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +21,21 @@ function UserList() {
   const UserID = location.state?.UserID;
   const houseId = currentHouse
 
+  useEffect(() => {
+    const fetchCreatorId = async () => {
+      if (!houseId) return;
+      try {
+        const res = await axios.get(`http://localhost:8080/getHouseCreator/house/${houseId}`);
+        // Use res.data.creator since that's what is returned.
+        setCreatorId(res.data.creator);
+        console.log("Creator ID:", res.data.creator);
+      } catch (error) {
+        console.error("Error fetching house details:", error);
+      }
+    };
+    fetchCreatorId();
+  }, [houseId]);
+  
   // Initialize users with dwellersList when component mounts
   useEffect(() => {
     const fetchUserType = async () => {
@@ -30,7 +46,7 @@ function UserList() {
       console.log("UserList House ID:", houseId);
 
       try {
-        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}`);
+        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}/house/${houseId}`);
         const { userType } = userTypeResponse.data;
         console.log("User Type:", userType);
         setCurrentUserType(userType.toLowerCase()); // Normalize the case
@@ -120,6 +136,18 @@ function UserList() {
 
   // Select users to delete
   const handleSelectUser = (id) => {
+    const currentId = parseInt(UserID);
+    const creator = creatorId ? parseInt(creatorId) : null;
+    
+    if (id === currentId) {
+      alert("You cannot delete yourself from the house");
+      return;
+    }
+    if (creator && id === creator) {
+      alert("You cannot delete the creator of the house");
+      return;
+    }
+    
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((userId) => userId !== id)
@@ -144,21 +172,26 @@ function UserList() {
       alert("Failed to delete users: " + (error.response?.data?.message || error.message));
     }
   };
-
   return (
     <>
-      <div className={`user-list-container ${showMenu ? "show-delete" : ""} ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}>
+      <div
+        className={`user-list-container ${
+          showMenu ? "show-delete" : ""
+        } ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}
+      >
         <div className="header-container">
           <h2 className="users-title">Users</h2>
           {currentUserType === "owner" && (
-            <button className="menu-btn" onClick={toggleMenu}>⋯</button>
+            <button className="menu-btn" onClick={toggleMenu}>
+              ⋯
+            </button>
           )}
         </div>
 
         <div className="button-container">
           {currentUserType === "owner" && (
             <>
-              <button className="add-user-btn" onClick={() => setShowModal(true)}>
+              <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>
                 Add Users
               </button>
 
@@ -176,15 +209,21 @@ function UserList() {
             users.map((user) => (
               <div key={user.id} className={`user-item ${deleteMode ? "delete-mode" : ""}`}>
                 {deleteMode && (
-                  <input
-                    type="checkbox"
-                    className="delete-checkbox"
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() => handleSelectUser(user.id)}
-                  />
+                  user.id !== parseInt(UserID) &&
+                  (creatorId ? user.id !== parseInt(creatorId) : true) && (
+                    <input
+                      type="checkbox"
+                      className="delete-checkbox"
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={() => handleSelectUser(user.id)}
+                    />
+                  )
                 )}
                 <img src={user.profilePic || DEFAULT_PROFILE_PIC} alt="User Profile" className="user-avatar" />
-                <p><strong>{user.name}</strong></p>
+                <p>
+                  <strong>{user.name}</strong>
+                  {creatorId && user.id === creatorId}
+                </p>
                 <p>{user.userType}</p>
               </div>
             ))
@@ -193,24 +232,20 @@ function UserList() {
           )}
         </div>
 
-        {/* Modify delete confirmation button to check user type */}
         {deleteMode && selectedUsers.length > 0 && currentUserType === "owner" && (
           <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
             Confirm Delete
           </button>
         )}
 
-        <button className="gay-btn" onClick={() => navigate(-1)}>Back</button>
+        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>
+          Back
+        </button>
       </div>
 
-      {/* Only show modal if user is owner */}
       {showModal && currentUserType === "owner" && (
         <div className="modal-overlay">
-          <Addndeleteuser 
-            users={dwellersList} 
-            onAddUser={handleAddUser} 
-            onClose={() => setShowModal(false)} 
-          />
+          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
         </div>
       )}
     </>

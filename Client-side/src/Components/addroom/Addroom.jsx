@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../addroom/Addroom.css";
+import "./Addroom.css";
 import axios from "axios";
 
 const AddRoom = ({ isOpen, onClose, currentHouse }) => {

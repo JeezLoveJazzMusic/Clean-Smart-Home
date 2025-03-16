@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import "./RemoveRoom.css";
 import axios from "axios";
-import "../removeroom/RemoveRoom.css";
 
 const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
   const [error, setError] = useState("");

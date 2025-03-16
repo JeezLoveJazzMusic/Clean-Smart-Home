@@ -7,7 +7,7 @@
   height: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow: visible;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .header {
@@ -86,7 +86,7 @@
 
 .toggleSwitch {
   position: relative;
-  width: 40px;
+  width: 35px;
   height: 15px;
   background-color: rgb(82, 82, 82);
   border-radius: 20px;
@@ -120,7 +120,7 @@
 }
 
 .toggleSwitch.on .toggleKnob {
-  transform: translateX(20px);
+  transform: translateX(12px);
 }
 
 /* When the toggle is OFF */
@@ -129,7 +129,7 @@
 }
 
 .toggleSwitch.off .toggleKnob {
-  transform: translateX(0);
+  transform: translateX(-8px);
 }
 
 /* Dropdown styles */

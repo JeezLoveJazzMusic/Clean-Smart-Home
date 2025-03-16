@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../addndeleteuser/addndeleteuser.css";
+import "./AddnDeleteUser.css";
 
-function Addndeleteuser({ users, onAddUser, onClose }) {
+function AddnDeleteUser({ users, onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [errors, setErrors] = useState({});
@@ -53,7 +53,7 @@ function Addndeleteuser({ users, onAddUser, onClose }) {
             className={errors.userType ? "input-error" : ""}
           >
             <option value="">Select User Type</option>
-            <option value="Home Owner">Home Owner</option>
+            <option value="Owner">Home Owner</option>
             <option value="Dweller">Dweller</option>
           </select>
           {errors.userType && <p className="error-message">{errors.userType}</p>}
@@ -69,4 +69,4 @@ function Addndeleteuser({ users, onAddUser, onClose }) {
   );
 }
 
-export default Addndeleteuser;
+export default AddnDeleteUser;
