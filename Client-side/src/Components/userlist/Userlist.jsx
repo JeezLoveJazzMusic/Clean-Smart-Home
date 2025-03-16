@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Addndeleteuser from "../addndeleteuser/Addndeleteuser";
+import Addndeleteuser from "../AddnDeleteUser/AddnDeleteUser";
 import axios from "axios";
-import "../userlist/userlist.css";
+import "./userlist.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -172,7 +172,6 @@ function UserList() {
       alert("Failed to delete users: " + (error.response?.data?.message || error.message));
     }
   };
-
   return (
     <>
       <div
@@ -192,7 +191,7 @@ function UserList() {
         <div className="button-container">
           {currentUserType === "owner" && (
             <>
-              <button className="add-user-btn" onClick={() => setShowModal(true)}>
+              <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>
                 Add Users
               </button>
 
@@ -239,7 +238,7 @@ function UserList() {
           </button>
         )}
 
-        <button className="back-btn" onClick={() => navigate(-1)}>
+        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>
           Back
         </button>
       </div>
