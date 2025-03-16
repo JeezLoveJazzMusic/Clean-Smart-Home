@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+
 /* Background Overlay */
 .removeroom-modal-overlay {
     position: fixed;
@@ -5,7 +7,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); 
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,73 +16,96 @@
 
 /* Modal Box */
 .removeroom-modal {
-    background: #f6f9eb;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 700px;
+    font-family: "Inria Serif", serif;
+    background: #f4f3ee;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 50vw;
+    height: auto;
     text-align: center;
-    height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 80px;
 }
 
-/* Title */
+/* Title Box */
+.removeroom-title-container {
+    text-align: left;
+    width: 100%;
+}
+
 .removeroom-title {
     display: inline-block;
-    background: #a8d5ba; 
-    color: black; 
+    background: #b7e4c7;
+    color: #1b4332;
     padding: 10px 20px;
-    border-radius: 20px; 
-    font-size: 22px;
+    border-radius: 20px;
+    font-size: 24px;
     font-weight: bold;
     text-align: center;
-    margin-left: 0;
-}
-/* Container to Align Title Left */
-.removeroom-title-container {
-    text-align: left; 
-    width: 100%; 
 }
 
-
-.removeroom-header {
-    background: #c5e1a5;
-    padding: 5px 15px;
-    border-radius: 20px;
-}
-
-/* Room List */
+/* Room List Grid */
 .removeroom-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    max-height: 320px; 
+  overflow-y: auto; 
+    gap: 12px 20px; 
     justify-content: center;
-    gap: 10px;
-    margin-top: 40px;
+    align-items: center;
+    margin-top: 20px;
+    max-width: 100%;
+    padding: 10px;
 }
 
-/* Room Items */
+/* Room Item */
 .removeroom-item {
-    background: #e0f2be;
-    padding: 10px 15px;
+    background: #d4edda;
+    padding: 12px 18px;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    min-width: 280px;
+    height: 50px;
+    justify-content: space-between;
+}
+
+/* Room Name */
+.removeroom-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1b4332;
+    text-align: left;
+    flex-grow: 1; 
 }
 
 /* Delete Button */
 .removeroom-delete-btn {
-    background: none;
-    border: none;
-    color: #d32f2f;
-    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #d4edda; 
+    border: 2px solid black; 
+    color: black !important; 
+    font-size: 22px; 
+    font-weight: bold;
+    text-align: center;
     cursor: pointer;
-    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .removeroom-delete-btn:hover {
-    color: #b71c1c;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* Back Button */
@@ -88,21 +113,18 @@
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background: #c5e1a5;
-    color: #2c3e50;
-    padding: 10px 28px;
-    border-radius: 15px;
-    font-size: 18px;
-    font-weight: 600;
+    font-family: "Inria Serif", serif;
+    display: block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #b7e4c7;
     border: none;
+    border-radius: 20px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .removeroom-back-btn:hover {
-    background: #aed581;
-    
-}
-.removeroom-modal {
-    position: relative;
+    background: #95d5b2;
 }
