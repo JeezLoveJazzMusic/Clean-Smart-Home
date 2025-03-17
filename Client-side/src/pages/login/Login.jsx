@@ -59,6 +59,8 @@ function Login() {
       setEmail("");
       setPassword("");
 
+      // refresh local storage upon login
+      localStorage.removeItem("currentHouseId");
       // redirect to MainContainer with state
       navigate("/Dashboard", { state: { userID, houseList } });
     } catch (error) {

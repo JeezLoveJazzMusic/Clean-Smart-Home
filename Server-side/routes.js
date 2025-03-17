@@ -2,7 +2,7 @@
 //Database imports
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -747,6 +747,25 @@ router.get("/getHouseCreator/house/:house_id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting house creator" });
+  }
+});
+
+//delete user (by Hao Chen)
+//be very careful fo this function. It deletes everything related to the user
+// we have to check if the user owns any house. If the user owns a house, we have to delete the house first
+// then we can delete the user
+router.delete("/deleteUser/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const result = await deleteUser(user_id);
+    if (!result.deleted) {
+      // The database function indicates the user is a creator.
+      return res.status(400).json({ deleted: false, isCreator: true });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while deleting user" });
   }
 });
 

@@ -43,9 +43,33 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
     setShowDeleteConfirm(true);
   };
 
-  const confirmDelete = () => {
-    setShowDeleteConfirm(false);
-    navigate("/Signup");
+  const confirmDelete = async () => {
+    try {
+      // Call backend to delete the user
+      const response = await axios.delete(`http://localhost:8080/deleteUser/user/${thisUserID}`);
+      const result = response.data;
+      console.log("Delete user response:", result);
+      if (result.deleted) {
+        // Deletion successful: navigate to signup (or logout)
+        alert("Account deleted successfully.");
+        navigate("/Signup");
+      }
+    } catch (error) {
+      // If the backend returned a 400 status, it will be caught here.
+      if (error.response && error.response.data) {
+        const result = error.response.data;
+        if (result.isCreator) {
+          alert("Your account cannot be deleted because you are the creator of a house.");
+        } else {
+          alert("Unable to delete your account at this time.");
+        }
+      } else {
+        console.error("Error deleting account:", error);
+        alert("An error occurred while deleting your account.");
+      }
+    } finally {
+      setShowDeleteConfirm(false);
+    }
   };
 
   const cancelDelete = () => {
@@ -80,7 +104,8 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
         <input type="text" value={userData.user_type} disabled />
       </div>
       ) : (
-        <p>Loading user data...</p>
+        <p> No Home Data Found
+        </p>
       )}
       <div className="profile-actions">
         <button className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button>  
