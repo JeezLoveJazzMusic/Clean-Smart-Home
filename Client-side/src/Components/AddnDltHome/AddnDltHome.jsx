@@ -157,9 +157,9 @@ const AddHome = () => {
             value={newHomeAddress}
             onChange={(e) => setNewHomeAddress(e.target.value)}
           />
-          <div className="modal-buttons">
+          <div className="AddnDltHome-modal-buttons">
             <button className="create-btn" onClick={handleAddHome}>Create</button>
-            <button className="modal-back-btn" onClick={() => setIsAdding(false)}>Back</button>
+            <button className="AddnDltHome-modal-back-btn" onClick={() => setIsAdding(false)}>Back</button>
           </div>
         </div>
       )}

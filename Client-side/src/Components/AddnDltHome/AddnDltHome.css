@@ -126,7 +126,7 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   }
   
-  .modal {/*Made by Joe */
+  .AddnDltHome-modal {/*Made by Joe */
     width: 500px;
     padding: 20px;
     border-radius: 20px;
@@ -140,13 +140,13 @@
     text-align: center;
   }
   
-  .modal h3 {/*Made by Joe */
+  .AddnDltHome-modal h3 {/*Made by Joe */
     color: #333;
     font-size: 22px;
     margin-bottom: 15px;
   }
   
-  .modal label {/*Made by Joe */
+  .AddnDltHome-modal label {/*Made by Joe */
     display: block;
     font-size: 16px;
     margin-top: 10px;
@@ -154,7 +154,7 @@
     text-align: left;
   }
   
-  .modal input {/*Made by Joe */
+  .AddnDltHome-modal input {/*Made by Joe */
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -163,7 +163,7 @@
     font-size: 14px;
   }
   
-  .modal-buttons {/*Made by Joe */
+  .AddnDltHome-modal-buttons {/*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -182,7 +182,7 @@
   }
   
   /* BACK BUTTON INSIDE MODAL */
-  .modal-back-btn {/*Made by Joe */
+  .AddnDltHome-modal-back-btn {/*Made by Joe */
     background-color: #ccc;
     color: black;
     border: none;
