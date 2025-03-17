@@ -1008,6 +1008,44 @@ async function toggleDevice(device_id, device_power) {
   }
 }
 
+//delete user and all related data
+async function deleteUser(user_id) {
+  try {
+    // Check if the user is a creator of any house.
+    const houseCreatorCheck = await turso.execute({
+      sql: "SELECT house_id FROM houses WHERE creator_id = ?",
+      args: [user_id],
+    });
+    // Instead of throwing an error, return a variable indicating the user is the creator.
+    if (houseCreatorCheck.rows.length > 0) {
+      return { deleted: false, isCreator: true };
+    }
+
+    // Remove all memberships for this user.
+    await turso.execute({
+      sql: "DELETE FROM house_members WHERE user_id = ?",
+      args: [user_id],
+    });
+
+    // Remove all permissions for this user.
+    await turso.execute({
+      sql: "DELETE FROM permissions WHERE user_id = ?",
+      args: [user_id],
+    });
+
+    // Finally, remove the user.
+    await turso.execute({
+      sql: "DELETE FROM users WHERE user_id = ?",
+      args: [user_id],
+    });
+    console.log("User and all dependent data deleted successfully!");
+    return { deleted: true };
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -1307,5 +1345,6 @@ module.exports = {
   addAllPermission,
   removeAllUserPermissions,
   isCreator,
-  getHouseCreator
+  getHouseCreator,
+  deleteUser
 };
