@@ -1,5 +1,5 @@
- /*( fix by Joe)*/
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./UserProfileMenu.css";
 import userAvatar from "../../assets/user-profile1.jpg";
 import axios from "axios";
@@ -7,6 +7,9 @@ import axios from "axios";
 
 const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
   const [userData, setUserData] = useState(null);
+  const [ImagePreview, setImagePreview] = useState(userAvatar);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -27,8 +30,27 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
       fetchUserData();
     }
   }, [thisUserID, thisHouse]);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
+    }
+  }; 
   
- 
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteConfirm(false);
+    navigate("/Signup");
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
 
   // console.log("userData:", userData);
   // console.log("userData.user_id:", userData.user_id);
@@ -39,7 +61,12 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
       {/* Back Button to Close Pop-up */}
       <button onClick={onClose} className="back-UserProfileMenubtn">Back</button>
       
-      <img src={userAvatar} alt="User Avatar" className="profile-image" />
+      <div className="profile-image">
+        <input type="file" accept="image/*" onChange={handleImageChange} hidden id="fileUpload" />
+        <label htmlFor="fileUpload">
+          <img src={ImagePreview || "/images/DDTDefaultimage.jpg"} alt="Profile" className="clickable-avatar" />
+        </label>
+      </div>
       
       {userData ? (
       <div className="profile-details">
@@ -56,8 +83,20 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
         <p>Loading user data...</p>
       )}
       <div className="profile-actions">
-        <button className="delete-UserProfileMenubtn">Delete Account</button>  
+        <button className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button>  
       </div>
+
+      {showDeleteConfirm && (
+        <div className="confirm-overlay">
+          <div className="confirm-msg">
+            <p>Are you sure you want to delete your account?</p>
+            <div className="confirm-buttons">
+              <button className="confirmdeletebutton" onClick={confirmDelete}>Yes</button>
+              <button className="canceldeletebutton" onClick={cancelDelete}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

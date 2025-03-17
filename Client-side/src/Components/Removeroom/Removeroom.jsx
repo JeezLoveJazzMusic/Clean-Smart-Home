@@ -48,7 +48,7 @@ const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
       <div className="removeroom-modal" onClick={(e) => e.stopPropagation()}>
         {/* Title */}
         <div className="removeroom-title-container">
-          <h2 className="removeroom-title">Remove Room</h2>
+          <h2 className="removeroom-title">Rooms</h2>
         </div>
 
         {/* Error Message */}
