@@ -29,7 +29,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 80px;
-    max-width: 90vw; /* Prevents the modal from becoming too wide */
+    max-width: 90vw; 
 }
 
 /* Title Box */
@@ -49,11 +49,11 @@
     text-align: center;
 }
 
-/* Room List Grid - Always 3x3 Layout */
+/* Room List Grid */
 .removeroom-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
-    gap: 12px 20px; /* Controls spacing between items */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 12px 20px; 
     justify-content: center;
     align-items: center;
     max-height: 320px;
@@ -73,7 +73,7 @@
     align-items: center;
     gap: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    min-width: 100%; /* Ensures proper spacing */
+    min-width: 100%; 
     height: 50px;
     justify-content: space-between;
 }
@@ -87,7 +87,7 @@
     flex-grow: 1; 
     overflow: hidden;
     text-overflow: ellipsis; 
-    white-space: nowrap; /* Prevents text from breaking */
+    white-space: nowrap; 
 }
 
 /* Delete Button */
@@ -133,21 +133,21 @@
     background: #95d5b2;
 }
 
-/* Ensuring 3x3 Layout Regardless of Screen Size */
+
 @media screen and (max-width: 1024px) {
     .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); /* Ensures 3 columns */
+        grid-template-columns: repeat(3, 1fr); 
     }
 }
 
 @media screen and (max-width: 768px) {
     .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); /* Keeps 3 columns even on smaller screens */
+        grid-template-columns: repeat(3, 1fr); 
     }
 }
 
 @media screen and (max-width: 480px) {
     .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); /* Forces 3 columns always */
+        grid-template-columns: repeat(3, 1fr); 
     }
 }
