@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Addndeleteuser from "../AddnDeleteUser/AddnDeleteUser";
+import UserPermissions from "../UserPermissions/UserPermissions";
 import axios from "axios";
 import "./userlist.css";
 
@@ -12,6 +13,7 @@ function UserList() {
   const [showMenu, setShowMenu] = useState(false);
   const [currentUserType, setCurrentUserType] = useState(null);
   const [creatorId, setCreatorId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // FOr UserPermissions
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,13 +21,15 @@ function UserList() {
   const dwellersList = location.state?.dwellersList || [];
   const currentHouse = location.state?.currentHouse;
   const UserID = location.state?.UserID;
-  const houseId = currentHouse
+  const houseId = currentHouse;
 
   useEffect(() => {
     const fetchCreatorId = async () => {
       if (!houseId) return;
       try {
-        const res = await axios.get(`http://localhost:8080/getHouseCreator/house/${houseId}`);
+        const res = await axios.get(
+          `http://localhost:8080/getHouseCreator/house/${houseId}`
+        );
         // Use res.data.creator since that's what is returned.
         setCreatorId(res.data.creator);
         console.log("Creator ID:", res.data.creator);
@@ -35,18 +39,20 @@ function UserList() {
     };
     fetchCreatorId();
   }, [houseId]);
-  
+
   // Initialize users with dwellersList when component mounts
   useEffect(() => {
     const fetchUserType = async () => {
-      if(!UserID){
+      if (!UserID) {
         console.log("User ID not found");
       }
       console.log("UserList Dwellers List:", dwellersList);
       console.log("UserList House ID:", houseId);
 
       try {
-        const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${UserID}/house/${houseId}`);
+        const userTypeResponse = await axios.get(
+          `http://localhost:8080/getUserType/user/${UserID}/house/${houseId}`
+        );
         const { userType } = userTypeResponse.data;
         console.log("User Type:", userType);
         setCurrentUserType(userType.toLowerCase()); // Normalize the case
@@ -56,13 +62,13 @@ function UserList() {
 
       if (dwellersList && dwellersList.length > 0) {
         // Transform dwellers into the user format if needed
-        const formattedDwellers = dwellersList.map(dweller => ({
+        const formattedDwellers = dwellersList.map((dweller) => ({
           id: dweller.user_id || Date.now() + Math.random(), // Ensure unique IDs
           name: dweller.username || "Unknown",
           userType: dweller.user_type || "Dweller",
           profilePic: dweller.profilePic || DEFAULT_PROFILE_PIC,
         }));
-        
+
         setUsers(formattedDwellers);
       }
     };
@@ -86,30 +92,36 @@ function UserList() {
       return;
     }
     console.log("New User:", newUser);
-    
+
     try {
       // Step 1: Check if the user exists in the database
-      const checkResponse = await axios.post(`http://localhost:8080/getUserByEmail`, {
-        email: newUser.name
-      });
-      
+      const checkResponse = await axios.post(
+        `http://localhost:8080/getUserByEmail`,
+        {
+          email: newUser.name,
+        }
+      );
+
       const returnedUser = checkResponse.data;
       console.log("Returned User:", returnedUser.user);
 
-
       if (!returnedUser || !returnedUser.user) {
-        alert("User does not exist in the system\nEmail address entered might be invalid or user has not registered yet");
+        alert(
+          "User does not exist in the system\nEmail address entered might be invalid or user has not registered yet"
+        );
         return;
-    }
+      }
 
       // Step 2: If user exists, send API request to add them to the house
-      const addResponse = await axios.post("http://localhost:8080/addUserToHouse", {
-        house_id: houseId,
-        user_id: returnedUser.user.user_id,
-        user_type: newUser.userType,
-      });
+      const addResponse = await axios.post(
+        "http://localhost:8080/addUserToHouse",
+        {
+          house_id: houseId,
+          user_id: returnedUser.user.user_id,
+          user_type: newUser.userType,
+        }
+      );
       console.log("Add User Response:", addResponse.data);
-
 
       const userObject = {
         id: returnedUser.user.user_id,
@@ -124,7 +136,10 @@ function UserList() {
       setShowModal(false);
     } catch (error) {
       console.error("Error adding user:", error);
-      alert("Failed to add user: " + (error.response?.data?.message || error.message));
+      alert(
+        "Failed to add user: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -138,7 +153,7 @@ function UserList() {
   const handleSelectUser = (id) => {
     const currentId = parseInt(UserID);
     const creator = creatorId ? parseInt(creatorId) : null;
-    
+
     if (id === currentId) {
       alert("You cannot delete yourself from the house");
       return;
@@ -147,7 +162,7 @@ function UserList() {
       alert("You cannot delete the creator of the house");
       return;
     }
-    
+
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((userId) => userId !== id)
@@ -160,24 +175,29 @@ function UserList() {
     try {
       // Call API to delete users from the house
       for (const userId of selectedUsers) {
-        await axios.delete(`http://localhost:8080/removeUserFromHome/houses/${houseId}/users/${userId}`); 
+        await axios.delete(
+          `http://localhost:8080/removeUserFromHome/houses/${houseId}/users/${userId}`
+        );
       }
-      
+
       // Update the UI after successful deletion
       setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
       setDeleteMode(false);
       setSelectedUsers([]);
     } catch (error) {
       console.error("Error deleting users:", error);
-      alert("Failed to delete users: " + (error.response?.data?.message || error.message));
+      alert(
+        "Failed to delete users: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
   return (
     <>
       <div
-        className={`user-list-container ${
-          showMenu ? "show-delete" : ""
-        } ${deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""}`}
+        className={`user-list-container ${showMenu ? "show-delete" : ""} ${
+          deleteMode && selectedUsers.length > 0 ? "show-confirm-delete" : ""
+        }`}
       >
         <div className="header-container">
           <h2 className="users-title">Users</h2>
@@ -191,7 +211,10 @@ function UserList() {
         <div className="button-container">
           {currentUserType === "owner" && (
             <>
-              <button className="AddUserbtn-user-btn" onClick={() => setShowModal(true)}>
+              <button
+                className="AddUserbtn-user-btn"
+                onClick={() => setShowModal(true)}
+              >
                 Add Users
               </button>
 
@@ -207,8 +230,12 @@ function UserList() {
         <div className="user-grid">
           {users.length > 0 ? (
             users.map((user) => (
-              <div key={user.id} className={`user-item ${deleteMode ? "delete-mode" : ""}`}>
-                {deleteMode && (
+              <div
+                key={user.id}
+                className={`user-item ${deleteMode ? "delete-mode" : ""}`}
+                onClick={() => setSelectedUser(user)}
+              >
+                {deleteMode &&
                   user.id !== parseInt(UserID) &&
                   (creatorId ? user.id !== parseInt(creatorId) : true) && (
                     <input
@@ -217,9 +244,12 @@ function UserList() {
                       checked={selectedUsers.includes(user.id)}
                       onChange={() => handleSelectUser(user.id)}
                     />
-                  )
-                )}
-                <img src={user.profilePic || DEFAULT_PROFILE_PIC} alt="User Profile" className="user-avatar" />
+                  )}
+                <img
+                  src={user.profilePic || DEFAULT_PROFILE_PIC}
+                  alt="User Profile"
+                  className="user-avatar"
+                />
                 <p>
                   <strong>{user.name}</strong>
                   {creatorId && user.id === creatorId}
@@ -232,11 +262,13 @@ function UserList() {
           )}
         </div>
 
-        {deleteMode && selectedUsers.length > 0 && currentUserType === "owner" && (
-          <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
-            Confirm Delete
-          </button>
-        )}
+        {deleteMode &&
+          selectedUsers.length > 0 &&
+          currentUserType === "owner" && (
+            <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
+              Confirm Delete
+            </button>
+          )}
 
         <button className="BackBtn1-btn" onClick={() => navigate(-1)}>
           Back
@@ -245,8 +277,19 @@ function UserList() {
 
       {showModal && currentUserType === "owner" && (
         <div className="modal-overlay">
-          <Addndeleteuser users={dwellersList} onAddUser={handleAddUser} onClose={() => setShowModal(false)} />
+          <Addndeleteuser
+            users={dwellersList}
+            onAddUser={handleAddUser}
+            onClose={() => setShowModal(false)}
+          />
         </div>
+      )}
+
+      {selectedUser && (
+        <UserPermissions
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+        />
       )}
     </>
   );

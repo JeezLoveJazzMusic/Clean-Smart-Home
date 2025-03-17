@@ -33,7 +33,7 @@ body {
 /* Header Container */
 .header-container {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   position: relative;
@@ -43,9 +43,9 @@ body {
 .menu-btn {
   position: absolute;
   top: 20px;
-  right: 20px; 
-  z-index: 2; 
-  background: #bdb6b6; 
+  right: 20px;
+  z-index: 2;
+  background: #bdb6b6;
   border: none;
   padding: 10px 30px;
   border-radius: 5px;
@@ -66,22 +66,21 @@ body {
 /* Add user button */
 .button-container {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  margin-left: 10px; 
-  margin-top: 10px; 
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .add-user-btn {
-  order: -1; 
+  order: -1;
 }
-
 
 /* Add User & Back Button */
 .AddUserbtn-user-btn,
 .AddUserbtn-btn {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   border: none;
   padding: 10px 25px;
@@ -94,12 +93,12 @@ body {
 
 .add-user-btn:hover,
 .AddUserbtn-btn:active:hover {
-  background: #4CAF50;
+  background: #4caf50;
 }
 
 .add-user-btn:active,
 .AddUserbtn-btn:active {
-  background: #4CAF50;
+  background: #4caf50;
   transform: scale(0.95);
 }
 
@@ -107,7 +106,7 @@ body {
 .delete-user-btn {
   position: absolute;
   right: 40px;
-  top: 80px; 
+  top: 80px;
   width: auto;
   display: none;
   background: #f30000;
@@ -162,7 +161,6 @@ body {
 
 /* User Grid */
 .user-grid {
-  
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -170,7 +168,6 @@ body {
   gap: 20px;
   width: 100%;
   margin-top: 50px;
- 
 }
 
 /* User Item */
@@ -186,11 +183,11 @@ body {
 .delete-checkbox {
   position: absolute;
   top: -10px;
-  right: -30px; 
+  right: -30px;
   cursor: pointer;
   width: 18px;
   height: 18px;
-  display: none; 
+  display: none;
   border-radius: 50%;
 }
 
@@ -199,13 +196,16 @@ body {
   display: block;
 }
 
-
 /* User Avatar */
 .user-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   border: 3px solid gold;
+}
+
+.user-item:hover {
+  filter: brightness(85%);
 }
 
 /* No Users Message */
@@ -237,7 +237,7 @@ body {
 
 /* Back Button Position */
 .BackBtn1-btn {
-  background: #f30000; 
+  background: #f30000;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -262,7 +262,7 @@ body {
 
 /* Users Title Box */
 .users-title {
-  background: #4CAF50; 
+  background: #4caf50;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 18px;
@@ -271,5 +271,4 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: inline-block;
   margin-bottom: 15px;
-  
 }
