@@ -46,22 +46,28 @@ const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
   return (
     <div className="removeroom-modal-overlay" onClick={onClose}>
       <div className="removeroom-modal" onClick={(e) => e.stopPropagation()}>
+        {/* Title */}
         <div className="removeroom-title-container">
-          <h2 className="removeroom-title">Remove Room</h2>
+          <h2 className="removeroom-title">Rooms</h2>
         </div>
 
+        {/* Error Message */}
         {error && <p className="error-message">{error}</p>}
 
+        {/* Room List */}
         <div className="removeroom-list">
           {rooms && rooms.length > 0 ? (
             rooms.map((room) => (
               <div key={room.room_id} className="removeroom-item">
-                <span>{room.room_name}</span>
+                {/* Room Name */}
+                <span className="removeroom-name">{room.room_name}</span>
+
+                {/* Remove Button */}
                 <button
                   className="removeroom-delete-btn"
                   onClick={() => handleRemoveRoom(room.room_id, room.room_name)}
                 >
-                  ⦻
+                  -
                 </button>
               </div>
             ))
@@ -69,7 +75,8 @@ const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
             <p>No Rooms Available</p>
           )}
         </div>
-
+  
+          {/* Back Button */}
         <button className="removeroom-back-btn" onClick={onClose}>
           Back
         </button>
