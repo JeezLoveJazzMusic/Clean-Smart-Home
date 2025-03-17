@@ -140,11 +140,7 @@ const Dashboard = () => {
       
 
       <div>
-      <Sidebar 
-      allHouses = {HouseDataTest}
-      currentUserID = {userID}
-      setCurrentHouseId={setCurrentHouseId}
-      /> 
+        <Sidebar allHouses={HouseDataTest} currentUserID={userID} setCurrentHouseId={handleHouseSelect} />
       </div>
     </div>
   );
