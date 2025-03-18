@@ -3,7 +3,7 @@
 /*Fix by Joe ( change the grid  position and also classname ) */
 .sensor-data-container1 {
   background-color: rgb(253, 253, 253);  padding: 0px;
-  border-radius: 60px;
+  border-radius: 40px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
@@ -49,7 +49,7 @@
   display: flex;
   font-family: "Inria Serif", serif;
   align-items: left;
-  background-color: #d4edda;
+  background-color: #B7E4BD;
   padding: 30px;
   width: 280px ;
   height: 160px;
@@ -58,7 +58,7 @@
   box-shadow: none;
   text-align: left;
   margin-right : 10px;
-border-radius: 30px;
+  border-radius: 20px;
 }
 
 /*Fix by Joe */
@@ -95,10 +95,10 @@ border-radius: 30px;
 
 /*Fix by Joe */
 .weather-box1 {
-  background-color: #d4edda;
+  background-color: #B7E4BD;
   border-radius: 30px;
   width: 100%; /* Make the box take full width of the grid cell */
-  height: auto; /* Make the box take full height of the grid cell */
+  height: 330px; /* Make the box take full height of the grid cell */
   display: flex;
   justify-content: center;
   align-items: center;
