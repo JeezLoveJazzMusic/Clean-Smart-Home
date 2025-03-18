@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../addndeleteuser/addndeleteuser.css";
+import "./AddnDeleteUser.css";
 
-function Addndeleteuser({ onAddUser, onClose }) {
+function AddnDeleteUser({ users, onAddUser, onClose }) {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("");
   const [errors, setErrors] = useState({});
@@ -27,16 +27,16 @@ function Addndeleteuser({ onAddUser, onClose }) {
   };
 
   return (
-    <div className="addndltuser-modal-overlay">
-      <div className="addndelete-modal-box">
+    <div className="AddnDeleteUser-modal-overlay">
+      <div className="AddnDeleteUser-modal-box">
         <h2>Add User</h2>
 
         {/* Username Field */}
         <div className="input-group">
-          <label>User Name:</label>
+          <label>User Email:</label>
           <input
             type="text"
-            placeholder="Enter username"
+            placeholder="Enter the user's email"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className={errors.name ? "input-error" : ""}
@@ -53,7 +53,7 @@ function Addndeleteuser({ onAddUser, onClose }) {
             className={errors.userType ? "input-error" : ""}
           >
             <option value="">Select User Type</option>
-            <option value="Home Owner">Home Owner</option>
+            <option value="Owner">Home Owner</option>
             <option value="Dweller">Dweller</option>
           </select>
           {errors.userType && <p className="error-message">{errors.userType}</p>}
@@ -69,4 +69,4 @@ function Addndeleteuser({ onAddUser, onClose }) {
   );
 }
 
-export default Addndeleteuser;
+export default AddnDeleteUser;

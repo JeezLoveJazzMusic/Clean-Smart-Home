@@ -4,8 +4,8 @@ import { useNavigate , useLocation} from "react-router-dom"; // Import useNaviga
 import "./LightLevel.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
-import ShareSensorData from "../ShareSensorData/ShareSensorData";
 import axios from "axios";
+import { RWebShare} from "react-web-share";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
@@ -15,9 +15,26 @@ const LightLevel = () => {
   
   const [prevMonth, setPrevMonth] = useState([]);
   const [curMonth, setCurMonth] = useState([]);
+  const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId } = location.state || {};
+  const { houseId, roomId ,roomName } = location.state || {};
+
+  // Helper function to convert an array of objects (device data) to a CSV string.
+  const convertToCSV = (dataArray) => {
+    if (!dataArray?.length) return "";
+    // Use object keys from the first item as headers.
+    const headers = Object.keys(dataArray[0]).join(",");
+    const rows = dataArray.map(item => Object.values(item).join(","));
+    return [headers, ...rows].join("\r\n");
+  };
+
+  // Prepare a CSV file (as a File object) so it can be shared.
+  const prepareCSVFile = () => {
+    const csvData = convertToCSV(fetchedDeviceData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    return new File([blob], "lightlevel-data.csv", { type: "text/csv" });
+  };
 
   const getData = async () => {
     try {
@@ -33,6 +50,10 @@ const LightLevel = () => {
       const curLow = await axios.get(`http://localhost:8080/getLowestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
       tempCurrentMonth.push(curHigh.data.highestCurrentMonth, curAvg.data.averageCurrentMonth, curLow.data.lowestCurrentMonth);
       
+      const getAllDeviceData = await axios.get(`http://localhost:8080/getAllDeviceData/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
+      console.log("All Device Data", getAllDeviceData.data);
+      setFetchedDeviceData(getAllDeviceData.data.deviceData);
+
       console.log("houseId", houseId);
       console.log("roomId", roomId);
 
@@ -106,10 +127,19 @@ const LightLevel = () => {
       </button>
 
       <div className="card-header">
-        <h2>Light Level</h2>
-        <button className="share-button" onClick={openShareSensorData}>
-          Share Data
-        </button>
+        <h2>Room: {roomName} - Light Level</h2>
+        <RWebShare 
+          data={{
+            files: [prepareCSVFile()],
+            text: `See the attached CSV file for ${roomName} light level sensor data.`,
+            title: `${roomName} Light Level Data`
+          }}
+          onClick={() => console.log("Shared successfully!")}
+        >
+          <button className="share-button">
+            Share Data
+          </button>
+        </RWebShare>
       </div>
 
       <div className="LightLevel-info">

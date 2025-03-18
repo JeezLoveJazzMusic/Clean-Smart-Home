@@ -6,52 +6,59 @@ import addHome2 from "../../assets/addhome2.jpg";
 import addHome3 from "../../assets/addhome3.jpg";
 import addButton from "../../assets/add-button.png";
 import "./Sidebar.css";
-import { useNavigate } from "react-router-dom";  /*made by Joe */
+import { useNavigate } from "react-router-dom"; /*made by Joe */
 
-function Sidebar({allHouses}) {
-  const navigate = useNavigate();  /*made by Joe */
+function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
+  const navigate = useNavigate(); /*made by Joe */
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
+
+  /* Temporary Home Data */
+  const testhomes = [
+    { id: 1, name: "Home 1", image: addHome1 },
+    { id: 2, name: "Home 2", image: addHome2 },
+    { id: 3, name: "Home 3", image: addHome3 },
+  ];
+
+  console.log("Sidebar received houses:", allHouses);
+
   return (
     <div className="sidebar-container">
       {/* Sidebar */}
-      <div className={`Sidebar ${isOpen ? "open" : ""}`}>
+      <div className={`sidebar ${isOpen ? "open" : ""}`}>
         {/* Toggle Button (Remains Attached) */}
-        <button className="Sidebar-toggle" onClick={toggleSidebar}>
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
           {isOpen ? "✖" : "☰"}
         </button>
 
         {/* Home List */}
-        <div className="Sidebar-list">
-          <div className="Sidebar-container">
-            <img src={addHome1} alt="Home 1" className="Sidebar-image" />
-            <span className="Sidebar-name">Home 1</span>
-          </div>
-          <div className="Sidebar-container">
-            <img src={addHome2} alt="Home 2" className="Sidebar-image" />
-            <span className="Sidebar-name">Home 2</span>
-          </div>
-          <div className="Sidebar-container">
-            <img src={addHome3} alt="Home 3" className="Sidebar-image" />
-            <span className="Sidebar-name">Home 3</span>
-          </div>
+        <div className="sidebar-list">
+          {allHouses && allHouses.map((home) => (
+            <button
+              key={home.house_id}
+              className="sidebar-container1"
+              onClick={() => setCurrentHouseId(home.house_id)}
+            >
+              <img src={home.image} alt={home.name} className="sidebar-image" />
+              <span className="sidebar-home-name">{home.house_name}</span>
+            </button>
+          ))}
         </div>
-
 
         {/* Add Home Button */}
-        <div className="add-Sidebar-container">
-          <button onClick={() => navigate("/AddnDltHome",{state:{allHouses}})} className="add-Sidebar">   
-          <button className="add-Sidebar">
-            <img src={addButton} alt="Add" className="add-Sidebar-icon" />
+        <div className="add-sidebar-container1">
+          <button
+            onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
+            className="add-sidebar1"
+          >
+            <img src={addButton} alt="Add" className="add-sidebar-icon" />
             Add Home
           </button>
-          </button>
         </div>
-
       </div>
     </div>
   );

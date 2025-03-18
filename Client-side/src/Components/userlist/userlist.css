@@ -8,11 +8,11 @@ body {
 /* User List Container */
 .user-list-container {
   background: #fefef5;
-  width: 50%;
-  min-height: 400px;
+  width: 1200px;
+  height: 700px;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -33,7 +33,7 @@ body {
 /* Header Container */
 .header-container {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   position: relative;
@@ -42,74 +42,74 @@ body {
 /* Three Dots Menu Button */
 .menu-btn {
   position: absolute;
-  top: 10px;
-  right: 10px; 
-  z-index: 2; 
-  background: #c5e1a5; 
+  top: 20px;
+  right: 20px;
+  z-index: 2;
+  background: #bdb6b6;
   border: none;
-  padding: 10px 15px;
+  padding: 10px 30px;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 .menu-btn:hover {
-  background: #a8cf7c;
+  background: #bdb6b6;
 }
 
 .menu-btn:active {
-  background: #92b966;
+  background: #bdb6b6;
 }
 
 /* Add user button */
 .button-container {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  margin-left: 10px; 
-  margin-top: 10px; 
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .add-user-btn {
-  order: -1; 
+  order: -1;
 }
 
-
 /* Add User & Back Button */
-.add-user-btn,
-.gay-btn {
-  background: #c5e1a5;
+.AddUserbtn-user-btn,
+.AddUserbtn-btn {
+  background: #4caf50;
+  color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 10px 25px;
+  border-radius: 10px;
+  font-size: 1rem;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 .add-user-btn:hover,
-.gay-btn:active:hover {
-  background: #a8cf7c;
+.AddUserbtn-btn:active:hover {
+  background: #4caf50;
 }
 
 .add-user-btn:active,
-.gay-btn:active {
-  background: #92b966;
+.AddUserbtn-btn:active {
+  background: #4caf50;
   transform: scale(0.95);
 }
 
 /* Delete User Button */
 .delete-user-btn {
   position: absolute;
-  right: 10px;
-  top: 85px; 
+  right: 40px;
+  top: 80px;
   width: auto;
   display: none;
-  background: #e57373;
+  background: #f30000;
   padding: 10px 15px;
   border-radius: 5px;
   font-size: 16px;
@@ -124,11 +124,11 @@ body {
 }
 
 .delete-user-btn:hover {
-  background: #d9534f;
+  background: #f30000;
 }
 
 .delete-user-btn:active {
-  background: #c9302c;
+  background: #f30000;
 }
 
 /* Confirm Delete button */
@@ -152,11 +152,11 @@ body {
 }
 
 .confirm-delete-btn:hover {
-  background: #cc0000;
+  background: #f30000;
 }
 
 .confirm-delete-btn:active {
-  background: #a50000;
+  background: #f30000;
 }
 
 /* User Grid */
@@ -167,7 +167,7 @@ body {
   align-items: center;
   gap: 20px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 /* User Item */
@@ -183,11 +183,11 @@ body {
 .delete-checkbox {
   position: absolute;
   top: -10px;
-  right: -30px; 
+  right: -30px;
   cursor: pointer;
   width: 18px;
   height: 18px;
-  display: none; 
+  display: none;
   border-radius: 50%;
 }
 
@@ -196,13 +196,16 @@ body {
   display: block;
 }
 
-
 /* User Avatar */
 .user-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   border: 3px solid gold;
+}
+
+.user-item:hover {
+  filter: brightness(85%);
 }
 
 /* No Users Message */
@@ -233,40 +236,39 @@ body {
 }
 
 /* Back Button Position */
-.gay-btn {
-  background: #c5e1a5; 
+.BackBtn1-btn {
+  background: #f30000;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   position: absolute;
   bottom: 20px;
-  right: 20px;
+  right: 10px;
   transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
-.gay-btn:active:hover {
-  background: #a8cf7c;
+.BackBtn1-btn:active:hover {
+  background: #f30000;
 }
 
-.gay-btn:active {
-  background: #92b966;
+.BackBtn1-btn:active {
+  background: #f30000;
 }
 
 /* Users Title Box */
 .users-title {
-  background: #c5e1a5; 
+  background: #4caf50;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: inline-block;
   margin-bottom: 15px;
-  
 }

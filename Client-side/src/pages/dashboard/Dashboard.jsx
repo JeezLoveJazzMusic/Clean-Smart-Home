@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Dashboard.css";
-import DeviceList from "../../components/DeviceList/DeviceList";
+import DeviceList from "../../Components/DeviceList/DeviceList";
 import Users from "../../Components/UserDashboard/UserDashboard";
 import SensorData from "../../Components/SensorData/SensorData";
 import Graphs from "../../Components/Graphs/Graphs";
@@ -18,70 +18,91 @@ const Dashboard = () => {
   const [sendRoomData, setSendRoomData] = useState({});
   const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
   const [userDetails, setUserData] = useState(null);
+  const [currentRoom, setCurrentRoom] = useState("");
   const location = useLocation();
   const { userID, houseList } = location.state || {};
 
-  const currentHouseId = 27;
+  const [currentHouseId, setCurrentHouseId] = useState(null);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      if (houseList && houseList.length > 0) {
-        const houseID = houseList[0]; // Use the first entry in the houseIDList
-        console.log("Fetching data for houseID:", houseID);
-        try {
-          const response = await axios.get(`http://localhost:8080/dashboard/house/27`);
-          const { roomList, dwellersList, devicesList } = response.data;
-          console.log("rooms:", roomList);
-          console.log("dwellers:", dwellersList);
-          console.log("devices:", devicesList);
-          setDashboardData({ roomList, dwellersList, devicesList });
-
-          let roomData = {};
-          for (let i = 0; i < roomList.length; i++) {
-            try {
-              const response1 = await axios.get(`http://localhost:8080/getRoomDevices/houses/27/rooms/${roomList[i].room_id}`);
-              const { devices } = response1.data;
-              console.log("room devices:", devices);
-              roomData[roomList[i].room_name] = devices;
-            } catch (error) {
-              console.error("Error fetching device data:", error);
-            }
-          }
-          setSendRoomData(roomData);
-          console.log("sendRoomData:", roomData);
-        } catch (error) {
-          console.error("Error fetching dashboard data:", error);
-        }
-
-        // Fetch user houses data
-        const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
-        const { allUserHouseData} = homeData.data;
-        console.log("this user has house data of:", allUserHouseData);
-        setAllUserHouseData(allUserHouseData);
-
-        // //fetch this house's users
-        // const houseUsers = await axios.get(`http://localhost:8080/getHouseUsers/house/${currentHouseId}`);
-
-        const response3 = await axios.get(`http://localhost:8080/getUserData/house/27/user/11`);
-        const{userData} = response3.data;
-        setUserData(userData);
-        console.log("userData:", userData);
-
+    if (houseList && houseList.length > 0) {
+      const savedHouseId = localStorage.getItem('currentHouseId');
+      const parsedId = savedHouseId ? parseInt(savedHouseId) : null;
+      const validHouseId = parsedId && houseList.includes(parsedId) ? parsedId : houseList[0];
+      setCurrentHouseId(validHouseId);
+      localStorage.setItem('currentHouseId', validHouseId.toString());
     }
-    };
-    
-    fetchDashboardData();
   }, [houseList]);
+
+  const handleHouseSelect = async (houseId) => {
+    setCurrentHouseId(houseId);
+    localStorage.setItem('currentHouseId', houseId.toString());
+    await fetchDashboardData(houseId);
+  };
+
+  const fetchDashboardData = async (houseId) => {
+    if (!houseId) return;
+    console.log("Fetching data for houseID:", houseId);
+    try {
+      const response = await axios.get(`http://localhost:8080/dashboard/house/${houseId}`);
+      const { roomList, dwellersList, devicesList } = response.data;
+      console.log("rooms:", roomList);
+      console.log("dwellers:", dwellersList);
+      console.log("devices:", devicesList);
+      setDashboardData({ roomList, dwellersList, devicesList });
+
+      let roomData = {};
+      for (let i = 0; i < roomList.length; i++) {
+        try {
+          const response1 = await axios.get(
+            `http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${roomList[i].room_id}`
+          );
+          const { devices } = response1.data;
+          roomData[roomList[i].room_name] = devices;
+        } catch (error) {
+          console.error("Error fetching device data:", error);
+        }
+      }
+      setSendRoomData(roomData);
+      console.log("sendRoomData:", roomData);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+
+    try {
+      const homeData = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${userID}`);
+      const { allUserHouseData } = homeData.data;
+      console.log("this user has house data of:", allUserHouseData);
+      setAllUserHouseData(allUserHouseData);
+    } catch (error) {
+      console.error("Error fetching home data:", error);
+    }
+
+    try {
+      const response3 = await axios.get(`http://localhost:8080/getUserData/house/${houseId}/user/${userID}`);
+      const { userData } = response3.data;
+      setUserData(userData);
+      console.log("userData:", userData);
+    } catch (error) {
+      console.error("Error fetching user dashboard data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentHouseId) {
+      fetchDashboardData(currentHouseId);
+    }
+  }, [currentHouseId]);
 
   return (
     <div className="dashboard-container">
       {/* Header */}
       <header className="dashboard-header">
         <div className="logo1">
-          <img
-            src={DDTlogo}
-            alt="Durian Dev Technologies"
-            className="logo-image"
+          <img 
+          src={DDTlogo} 
+          alt="Durian Dev Technologies" 
+          className="logo1-image" 
           />
         </div>
         {/* Profile Icon with Click Event */}
@@ -92,13 +113,16 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-        <SensorData houseId={27} roomId={18} userID = {userID}/> {/*temporarily hardcoded room*/}
+      {Object.keys(sendRoomData).length > 0 &&(
+        <SensorData houseId={27} userID = {userID} roomName={currentRoom} roomList={sendRoomData}/>
+        )}
       </div>
 
       {/* Device List */}
       <div className="device-dashboard">
         {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} />
+          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} 
+          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData}/>
         )}
       </div>
 
@@ -107,10 +131,10 @@ const Dashboard = () => {
         <Graphs />
       </div>
 
-    {/* User Dashboard */}
-    <div className="user-dashboard">
+      {/* User Dashboard */}
+      <div className="user-dashboard">
         {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} />
+        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID}/>
         )}
       </div>
 
@@ -124,7 +148,7 @@ const Dashboard = () => {
       
 
       <div>
-      <Sidebar allHouses = {HouseDataTest}/> 
+        <Sidebar allHouses={HouseDataTest} currentUserID={userID} setCurrentHouseId={handleHouseSelect} />
       </div>
     </div>
   );

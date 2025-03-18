@@ -86,6 +86,22 @@ async function getUserList(house_id) {
   }
 }
 
+
+async function getUserListWithType(house_id) {
+  try {
+    // Query the database for all users in the house, including their user_type.
+    const result = await turso.execute({
+      sql: "SELECT u.user_id, u.username, u.email, hm.user_type FROM house_members hm JOIN users u ON hm.user_id = u.user_id WHERE hm.house_id = ?",
+      args: [house_id],
+    });
+    // Return the list of users with their user_type
+    return result.rows;
+  } catch (error) {
+    console.error("Error getting user list with type:", error.message);
+    throw error;
+  }
+}
+
 // Code added by: Ahmed Al-Ansi
 // Function to add a user to a home profile
 async function addUserToHouse(user_id, house_id, user_type) {
@@ -151,6 +167,20 @@ async function removePermission(user_id, house_id, device_id) {
   }
 }
 
+//remove all user permissions
+async function removeAllUserPermissions(user_id) {
+  try {
+    await turso.execute({
+      sql: "DELETE FROM permissions WHERE user_id = ?",
+      args: [user_id],
+    });
+    console.log("All permissions removed successfully!");
+  } catch (error) {
+    console.error("Error removing all permissions:", error.message);
+    throw error;
+  }
+}
+
 async function getHouseList(user_id) {
   try {
     console.log("this is user id" + user_id);
@@ -198,16 +228,16 @@ async function addDeviceToRoom(
   room_id,
   device_name,
   device_type,
-  manufacturer,
-  model
+  device_number
 ) {
   try {
     await turso.execute({
-      sql: "INSERT INTO devices (house_id, room_id, device_name, device_type, manufacturer, model) VALUES (?, ?, ?, ?, ?, ?)",
-      args: [house_id, room_id, device_name, device_type, manufacturer, model],
+      sql: "INSERT INTO devices (house_id, room_id, device_name, device_type, device_number) VALUES (?, ?, ?, ?, ?)",
+      args: [house_id, room_id, device_name, device_type, device_number],
     });
     console.log("Device added to room successfully!");
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error adding device to room:", error.message);
     throw error;
   }
@@ -223,6 +253,35 @@ async function getUserPermissions(user_id) {
     return result.rows;
   } catch (error) {
     console.error("Error getting user permissions:", error.message);
+    throw error;
+  }
+}
+
+//by hao chen
+async function getUserType(user_id, house_id){
+  try {
+    const result = await turso.execute({
+      sql: "SELECT user_type FROM house_members WHERE user_id = ? AND house_id = ?",
+      args: [user_id, house_id],
+    });
+    return result.rows[0].user_type;
+  } catch (error) {
+    console.error("Error getting user type:", error.message);
+    throw error;
+  }
+}
+
+//by Hao Chen
+async function removeAllDevicesFromRoom(house_id, room_id) {
+  try {
+    await turso.execute({
+      sql: "DELETE FROM devices WHERE house_id = ? AND room_id = ?",
+      args: [house_id, room_id],
+    });
+    console.log("All devices removed from room successfully!");
+  }
+  catch (error) {
+    console.error("Error removing all devices from room:", error.message);
     throw error;
   }
 }
@@ -949,6 +1008,44 @@ async function toggleDevice(device_id, device_power) {
   }
 }
 
+//delete user and all related data
+async function deleteUser(user_id) {
+  try {
+    // Check if the user is a creator of any house.
+    const houseCreatorCheck = await turso.execute({
+      sql: "SELECT house_id FROM houses WHERE creator_id = ?",
+      args: [user_id],
+    });
+    // Instead of throwing an error, return a variable indicating the user is the creator.
+    if (houseCreatorCheck.rows.length > 0) {
+      return { deleted: false, isCreator: true };
+    }
+
+    // Remove all memberships for this user.
+    await turso.execute({
+      sql: "DELETE FROM house_members WHERE user_id = ?",
+      args: [user_id],
+    });
+
+    // Remove all permissions for this user.
+    await turso.execute({
+      sql: "DELETE FROM permissions WHERE user_id = ?",
+      args: [user_id],
+    });
+
+    // Finally, remove the user.
+    await turso.execute({
+      sql: "DELETE FROM users WHERE user_id = ?",
+      args: [user_id],
+    });
+    console.log("User and all dependent data deleted successfully!");
+    return { deleted: true };
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -1081,6 +1178,113 @@ async function printAllDeviceStates() {
   }
 }
 
+//get house name
+async function getHouseName(house_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT house_name FROM houses WHERE house_id = ?",
+      args: [house_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].house_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting house name:", error.message);
+    throw error;
+  }
+}
+
+//get room name
+async function getRoomName(room_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT room_name FROM rooms WHERE room_id = ?",
+      args: [room_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].room_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting room name:", error.message);
+    throw error;
+  }
+}
+
+//add all permissions for the user in that house
+//for each devices in that house, add permission for that user
+async function addAllPermission(user_id, house_id) {
+  try {
+    const devices = await turso.execute({
+      sql: "SELECT device_id FROM devices WHERE house_id = ?",
+      args: [house_id],
+    });
+    for (const device of devices.rows) {
+      await turso.execute({
+        sql: "INSERT INTO permissions (user_id, device_id) VALUES (?, ?)",
+        args: [user_id, device.device_id],
+      });
+    }
+    console.log("Permissions added for user in house successfully!");
+  } catch (error) {
+    console.error("Error adding permissions for user in house:", error.message);
+    throw error;
+  }
+}
+
+//check if a user is the creator of the house
+async function isCreator(user_id, house_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT creator_id FROM houses WHERE house_id = ?",
+      args: [house_id],
+    });
+    if (result.rows.length === 0) return false;
+    return parseInt(result.rows[0].creator_id) === parseInt(user_id);
+  } catch (error) {
+    console.error("Error checking if user is creator:", error.message);
+    return false;
+  }
+}
+
+//get the ID of house creator
+async function getHouseCreator(house_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT creator_id FROM houses WHERE house_id = ?",
+      args: [house_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].creator_id;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting house creator:", error.message);
+    throw error;
+  }
+}
+
+//from ing ji
+//get all info about the sensor needed for exporting csv.
+async function getAllDeviceData(houseId, roomId, deviceType) {
+  const query = `
+    SELECT ds.state_value, ds.updated_at
+    FROM device_states ds
+    JOIN devices d ON ds.device_id = d.device_id
+    WHERE d.house_id = ? AND d.room_id = ? AND d.device_type = ?
+    ORDER BY ds.updated_at ASC;
+  `;
+  try {
+    const result = await turso.execute({ sql: query, args: [houseId, roomId, deviceType] });
+    return result.rows;
+  } catch (error) {
+    console.error("Database error in getAllDeviceData:", error);
+    return [];
+
+  }
+}
+
 //exporting functions for routes
 module.exports = {
   createUser,
@@ -1122,6 +1326,8 @@ module.exports = {
   printAllDeviceStates,
   getCurrentState,
   getHighestLastMonth,
+  getHouseName,
+  getRoomName,
   getAverageLastMonth,
   getLowestLastMonth,
   getAverageCurrentMonth,
@@ -1131,5 +1337,14 @@ module.exports = {
   getUserData,
   getUserName,
   testdb,
-  toggleDevice
+  toggleDevice,
+  getUserListWithType,
+  getAllDeviceData,
+  getUserType,
+  removeAllDevicesFromRoom,
+  addAllPermission,
+  removeAllUserPermissions,
+  isCreator,
+  getHouseCreator,
+  deleteUser
 };

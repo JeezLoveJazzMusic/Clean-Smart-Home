@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './login.css';
+import './Login.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -59,6 +59,8 @@ function Login() {
       setEmail("");
       setPassword("");
 
+      // refresh local storage upon login
+      localStorage.removeItem("currentHouseId");
       // redirect to MainContainer with state
       navigate("/Dashboard", { state: { userID, houseList } });
     } catch (error) {
@@ -125,7 +127,7 @@ function Login() {
           </div>
 
           <div className="form-options">
-            <a href="#">Forgot Password?</a>
+            <a href="/RequestResetPassword">Forgot Password?</a>
           </div>
           <button type="submit" className="auth-btn">Login</button>  
 

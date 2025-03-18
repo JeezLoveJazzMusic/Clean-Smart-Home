@@ -1,10 +1,10 @@
-.home-container {/*Made by Joe */
+.AddnDltHome-container {/*Made by Joe */
     position: fixed;
     top: 80px;  /* Adjust as needed */
     left: 50%;
     transform: translateX(-50%);
     width: 1200px;
-    height: 600px;
+    height: 700px;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
@@ -15,7 +15,7 @@
   }
   
   
-  .home-header1 { /*Made by Joe */
+  .AddnDltHome-header1 { /*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,8 +28,8 @@
   
   .add1-addndltbtn  {/*Made by Joe */
     position: absolute;
-    top: 80px;
-    left: 8px;
+    top: 70px;
+    LEFT: 10px;
     background: #4CAF50;
     color: white;
     padding: 10px 25px;
@@ -39,7 +39,7 @@
     font-size: 1rem;
   }
   
-  .main-back-btn {/*Made by Joe */
+  .AddnDltHome-main-back-btn {/*Made by Joe */
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -52,7 +52,7 @@
     cursor: pointer;
   }
   
-   .options-btn{/*Made by Joe */
+   .AddnDltHome-options-btn{/*Made by Joe */
     position: absolute;
     top: 20px;
     right: 20px;
@@ -65,11 +65,11 @@
     cursor: pointer;
    }
   
-   .delete-btn {/*Made by Joe */
+   .AddnDltHome-delete-btn {/*Made by Joe */
     position: absolute;
     top: 60px;
     right: 20px;
-    padding: 10px 15px;
+    padding: 10px 25px;
     font-size: 14px;
     background-color: #f87171;
     color: white;
@@ -78,15 +78,15 @@
     cursor: pointer;
   }
   
-  .home-list {/*Made by Joe */
-    margin-top: 80px;
+  .AddnDltHome-list {/*Made by Joe */
+    margin-top: 120px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
   }
   
-  .home-item {/*Made by Joe */
+  .AddnDltHome-item {/*Made by Joe */
     background-size: cover;
     background-position: center;
     width: 150px;
@@ -101,19 +101,22 @@
     justify-content: center;
     text-align: center;
    opacity: 0.5;
-
-
+   word-wrap: break-word; /* Break long words */
+   overflow-wrap: break-word;
   }
-  .home-item-container {/*Made by Joe */
+
+  .AddnDltHome-item-container {/*Made by Joe */
     position: relative;
     width: 150px;
     height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word;
   }
   
-  .delete-icon {/*Made by Joe */
+  .AddnDltHome-delete-icon {/*Made by Joe */
     position: absolute;
     top: 5px;
     right: 5px;
@@ -126,7 +129,7 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   }
   
-  .modal {/*Made by Joe */
+  .AddnDltHome-modal {/*Made by Joe */
     width: 500px;
     padding: 20px;
     border-radius: 20px;
@@ -140,13 +143,13 @@
     text-align: center;
   }
   
-  .modal h3 {/*Made by Joe */
+  .AddnDltHome-modal h3 {/*Made by Joe */
     color: #333;
     font-size: 22px;
     margin-bottom: 15px;
   }
   
-  .modal label {/*Made by Joe */
+  .AddnDltHome-modal label {/*Made by Joe */
     display: block;
     font-size: 16px;
     margin-top: 10px;
@@ -154,7 +157,7 @@
     text-align: left;
   }
   
-  .modal input {/*Made by Joe */
+  .AddnDltHome-modal input {/*Made by Joe */
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -163,7 +166,7 @@
     font-size: 14px;
   }
   
-  .modal-buttons {/*Made by Joe */
+  .AddnDltHome-modal-buttons {/*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -171,7 +174,7 @@
   }
   
   /* CREATE BUTTON */
-  .create-btn {/*Made by Joe */
+  .AddnDltHome-create-btn {/*Made by Joe */
     background-color: #6eeb84;
     color: rgb(12, 12, 12);
     border: none;
@@ -182,7 +185,7 @@
   }
   
   /* BACK BUTTON INSIDE MODAL */
-  .modal-back-btn {/*Made by Joe */
+  .AddnDltHome-modal-back-btn {/*Made by Joe */
     background-color: #ccc;
     color: black;
     border: none;
@@ -193,7 +196,7 @@
   }
   
   /* MAIN BACK BUTTON (For Page) */
-  .back-btn {/*Made by Joe */
+  .AddnDltHome-back-btn {/*Made by Joe */
     background-color: #ddd;
     color: black;
     border: none;

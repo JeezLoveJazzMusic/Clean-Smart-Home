@@ -20,12 +20,6 @@ app.use(routes);
 //Make all client side files publicly accessable
 app.use("/Client-side", express.static("Client-side"));
 
-//Ing ji's test code - working client side can receive json file from server
-app.get("/api", function(req, res)
-{
-    res.json({ fruits: ["apple", "banana", "cherry"] });
-});
-
 //Getting server live
 app.get("/", function(req, res)
 {

@@ -1,7 +1,9 @@
 //REMEMBER TO ADD CHECK FOR DUPLICATES WHEN ADDING SHIT
 //Database imports
-const { createUser, getUserByEmail, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice,
-  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb } = require("./database.js"); 
+const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
+  removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser } = require("./database.js"); 
+
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
 const express = require("express");
@@ -79,7 +81,7 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  try {
    // Get home-specific data (e.g., rooms, dwellers, house-level devices)
    const rooms = await getRoomList(house_id);
-   const dwellers = await getUserList(house_id);
+   const dwellers = await getUserListWithType(house_id);
    const houseDevices = await getHouseDevices(house_id);
    
    res.status(200).send({
@@ -98,16 +100,29 @@ router.get("/dashboard/house/:house_id", async (req, res) => {
  }
 });
 
+//get user by email
+router.post("/getUserByEmail", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await getUserByEmail(email);
+    res.status(200).send({ message: "Routes: User successfully retrieved", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user" });
+  }
+});
+
 //check if email exists (by Hao Chen) ##
 router.post("/check_Email", async (req, res) => {
  const { email } = req.body;
  try {
    // Check if email doesn't exist
    const existBool = await checkUserExists(email);
+   console.log("routes: this is existBool:",existBool);
    if (existBool == false) {
      return res.status(401).send({ message: "Routes: Email does not exist",existBool});
    }
-   res.status(200).send({ message: "Routes: Email exists" });
+   res.status(200).send({ message: "Routes: Email exists", existBool});
  } 
  catch (error) {
    console.error(error);
@@ -134,6 +149,8 @@ router.delete("/removeUserFromHome/houses/:house_id/users/:user_id", async (req,
  const { house_id, user_id } = req.params;
  try {
    await removeUser(user_id, house_id);
+   // Also remove all permissions for that user (this could be house-specific if needed)
+   await removeAllUserPermissions(user_id);
    res.status(200).send({message: "Routes: User successfully removed"});
  } 
  catch (error) {
@@ -228,7 +245,7 @@ router.post("/add_DeviceToRoom", async (req, res) => {
 router.post("/addDeviceTemp", async (req, res) => {
   const { house_id, room_id, device_name, device_type, device_num } = req.body;
   try {
-    await addDeviceTemp(house_id, room_id,device_name, device_type, device_num);
+    await addDeviceToRoom(house_id, room_id,device_name, device_type, device_num);
     res.status(200).send({message: "Routes: Device successfully added to room"});
   } 
   catch (error) {
@@ -369,6 +386,32 @@ router.post ("/addDwellerToHouse", async (req, res) => {
    res.status(500).send({ message: "Routes: An error occurred while adding dweller to house" });
  }
 });
+
+//add owner to house (by Hao Chen)
+router.post ("/addOwnerToHouse", async (req, res) => {
+  const { user_id, house_id } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, "owner");
+    res.status(200).send({message: "Routes: Owner successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding owner to house" });
+  }
+});
+
+router.post("/addUserToHouse", async (req, res) => { 
+  const { user_id, house_id, user_type } = req.body;
+  try {
+    await addUserToHouse(user_id, house_id, user_type);
+    res.status(200).send({message: "Routes: User successfully added to house"});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding user to house" });
+  }
+});
+
 
 //remove house from user (by Hao Chen) NOT NEEDED
 //this  removes owner from the house. Doing this will remove everything related to the house 
@@ -556,9 +599,175 @@ router.put("/toggleDevice", async (req, res) => {
 });
 
 
+//get user list with type (by Hao Chen)
+router.get("/getUserListWithType/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const users = await getUserListWithType(house_id);
+    res.status(200).send({message: "Routes: Users successfully retrieved", users});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting users" });
+  }
+  });
+  
+
+//get house name (Dylan)
+router.get("/getHouseName/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    const houseName = await getHouseName(house_id);
+    if (houseName === null) {
+      res.status(404).send({ message: "Routes: House not found" });
+    } else {
+      res.status(200).send({ message: "Routes: House name successfully retrieved", houseName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting house name" });
+  }
+});
 
 
+//get room name (Dylan)
+router.get("/getRoomName/room/:room_id", async (req, res) => {
+  const { room_id } = req.params;
+  try {
+    const roomName = await getRoomName(room_id);
+    if (roomName === null) {
+      res.status(404).send({ message: "Routes: Room not found" });
+    } else {
+      res.status(200).send({ message: "Routes: Room name successfully retrieved", roomName });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting room name" });
+  }
+});
 
+//get All Device Data (Ing Ji)
+router.get("/getAllDeviceData/house/:house_id/room/:room_id/deviceType/:deviceType", async (req, res) => {
+  const { house_id, room_id, deviceType } = req.params;
+  dvType = await sensorMap(deviceType);
+  try {
+    const allDeviceData = await getAllDeviceData(house_id, room_id, dvType);
+    res.status(200).send({
+      message: "Routes: All device data successfully retrieved",
+      deviceData: allDeviceData
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting all device data" });
+  }
+});
+
+//get user type (hao chen)
+router.get("/getUserType/user/:user_id/house/:house_id", async (req, res) => {
+  const { user_id, house_id } = req.params;
+  try {
+    const userType = await getUserType(user_id, house_id);
+    if (userType === null) {
+      res.status(404).send({ message: "Routes: User not found" });
+    }
+    else {
+      res.status(200).send({ message: "Routes: User type successfully retrieved", userType });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user type" });
+  }
+});
+
+//delete all devices from room (by Hao Chen)
+router.delete("/removeAllDevicesFromRoom/houses/:house_id/rooms/:room_id", async (req, res) => {
+  const { house_id, room_id } = req.params;
+  try {
+    await removeAllDevicesFromRoom(house_id, room_id);
+    res.status(200).send({ message: "Routes: All devices successfully removed from room" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing all devices from room" });
+  }
+});
+
+
+//add all permissions (by Hao Chen)
+router.post("/addAllPermission", async (req, res) => {
+  const { user_id, house_id } = req.body;
+  try {
+    await addAllPermission(user_id, house_id);
+    res.status(200).send({ message: "Routes: All permissions successfully added" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while adding all permissions" });
+  }
+});
+
+//remove all user permissions (by Hao Chen)
+router.delete("/removeAllUserPermissions/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    await removeAllUserPermissions(user_id);
+    res.status(200).send({ message: "Routes: All user permissions successfully removed" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while removing all user permissions" });
+  }
+});
+
+//check if a user is a creator of a house (by Hao Chen)
+router.get("/checkHouseCreator/user/:user_id/house/:house_id", async (req, res) => {
+  const { user_id, house_id } = req.params;
+  try {
+    // isCreator should return a boolean
+    const creatorFlag = await isCreator(user_id, house_id);
+    if (creatorFlag) {
+      res.status(200).send({ message: "Routes: User is the creator of the house", isCreator: true });
+    } else {
+      res.status(200).send({ message: "Routes: User is not the creator of the house", isCreator: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while checking house creator" });
+  }
+});
+
+//get house creator (by Hao Chen)
+router.get("/getHouseCreator/house/:house_id", async (req, res) => {
+  const { house_id } = req.params;
+  try {
+    const creator = await getHouseCreator(house_id);
+    if (creator === null) {
+      res.status(404).send({ message: "Routes: House not found" });
+    }
+    else {
+      res.status(200).send({ message: "Routes: House creator successfully retrieved", creator });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting house creator" });
+  }
+});
+
+//delete user (by Hao Chen)
+//be very careful fo this function. It deletes everything related to the user
+// we have to check if the user owns any house. If the user owns a house, we have to delete the house first
+// then we can delete the user
+router.delete("/deleteUser/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const result = await deleteUser(user_id);
+    if (!result.deleted) {
+      // The database function indicates the user is a creator.
+      return res.status(400).json({ deleted: false, isCreator: true });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while deleting user" });
+  }
+});
 
 
 

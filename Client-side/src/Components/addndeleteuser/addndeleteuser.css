@@ -6,7 +6,7 @@ body {
 }
 
 /* Modal Overlay */
-.addndltuser-modal-overlay {
+.AddnDeleteUser-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -19,7 +19,7 @@ body {
 }
 
 /* Modal Box */
-.addndelete-modal-box {
+.AddnDeleteUser-modal-box {
   background: #fefef5;
   padding: 20px;
   border-radius: 8px;
