@@ -132,21 +132,29 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-      {Object.keys(sendRoomData).length > 0 &&(
-        <SensorData houseId={27} userID = {userID} roomName={currentRoom} roomList={sendRoomData}/>
-        )}
+        <SensorData 
+          houseId={currentHouseId} 
+          userID={userID} 
+          roomName={currentRoom} 
+          roomList={sendRoomData}
+        />
       </div>
 
       {/* Device List */}
       <div className="device-dashboard">
-        {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} 
-          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData} setRoomID = {handleRoomSelect}/>
-        )}
+        <DeviceList
+          rooms={Object.keys(sendRoomData).length > 0 ? sendRoomData : { "Empty House": [] }}
+          initialRoom={Object.keys(sendRoomData).length > 0 ? Object.keys(sendRoomData)[0] : "Empty House"}
+          onRoomChange={setCurrentRoom}
+          currentHouse={currentHouseId}
+          TheUserID={userID}
+          dashboardData={dashboardData}
+          setRoomID={handleRoomSelect}
+        />
       </div>
 
-      {/* Graph Section */}
-      <div className="graph-section">
+       {/* Graph Section */}
+       <div className="graph-section">
         <Graphs />
       </div>
 
