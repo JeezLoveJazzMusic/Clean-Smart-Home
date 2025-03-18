@@ -2,7 +2,7 @@
 //Database imports
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, updateUserPassword } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -769,7 +769,25 @@ router.delete("/deleteUser/user/:user_id", async (req, res) => {
   }
 });
 
+//resetPassword (by ing ji)
+router.put("/resetPassword/email/:email/password/:password", async (req, res) => {
+  const { email, password } = req.params;
+  if (!email || !password) {
+    const result = await updateUserPassword(email, password);
+    // If result indicates 0 rows updated, then the email might not exist.
+    if (result && result.rowsAffected === 0) {
+      return res.status(404).send({ message: "No user found with that email." });
+    }
+  }
 
+  try {
+    await updateUserPassword(email, password);
+    res.status(200).send({ message: "Password updated successfully." });
+  } catch (error) {
+    console.error("Routes: Error updating password:", error);
+    res.status(500).send({ message: "An error occurred while updating the password." });
+  }
+});
 
 
 
