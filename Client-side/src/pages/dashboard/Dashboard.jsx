@@ -9,7 +9,7 @@ import SensorData from "../../Components/SensorData/SensorData";
 import Graphs from "../../Components/Graphs/Graphs";
 import UserProfile from "../../Components/UserProfileMenu/UserProfileMenu"; // Import the pop-up
 import Sidebar from "../../Components/Sidebar/Sidebar";
-import DDTlogo from "../../assets/DDT-logo-transbg.png";
+import DDTlogo from "../../assets/DDT-new-logo1.png";
 import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
@@ -23,6 +23,7 @@ const Dashboard = () => {
   const { userID, houseList } = location.state || {};
 
   const [currentHouseId, setCurrentHouseId] = useState(null);
+  const [currentRoomID, setCurrentRoomID] = useState(null);
 
   useEffect(() => {
     if (houseList && houseList.length > 0) {
@@ -31,8 +32,26 @@ const Dashboard = () => {
       const validHouseId = parsedId && houseList.includes(parsedId) ? parsedId : houseList[0];
       setCurrentHouseId(validHouseId);
       localStorage.setItem('currentHouseId', validHouseId.toString());
+      
     }
   }, [houseList]);
+
+  const handleRoomSelect = (roomID) => {
+    console.log("Room ID selected:", roomID);
+    setCurrentRoomID(roomID);
+    localStorage.setItem('currentRoomID', roomID.toString());
+  }
+
+  //function to set the default room
+  useEffect(() => {
+    if (dashboardData && dashboardData.roomList && dashboardData.roomList.length > 0 && !currentRoom) {
+      const firstRoom = dashboardData.roomList[0];
+      setCurrentRoom(firstRoom.room_name);
+      setCurrentRoomID(firstRoom.room_id);
+      localStorage.setItem('currentRoomID', firstRoom.room_id.toString());
+      console.log("Default room set to:", firstRoom.room_name, "with id:", firstRoom.room_id);
+    }
+  }, [dashboardData, currentRoom]);
 
   const handleHouseSelect = async (houseId) => {
     setCurrentHouseId(houseId);
@@ -102,7 +121,7 @@ const Dashboard = () => {
           <img 
           src={DDTlogo} 
           alt="Durian Dev Technologies" 
-          className="logo1-image" 
+          className="logo-image" 
           />
         </div>
         {/* Profile Icon with Click Event */}
@@ -122,7 +141,7 @@ const Dashboard = () => {
       <div className="device-dashboard">
         {Object.keys(sendRoomData).length > 0 && (
           <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} 
-          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData}/>
+          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData} setRoomID = {handleRoomSelect}/>
         )}
       </div>
 
@@ -134,7 +153,7 @@ const Dashboard = () => {
       {/* User Dashboard */}
       <div className="user-dashboard">
         {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID}/>
+        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID} currentRoom = {currentRoomID}/>
         )}
       </div>
 

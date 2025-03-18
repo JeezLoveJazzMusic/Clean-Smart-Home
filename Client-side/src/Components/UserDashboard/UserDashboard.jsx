@@ -5,12 +5,12 @@ import user1 from "../../assets/user-profile1.jpg";
 import user2 from "../../assets/user-profile2.jpg";
 import user3 from "../../assets/user-profile3.jpg";
 import user4 from "../../assets/user-profile4.jpg";
-import addUser from "../../assets/add-button.png";
+import addUser from "../../assets/3dot-button.png";
 
 // Array of icons to select from
 const userIcons = [user1, user2, user3, user4];
 
-const Users = ({ dwellersList = [], currentHouse, UserID }) => {
+const Users = ({ dwellersList = [], currentHouse, UserID, currentRoom }) => {
   const navigate = useNavigate();
   console.log("house currently in: ", currentHouse);
   return (
@@ -26,7 +26,7 @@ const Users = ({ dwellersList = [], currentHouse, UserID }) => {
             </div>
           );
         })}
-        <button33 onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="UserDasboard-add-user">
+        <button33 onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="add-user1">
           <img src={addUser} alt="Add User" />
         </button33>
       </div>

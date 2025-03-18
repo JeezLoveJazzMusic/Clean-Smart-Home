@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./RequestResetPassword.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function RequestResetPassword() {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ function RequestResetPassword() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let newErrors = {};
@@ -30,9 +31,37 @@ function RequestResetPassword() {
       return;
     }
 
+    try{
+      const response = await axios.post(`http://localhost:8080/check_Email`, {
+        email: email
+      });
+
+      console.log(response.data);
+
+      if(response.data === false){
+        newErrors.email = "Email does not exist";
+        setErrors(newErrors);
+        return;
+      }
+    }catch(error){
+      console.log("Error checking email",error);
+      alert("Error checking email, email might not be signed up");
+      return;
+    }
+
     // Reset errors and show loading state
     setErrors({});
     setLoading(true);
+
+    try{
+      const response = await axios.post(`http://localhost:8080/forgotPassword/${email}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error sending email: ", error);
+      setErrors({ email: "Failed to send email." });
+      setLoading(false);
+      return;
+    }
 
     // Simulate an API request delay (1.5 seconds)
     setTimeout(() => {

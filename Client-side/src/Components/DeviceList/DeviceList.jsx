@@ -49,7 +49,7 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData }) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData, setRoomID }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
 
   useEffect(() => {
@@ -109,10 +109,37 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
     setDeviceStates(processDevices(rooms[room]));
     onRoomChange(room);
     setDropdownOpen(false);
+    console.log("Room changed to:", room);
+
+     // Look up the room info in dashboardData.roomList based on room name
+  const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === room);
+  if (roomInfo) {
+    console.log("Current room id:", roomInfo.room_id);
+    setRoomID(roomInfo.room_id);
+  } else {
+    console.error("Room ID not found for:", room);
+  }
   };
 
   // Toggle the device state
   const toggleDevice = async (index) => {
+    const device = deviceStates[index];
+
+    // If not owner, check if the user has permission to toggle this device.
+      try {
+        const permissionResponse = await axios.get(
+          `http://localhost:8080/hasPermission/user/${TheUserID}/device/${device.device_id}`
+        );
+        if (!permissionResponse.data.hasPermission) {
+          alert("You do not have permission to toggle this device.");
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking permission:", error);
+        alert("Error checking permissions. Please try again.");
+        return;
+      }
+      
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
         console.log("Device object:", device);
