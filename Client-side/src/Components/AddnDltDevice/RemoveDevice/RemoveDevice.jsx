@@ -44,23 +44,23 @@ const getDeviceIcon = (deviceType) => {
 
 const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
   return (
-    <div className="rd-popup-overlay">
-      <div className="rd-popup-container">
-        <div className="rd-popup-title-box">
-          <h2 className="rd-popup-title">Devices</h2>
+    <div className="RemoveDevice-popup-overlay">
+      <div className="RemoveDevice-popup-container">
+        <div className="RemoveDevice-popup-title-box">
+          <h2 className="RemoveDevice-popup-title">Devices</h2>
         </div>
 
-        <div className="rd-device-grid">
+        <div className="RemoveDevice-device-grid">
           {devices.map((device) => (
-            <div key={device.id} className="rd-device-card">
+            <div key={device.id} className="RemoveDevice-device-card">
               <img
                 src={getDeviceIcon(device.device_type)}
                 alt={device.device_name}
                 className="device-icon"
               />
-              <span className="rd-device-name">{device.device_name}</span>
+              <span className="RemoveDevice-device-name">{device.device_name}</span>
               <button
-                className="rd-remove-button"
+                className="RemoveDevice-remove-button"
                 onClick={() => onRemoveDevice(device.device_id)}
               >
                 −
@@ -69,8 +69,8 @@ const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
           ))}
         </div>
 
-        <div className="rd-back-button-container">
-          <button className="rd-back-button" onClick={onClose}>
+        <div className="RemoveDevice-back-button-container">
+          <button className="RemoveDevice-back-button" onClick={onClose}>
             Back
           </button>
         </div>

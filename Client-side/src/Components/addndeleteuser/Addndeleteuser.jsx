@@ -27,8 +27,8 @@ function AddnDeleteUser({ users, onAddUser, onClose }) {
   };
 
   return (
-    <div className="addndltuser-modal-overlay">
-      <div className="addndelete-modal-box">
+    <div className="AddnDeleteUser-modal-overlay">
+      <div className="AddnDeleteUser-modal-box">
         <h2>Add User</h2>
 
         {/* Username Field */}
