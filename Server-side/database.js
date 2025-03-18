@@ -1285,6 +1285,22 @@ async function getAllDeviceData(houseId, roomId, deviceType) {
   }
 }
 
+//from ing ji
+//forgot password
+async function updateUserPassword(email, newPassword) {
+  try {
+    const result = await turso.execute({
+      sql: "UPDATE users SET password = ? WHERE email = ?",
+      args: [newPassword, email],
+    });
+    console.log(`Password updated successfully for email: ${email}`);
+    return result;
+  } catch (error) {
+    console.error("Error updating password:", error.message);
+    throw error;
+  }
+}
+
 //exporting functions for routes
 module.exports = {
   createUser,
@@ -1346,5 +1362,6 @@ module.exports = {
   removeAllUserPermissions,
   isCreator,
   getHouseCreator,
-  deleteUser
+  deleteUser,
+  updateUserPassword
 };
