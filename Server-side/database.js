@@ -1305,6 +1305,7 @@ async function getAllDeviceData(houseId, roomId, deviceType) {
   }
 }
 
+
 //check if user has permission to access the device
 async function checkPermission(user_id, device_id) {
   try {
@@ -1318,6 +1319,23 @@ async function checkPermission(user_id, device_id) {
     throw error;
   }
 } 
+
+//from ing ji
+//forgot password
+async function updateUserPassword(email, newPassword) {
+  try {
+    const result = await turso.execute({
+      sql: "UPDATE users SET password = ? WHERE email = ?",
+      args: [newPassword, email],
+    });
+    console.log(`Password updated successfully for email: ${email}`);
+    return result;
+  } catch (error) {
+    console.error("Error updating password:", error.message);
+    throw error;
+  }
+}
+
 
 //exporting functions for routes
 module.exports = {
@@ -1382,5 +1400,7 @@ module.exports = {
   getHouseCreator,
   deleteUser,
   getUserPermissionForRoom,
-  checkPermission
+  checkPermission,
+  updateUserPassword
+
 };

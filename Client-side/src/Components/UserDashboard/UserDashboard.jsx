@@ -5,7 +5,7 @@ import user1 from "../../assets/user-profile1.jpg";
 import user2 from "../../assets/user-profile2.jpg";
 import user3 from "../../assets/user-profile3.jpg";
 import user4 from "../../assets/user-profile4.jpg";
-import addUser from "../../assets/add-button.png";
+import addUser from "../../assets/3dot-button.png";
 
 // Array of icons to select from
 const userIcons = [user1, user2, user3, user4];

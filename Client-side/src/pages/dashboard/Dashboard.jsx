@@ -9,7 +9,7 @@ import SensorData from "../../Components/SensorData/SensorData";
 import Graphs from "../../Components/Graphs/Graphs";
 import UserProfile from "../../Components/UserProfileMenu/UserProfileMenu"; // Import the pop-up
 import Sidebar from "../../Components/Sidebar/Sidebar";
-import DDTlogo from "../../assets/DDT-logo-transbg.png";
+import DDTlogo from "../../assets/DDT-new-logo1.png";
 import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
@@ -121,7 +121,7 @@ const Dashboard = () => {
           <img 
           src={DDTlogo} 
           alt="Durian Dev Technologies" 
-          className="logo1-image" 
+          className="logo-image" 
           />
         </div>
         {/* Profile Icon with Click Event */}
