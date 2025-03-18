@@ -1,4 +1,4 @@
-.home-container {/*Made by Joe */
+.AddnDltHome-container {/*Made by Joe */
     position: fixed;
     top: 80px;  /* Adjust as needed */
     left: 50%;
@@ -15,7 +15,7 @@
   }
   
   
-  .home-header1 { /*Made by Joe */
+  .AddnDltHome-header1 { /*Made by Joe */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,7 +39,7 @@
     font-size: 1rem;
   }
   
-  .main-back-btn {/*Made by Joe */
+  .AddnDltHome-main-back-btn {/*Made by Joe */
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -52,7 +52,7 @@
     cursor: pointer;
   }
   
-   .options-btn{/*Made by Joe */
+   .AddnDltHome-options-btn{/*Made by Joe */
     position: absolute;
     top: 20px;
     right: 20px;
@@ -65,7 +65,7 @@
     cursor: pointer;
    }
   
-   .delete-btn {/*Made by Joe */
+   .AddnDltHome-delete-btn {/*Made by Joe */
     position: absolute;
     top: 60px;
     right: 20px;
@@ -78,7 +78,7 @@
     cursor: pointer;
   }
   
-  .home-list {/*Made by Joe */
+  .AddnDltHome-list {/*Made by Joe */
     margin-top: 120px;
     display: flex;
     flex-wrap: wrap;
@@ -86,7 +86,7 @@
     justify-content: center;
   }
   
-  .home-item {/*Made by Joe */
+  .AddnDltHome-item {/*Made by Joe */
     background-size: cover;
     background-position: center;
     width: 150px;
@@ -101,19 +101,22 @@
     justify-content: center;
     text-align: center;
    opacity: 0.5;
-
-
+   word-wrap: break-word; /* Break long words */
+   overflow-wrap: break-word;
   }
-  .home-item-container {/*Made by Joe */
+
+  .AddnDltHome-item-container {/*Made by Joe */
     position: relative;
     width: 150px;
     height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word;
   }
   
-  .delete-icon {/*Made by Joe */
+  .AddnDltHome-delete-icon {/*Made by Joe */
     position: absolute;
     top: 5px;
     right: 5px;
@@ -171,7 +174,7 @@
   }
   
   /* CREATE BUTTON */
-  .create-btn {/*Made by Joe */
+  .AddnDltHome-create-btn {/*Made by Joe */
     background-color: #6eeb84;
     color: rgb(12, 12, 12);
     border: none;
@@ -193,7 +196,7 @@
   }
   
   /* MAIN BACK BUTTON (For Page) */
-  .back-btn {/*Made by Joe */
+  .AddnDltHome-back-btn {/*Made by Joe */
     background-color: #ddd;
     color: black;
     border: none;

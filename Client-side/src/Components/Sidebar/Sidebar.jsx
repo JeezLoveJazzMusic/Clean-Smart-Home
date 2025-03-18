@@ -40,7 +40,7 @@ function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
           {allHouses && allHouses.map((home) => (
             <button
               key={home.house_id}
-              className="sidebar-container"
+              className="sidebar-container1"
               onClick={() => setCurrentHouseId(home.house_id)}
             >
               <img src={home.image} alt={home.name} className="sidebar-image" />
@@ -50,10 +50,10 @@ function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
         </div>
 
         {/* Add Home Button */}
-        <div className="add-sidebar-container">
+        <div className="add-sidebar-container1">
           <button
             onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
-            className="add-sidebar"
+            className="add-sidebar1"
           >
             <img src={addButton} alt="Add" className="add-sidebar-icon" />
             Add Home

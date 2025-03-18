@@ -248,7 +248,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
 
   return (
     <div className="smart-home-container">
-      <div className="header">
+      <div className="DeviceList-header">
         <div className="dropdown">
           <button
             className="room-button"
@@ -257,7 +257,14 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
             {selectedRoom} ▽
           </button>
           {dropdownOpen && (
-            <div className="dropdown-menu">
+            <div
+              className="dropdown-menu"
+              style={
+                Object.keys(rooms).length > 10
+                  ? { maxHeight: "250px", overflowY: "auto" }
+                  : {}
+              }
+            >
               {Object.keys(rooms).map((room) => (
                 <div
                   key={room}
@@ -274,41 +281,41 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
         {/* Menu button with dropdown */}
         <div className="menu-container">
           {currentUserType === "owner" && (
-      <>
-        <button
-          className="menu-button"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <FiMoreVertical />
-        </button>
-        {menuOpen && (
-          <div className="menu-dropdown">
-            <div className="menu-option" onClick={() => setAddRoom(true)}>
-              Add Room
-            </div>
-            <div className="menu-option" onClick={() => setAddDevice(true)}>
-              Add Device
-            </div>
-            <div className="menu-option" onClick={() => setRemoveRoom(true)}>
-              Remove Room
-            </div>
-            <div className="menu-option" onClick={() => setRemoveDevice(true)}>
-              Remove Device
-            </div>
-          </div>
-        )}
-      </>
-    )}
-  </div>
+            <>
+              <button
+                className="menu-button"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <FiMoreVertical />
+              </button>
+              {menuOpen && (
+                <div className="menu-dropdown">
+                  <div className="menu-option" onClick={() => setAddRoom(true)}>
+                    Add Room
+                  </div>
+                  <div className="menu-option" onClick={() => setAddDevice(true)}>
+                    Add Device
+                  </div>
+                  <div className="menu-option" onClick={() => setRemoveRoom(true)}>
+                    Remove Room
+                  </div>
+                  <div className="menu-option" onClick={() => setRemoveDevice(true)}>
+                    Remove Device
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div className="device-grid">
         {deviceStates.map((device, index) => (
           <div key={device.device_id} className="device-card">
-            <img 
-              src={getDeviceIcon(device.device_type)} 
-              alt={device.device_name} 
-              className="device-icon" 
+            <img
+              src={getDeviceIcon(device.device_type)}
+              alt={device.device_name}
+              className="device-icon"
             />
             <div className="device-info">
               <span className="device-name">{device.device_name}</span>
@@ -349,13 +356,13 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       {/* Remove Device Popup */}
       {removeDevice && (
         <RemoveDevice
-        onClose={() => setRemoveDevice(false)}
-        devices={deviceStates.map(device => ({
-          ...device,
-          icon: getDeviceIcon(device.device_type) // Attach the icon
-        }))}
-        onRemoveDevice={handleRemoveDevice}
-      />
+          onClose={() => setRemoveDevice(false)}
+          devices={deviceStates.map((device) => ({
+            ...device,
+            icon: getDeviceIcon(device.device_type), // Attach the icon
+          }))}
+          onRemoveDevice={handleRemoveDevice}
+        />
       )}
     </div>
   );

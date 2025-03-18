@@ -132,11 +132,11 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
         </div>
 
         {/* Buttons */}
-        <div className="button-group">
-          <button className="confirm-btn" onClick={handleConfirm}>
+        <div className="AddDevice-button-group">
+          <button className="AddDevice-confirm-btn" onClick={handleConfirm}>
             Confirm
           </button>
-          <button className="cancel-btn" onClick={onClose}>
+          <button className="AddDevice-cancel-btn" onClick={onClose}>
             Back
           </button>
         </div>
