@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Addroom.css";
 import axios from "axios";
 
-const AddRoom = ({ isOpen, onClose, currentHouse }) => {
+const AddRoom = ({ isOpen, onClose, currentHouse, onRoomAdded }) => {
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
   const [error, setError] = useState("");
@@ -24,47 +24,46 @@ const AddRoom = ({ isOpen, onClose, currentHouse }) => {
   };
 
   // Function to add a new room
-
-const handleConfirm = async () => {
-  // ... existing validation code ...
-
-  try {
-    const response = await axios.post("http://localhost:8080/addRoom", {
-      house_id: currentHouse,
-      room_name: roomName
-    });
-
-    console.log("Room creation response:", response.data); // Debug log
-
-    
-
-    // Initialize the new room with the room_id from the response
-    const newRoom = {
-      room_id: response.data.room_id,
-      room_name: roomName,
-      devices: [] // Initialize empty devices array
-    };
-
-    // Notify parent component of the new room
-    if (typeof onRoomAdded === 'function') {
-      onRoomAdded(newRoom);
+  const handleConfirm = async () => {
+    if (roomName.trim() === "") {
+      setError("Please enter a valid room name.");
+      return;
     }
 
-    setRoomName("");
-    onClose();
-    window.location.reload();
-  } catch (error) {
-    console.error("Error adding room:", error);
-    setError("Failed to add room. Please try again.");
-  }
-};
+    try {
+      const response = await axios.post("http://localhost:8080/addRoom", {
+        house_id: currentHouse,
+        room_name: roomName
+      });
+
+      console.log("Room creation response:", response.data); // Debug log
+
+      // Initialize the new room with the room_id from the response
+      const newRoom = {
+        room_id: response.data.room_id,
+        room_name: roomName,
+        devices: [] // Initialize empty devices array
+      };
+
+      // Notify parent component of the new room
+      if (typeof onRoomAdded === 'function') {
+        onRoomAdded(newRoom);
+      }
+
+      setRoomName("");
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding room:", error);
+      setError("Failed to add room. Please try again.");
+    }
+  };
 
   if (!isOpen) return null; // Hide modal if not open
 
   return (
     <div className="addroom-modal-overlay" onClick={onClose}>
       <div className="addroom-modal" onClick={(e) => e.stopPropagation()}>
-       
         <h2 className="addroom-title">Add Room</h2>
 
         {/* Error Message */}

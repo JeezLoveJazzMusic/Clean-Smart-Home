@@ -73,14 +73,14 @@
 }
 
 /* Buttons */
-.button-group {
+.AddDevice-button-group {
   display: flex;
   justify-content: space-between;
   margin-top: 5vh;
 }
 
-.confirm-btn,
-.cancel-btn {
+.AddDevice-confirm-btn,
+.AddDevice-cancel-btn {
   padding: 8px 16px;
   border: none;
   cursor: pointer;
