@@ -1,8 +1,8 @@
 /* main container for the overall users section  */
 .container {      /*( fix by Joe)*/
   background-color: rgb(253, 253, 253);
-      padding: 10px;
-    border-radius: 60px;
+    padding: 10px;
+    border-radius: 40px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     height: 100%;  /*change from 20vh to 95%( from Joe )*/
@@ -61,6 +61,7 @@
     justify-content: center;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
+    border: 3px solid black;
 }
 
 /* image of the add user button *//*( fix by Joe)*/

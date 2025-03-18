@@ -80,8 +80,9 @@ body {
 /* Add User & Back Button */
 .AddUserbtn-user-btn,
 .AddUserbtn-btn {
-  background: #4caf50;
-  color: white;
+  background: #B7E4BD;
+  color: black;
+  font-size: 20px;
   border: none;
   padding: 10px 25px;
   border-radius: 10px;
@@ -93,7 +94,7 @@ body {
 
 .add-user-btn:hover,
 .AddUserbtn-btn:active:hover {
-  background: #4caf50;
+  background: #83ad85;
 }
 
 .add-user-btn:active,
@@ -106,10 +107,10 @@ body {
 .delete-user-btn {
   position: absolute;
   right: 40px;
-  top: 80px;
+  top: 90px;
   width: auto;
   display: none;
-  background: #f30000;
+  background: rgb(255, 67, 67);
   padding: 10px 15px;
   border-radius: 5px;
   font-size: 16px;
@@ -124,7 +125,7 @@ body {
 }
 
 .delete-user-btn:hover {
-  background: #f30000;
+  background: #ff3e3e;
 }
 
 .delete-user-btn:active {
@@ -139,7 +140,7 @@ body {
 
 /* Confirm Delete Button */
 .confirm-delete-btn {
-  background: red;
+  background: rgb(255, 67, 67);
   border: none;
   padding: 12px 20px;
   border-radius: 5px;
@@ -237,13 +238,13 @@ body {
 
 /* Back Button Position */
 .BackBtn1-btn {
-  background: #f30000;
+  background: #B7E4BD;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
-  color: #ffffff;
+  color: #000000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   position: absolute;
@@ -253,21 +254,21 @@ body {
 }
 
 .BackBtn1-btn:active:hover {
-  background: #f30000;
+  background: #B7E4BD;
 }
 
 .BackBtn1-btn:active {
-  background: #f30000;
+  background: #B7E4BD;
 }
 
 /* Users Title Box */
 .users-title {
-  background: #4caf50;
+  background: #B7E4BD;
   padding: 10px 20px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
-  color: #ffffff;
+  color: #000000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: inline-block;
   margin-bottom: 15px;

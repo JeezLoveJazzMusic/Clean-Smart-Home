@@ -6,7 +6,7 @@
   padding: 5px;
   border-radius: 10px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  background-color: #f8f8f8;
+  background-color: #F1EEE1;
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto 1fr;
@@ -23,13 +23,15 @@
   align-items: center;
   grid-column: span 2;
   padding: 2px;
-  background-color: #ffffff;
+  background-color: #129E70;
   height: 100px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .logo-image {
-  height: 40px;
+  height: auto;
+  width: auto;
 }
 
 .logo1 {        /*( fix by Joe)*/

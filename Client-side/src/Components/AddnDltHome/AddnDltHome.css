@@ -30,8 +30,8 @@
     position: absolute;
     top: 70px;
     LEFT: 10px;
-    background: #4CAF50;
-    color: white;
+    background: #B7E4BD;
+    color: black;
     padding: 10px 25px;
     margin: 5px;
     cursor: pointer;
@@ -45,8 +45,8 @@
     right: 20px;
     padding: 10px 15px;
     font-size: 14px;
-    background-color: #f87171;
-    color: white;
+    background-color: #B7E4BD;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -71,7 +71,7 @@
     right: 20px;
     padding: 10px 25px;
     font-size: 14px;
-    background-color: #f87171;
+    background-color: rgb(255, 67, 67);
     color: white;
     border: none;
     border-radius: 5px;
