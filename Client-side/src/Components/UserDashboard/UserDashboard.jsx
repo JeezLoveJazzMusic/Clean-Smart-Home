@@ -26,7 +26,7 @@ const Users = ({ dwellersList = [], currentHouse, UserID, currentRoom }) => {
             </div>
           );
         })}
-        <button33 onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="add-user1">
+        <button33 onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="UserDasboard-add-user">
           <img src={addUser} alt="Add User" />
         </button33>
       </div>

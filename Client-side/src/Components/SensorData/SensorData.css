@@ -94,7 +94,7 @@
 }
 
 /*Fix by Joe */
-..sensor-data-weather-box {
+.sensor-data-weather-box {
   background-color: #d4edda;
   border-radius: 30px;
   width: 100%; /* Make the box take full width of the grid cell */
