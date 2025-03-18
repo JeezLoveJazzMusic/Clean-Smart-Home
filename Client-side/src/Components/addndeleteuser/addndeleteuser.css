@@ -111,7 +111,8 @@ body {
 }
 
 .confirm-btn:hover {
-  background-color: #18992d;
+  background-color: #B7E4BD;
+  color: black;
 }
 
 /* Cancel Button */
