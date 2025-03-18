@@ -14,7 +14,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
       console.log("UserPermissions: currentRoom:", currentRoom, "HouseId:", houseId, "User:", user.id);
       try {
         const response = await axios.get(
-          `http://localhost:8080/getUserPermissionForRoom/house/${houseId}/user/${user.id}/room/${currentRoom}`
+          http://localhost:8080/getUserPermissionForRoom/house/${houseId}/user/${user.id}/room/${currentRoom}
         );
         const { userPermission } = response.data;
         // Convert the returned array into a mapping, e.g. [95] becomes { 95: true }
@@ -42,7 +42,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
     const fetchDevices = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${currentRoom}`
+          http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${currentRoom}
         );
         const { devices } = response.data;
         console.log("Fetched devices for permissions:", devices);
@@ -99,7 +99,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
       if (removePermissionIds.length > 0) {
         await Promise.all(
           removePermissionIds.map((deviceId) =>
-            axios.delete(`http://localhost:8080/remove_permission/user/${user.id}/device/${deviceId}`)
+            axios.delete(http://localhost:8080/remove_permission/user/${user.id}/device/${deviceId})
           )
         );
         console.log("Removed permissions for:", removePermissionIds);
@@ -131,15 +131,12 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
           </div>
         </div>
         <div className="user-permissions-buttons">
-          <button39
-            className="user-permissions-submit-btn"
-            onClick={handleSubmit}
-          >
+          <button className="user-permissions-submit-btn" onClick={handleSubmit}>
             Submit
-          </button39>
-          <button40 className="user-permissions-cancel-btn" onClick={onClose}>
+          </button>
+          <button className="user-permissions-cancel-btn" onClick={onClose}>
             Cancel
-          </button40>
+          </button>
         </div>
       </div>
     </div>
