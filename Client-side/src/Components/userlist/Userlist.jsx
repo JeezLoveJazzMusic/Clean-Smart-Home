@@ -253,7 +253,11 @@ function UserList() {
               <div
                 key={user.id}
                 className={`user-item ${deleteMode ? "delete-mode" : ""}`}
-                onClick={() => setSelectedUser(user)}
+                onClick={() => {
+                  if (currentUserType === "owner" && !deleteMode) {
+                  setSelectedUser(user);
+                  }
+                }}
               >
                 {deleteMode &&
                   user.id !== parseInt(UserID) &&

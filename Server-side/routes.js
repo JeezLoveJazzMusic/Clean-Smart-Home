@@ -2,7 +2,7 @@
 //Database imports
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -800,6 +800,22 @@ router.get("/getUserPermissionForRoom/house/:house_id/user/:user_id/room/:room_i
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting user permission" });
+  }
+});
+
+//check user permission for device (by Hao Chen)
+router.get("/hasPermission/user/:user_id/device/:device_id", async (req, res) => {
+  const { user_id, device_id } = req.params;
+  try {
+    const hasPermission = await checkPermission(user_id, device_id);
+    if (hasPermission) {
+      res.status(200).send({ message: "Routes: User has permission for device", hasPermission: true });
+    } else {
+      res.status(200).send({ message: "Routes: User does not have permission for device", hasPermission: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while checking user permission" });
   }
 });
 

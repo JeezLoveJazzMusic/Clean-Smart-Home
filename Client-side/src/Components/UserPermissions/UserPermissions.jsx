@@ -1,32 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "./UserPermissions.css";
 import axios from "axios";
+import "./UserPermissions.css";
 
 const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
-  const[devices, setDevices] = useState([]);
+  const [devices, setDevices] = useState([]);
   const [permissions, setPermissions] = useState({});
-  // const devices = [
-  //   { id: "1", device_name: "Fan", device_type: "Fan", device_no: "1" },
-  //   { id: "2", device_name: "Light", device_type: "Light", device_no: "2" },
-  //   {
-  //     id: "3",
-  //     device_name: "Air Conditioner",
-  //     device_type: "Aircond",
-  //     device_no: "3",
-  //   },
-  //   { id: "4", device_name: "TV", device_type: "TV", device_no: "4" },
-  //   { id: "5", device_name: "CCTV", device_type: "CCTV", device_no: "5" },
-  //   { id: "6", device_name: "Sensor", device_type: "Sensor", device_no: "6" },
-  //   {
-  //     id: "7",
-  //     device_name: "Computer",
-  //     device_type: "Computer",
-  //     device_no: "7",
-  //   },
-  //   { id: "8", device_name: "WiFi", device_type: "WiFi", device_no: "8" },
-  // ];
+  // Save a copy of the initial permissions so we can compare later.
+  const [initialPermissions, setInitialPermissions] = useState({});
 
-
+  // Fetch user permissions
   useEffect(() => {
     const fetchUserPermissions = async () => {
       console.log("UserPermissions: currentRoom:", currentRoom, "HouseId:", houseId, "User:", user.id);
@@ -35,8 +17,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
           `http://localhost:8080/getUserPermissionForRoom/house/${houseId}/user/${user.id}/room/${currentRoom}`
         );
         const { userPermission } = response.data;
-        // Convert the returned permissions array into an object mapping
-        // e.g, [95] becomes { 95: true }
+        // Convert the returned array into a mapping, e.g. [95] becomes { 95: true }
         const permissionMap = {};
         if (Array.isArray(userPermission)) {
           userPermission.forEach((deviceId) => {
@@ -45,6 +26,8 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
         }
         console.log("Fetched permissions for user (mapped):", permissionMap);
         setPermissions(permissionMap);
+        // Keep an immutable copy for later comparisons.
+        setInitialPermissions(permissionMap);
       } catch (error) {
         console.error("Error fetching user permissions:", error);
       }
@@ -54,6 +37,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
     }
   }, [currentRoom, houseId, user]);
 
+  // Fetch devices
   useEffect(() => {
     const fetchDevices = async () => {
       try {
@@ -67,24 +51,64 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
         console.error("Error fetching devices for current room:", error);
       }
     };
-
     if (currentRoom && houseId) {
       fetchDevices();
     }
   }, [currentRoom, houseId]);
 
-  /* UPDATE THIS TO SAVE DEVICE PERMISSIONS */
-  const handleSubmit = () => {
-    console.log("User Permissions:", permissions);
-  };
-
-  const togglePermission = (device) => {
+  // Toggle checkbox just updates local state.
+  const togglePermission = (deviceId) => {
     setPermissions((prev) => ({
       ...prev,
-      [device]: !prev[device],
+      [deviceId]: !prev[deviceId],
     }));
   };
 
+  // On submit, compare the current permission state to the initial state,
+  // then call API endpoints appropriately.
+  const handleSubmit = async () => {
+    console.log("Initial Permissions:", initialPermissions);
+    console.log("Final Permissions:", permissions);
+    const addPermissionIds = [];
+    const removePermissionIds = [];
+  
+    for (const [deviceId, allowed] of Object.entries(permissions)) {
+      if (allowed && !initialPermissions[deviceId]) {
+        addPermissionIds.push(deviceId);
+      }
+      if (!allowed && initialPermissions[deviceId]) {
+        removePermissionIds.push(deviceId);
+      }
+    }
+  
+    try {
+      // Process add permissions one by one.
+      if (addPermissionIds.length > 0) {
+        await Promise.all(
+          addPermissionIds.map((deviceId) =>
+            axios.post("http://localhost:8080/add_permission", {
+              user_id: user.id,
+              device_id: deviceId,
+            })
+          )
+        );
+        console.log("Added permissions for:", addPermissionIds);
+      }
+  
+      // Process remove permissions.
+      if (removePermissionIds.length > 0) {
+        await Promise.all(
+          removePermissionIds.map((deviceId) =>
+            axios.delete(`http://localhost:8080/remove_permission/user/${user.id}/device/${deviceId}`)
+          )
+        );
+        console.log("Removed permissions for:", removePermissionIds);
+      }
+      onClose();
+    } catch (error) {
+      console.error("Error updating permissions:", error);
+    }
+  };
   
   return (
     <div className="user-permissions-overlay">

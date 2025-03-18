@@ -152,7 +152,7 @@ async function removeUserFromHouse(user_id, house_id) {
 
 // Code added by: Ahmed Al-Ansi
 // Function to remove a user's permission to use a device/view its data
-async function removePermission(user_id, house_id, device_id) {
+async function removePermission(user_id, device_id) {
   console.log("this is removing ${device_id}");
   try {
     // Remove user's permission from the permissions table.
@@ -1305,6 +1305,20 @@ async function getAllDeviceData(houseId, roomId, deviceType) {
   }
 }
 
+//check if user has permission to access the device
+async function checkPermission(user_id, device_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT 1 FROM permissions WHERE user_id = ? AND device_id = ?",
+      args: [user_id, device_id],
+    });
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error("Error checking permission:", error.message);
+    throw error;
+  }
+} 
+
 //exporting functions for routes
 module.exports = {
   createUser,
@@ -1367,5 +1381,6 @@ module.exports = {
   isCreator,
   getHouseCreator,
   deleteUser,
-  getUserPermissionForRoom
+  getUserPermissionForRoom,
+  checkPermission
 };
