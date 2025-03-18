@@ -81,13 +81,12 @@
   border-radius: 10px;
 }
 
-.sidebar-container {
+.sidebar-container1 {
   /*Fix by Joe */
   display: flex;
   align-items: center;
   font-family: "Inria Serif", serif;
   margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.7);
   padding: 5px;
   overflow: hidden; /* Prevents stretching issues */
   border-radius: 5px;
@@ -97,7 +96,7 @@
   text-align: center; /* Centers text horizontally */
 }
 
-.sidebar-container button {
+.sidebar-container1 button {
   border: none;
   outline: none;
 }
@@ -126,7 +125,7 @@
 }
 
 /* Add Home Container (Fixed to Bottom) */
-.add-sidebar-container {
+.add-sidebar-container1 {
   /*Fix by Joe */
   margin-top: auto; /* Pushes it to the bottom */
   width: 100%;
@@ -136,7 +135,7 @@
 }
 
 /* Add Home Button */
-.add-sidebar {
+.add-sidebar1 {
   /*Fix by Joe */
   display: flex;
   align-items: center;

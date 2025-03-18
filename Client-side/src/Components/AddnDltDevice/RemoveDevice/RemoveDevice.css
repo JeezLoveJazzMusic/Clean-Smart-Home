@@ -1,4 +1,4 @@
-.rd-popup-overlay {
+.RemoveDevice-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.rd-popup-container {
+.RemoveDevice-popup-container {
   font-family: "Inria Serif", serif;
   font-weight: bold;
   color: #1b4332;
@@ -20,23 +20,23 @@
   border-radius: 10px;
   width: 120vw;
   max-width: 50vw;
-  height: 80vh;
+  height: 75vh;
 }
 
-.rd-popup-title-box {
+.RemoveDevice-popup-title-box {
   background: #b7e4c7;
   border: none;
   border-radius: 20px;
   width: 25vh;
 }
 
-.rd-popup-title {
+.RemoveDevice-popup-title {
   text-align: center;
   font-size: 27px;
   font-weight: bold;
 }
 
-.rd-device-grid {
+.RemoveDevice-device-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 15px;
@@ -48,7 +48,7 @@
   padding-right: 0px;
 }
 
-.rd-device-card {
+.RemoveDevice-device-card {
   position: relative;
   display: flex;
   align-items: center;
@@ -63,7 +63,7 @@
   border: 2px solid #4caf50;
 }
 
-.rd-device-name {
+.RemoveDevice-device-name {
   font-size: 14px; /* Adjust as needed */
   font-weight: bold;
   font-family: Arial, sans-serif;
@@ -75,7 +75,7 @@
   display: block;
 }
 
-.rd-remove-button {
+.RemoveDevice-remove-button {
   position: absolute;
   top: 3%;
   right: 1%;
@@ -92,17 +92,17 @@
   cursor: pointer;
 }
 
-.rd-remove-button:hover {
+.RemoveDevice-remove-button:hover {
   background: #95d5b2; /* Slightly darker on hover */
 }
 
-.rd-back-button-container {
+.RemoveDevice-back-button-container {
   display: flex;
   justify-content: flex-end; /* Aligns button to the right */
   margin-top: 10px; /* Adjust spacing from other elements */
 }
 
-.rd-back-button {
+.RemoveDevice-back-button {
   position: absolute;
   font-family: "Inria Serif", serif;
   display: block;
@@ -116,6 +116,6 @@
   cursor: pointer;
 }
 
-.rd-back-button:hover {
+.RemoveDevice-back-button:hover {
   background-color: #a5d6a7;
 }
