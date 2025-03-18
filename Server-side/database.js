@@ -1046,6 +1046,26 @@ async function deleteUser(user_id) {
   }
 }
 
+//get user permission for room
+async function getUserPermissionForRoom(user_id, house_id, room_id) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT p.device_id 
+        FROM permissions p 
+        INNER JOIN devices d ON p.device_id = d.device_id 
+        WHERE p.user_id = ? AND d.house_id = ? AND d.room_id = ?
+      `,
+      args: [user_id, house_id, room_id],
+    });
+    // Return an array of device_ids that have permission for this user in the room.
+    return result.rows.map(row => row.device_id);
+  } catch (error) {
+    console.error("Error getting user permission for room:", error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -1346,5 +1366,6 @@ module.exports = {
   removeAllUserPermissions,
   isCreator,
   getHouseCreator,
-  deleteUser
+  deleteUser,
+  getUserPermissionForRoom
 };

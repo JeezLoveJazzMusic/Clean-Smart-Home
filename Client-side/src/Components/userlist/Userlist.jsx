@@ -21,6 +21,7 @@ function UserList() {
   const dwellersList = location.state?.dwellersList || [];
   const currentHouse = location.state?.currentHouse;
   const UserID = location.state?.UserID;
+  const currentRoom = location.state?.currentRoom;
   const houseId = currentHouse;
 
   useEffect(() => {
@@ -39,6 +40,25 @@ function UserList() {
     };
     fetchCreatorId();
   }, [houseId]);
+
+  //get roomDevices
+  // useEffect(() => {
+  //   const fetchCurrentRoom = async () => {
+  //     if (!currentRoom) return;
+  //     console.log("userList: Current Room:", currentRoom);
+  //     console.log("userList: House ID:", houseId);
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${currentRoom}`
+  //       );
+  //       const { devices } = response.data;
+  //       console.log("Devices in current room:", devices);
+  //     } catch (error) {
+  //       console.error("Error fetching devices for current room:", error);
+  //     }
+  //   };
+  //   fetchCurrentRoom();
+  // }, [currentRoom]);
 
   // Initialize users with dwellersList when component mounts
   useEffect(() => {
@@ -289,6 +309,8 @@ function UserList() {
         <UserPermissions
           user={selectedUser}
           onClose={() => setSelectedUser(null)}
+          currentRoom={currentRoom}
+          houseId={currentHouse}
         />
       )}
     </>
