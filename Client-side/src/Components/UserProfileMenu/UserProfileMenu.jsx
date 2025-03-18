@@ -83,7 +83,7 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
   return (
     <div className="profile-card">
       {/* Back Button to Close Pop-up */}
-      <button onClick={onClose} className="back-UserProfileMenubtn">Back</button>
+      <button44 onClick={onClose} className="back-UserProfileMenubtn">Back</button44>
       
       <div className="profile-image">
         <input type="file" accept="image/*" onChange={handleImageChange} hidden id="fileUpload" />
@@ -108,7 +108,7 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
         </p>
       )}
       <div className="profile-actions">
-        <button className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button>  
+        <button41 className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button41>  
       </div>
 
       {showDeleteConfirm && (
@@ -116,8 +116,8 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
           <div className="confirm-msg">
             <p>Are you sure you want to delete your account?</p>
             <div className="confirm-buttons">
-              <button className="confirmdeletebutton" onClick={confirmDelete}>Yes</button>
-              <button className="canceldeletebutton" onClick={cancelDelete}>No</button>
+              <button42 className="confirmdeletebutton" onClick={confirmDelete}>Yes</button42>
+              <button43 className="canceldeletebutton" onClick={cancelDelete}>No</button43>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@
 }
 
 /*Fix by Joe */
-.grid-container1 {
+.sensor-data-grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Ensures 2 columns */
   grid-template-rows: repeat(1, 1fr); /* 2 rows for the grid */
@@ -44,7 +44,7 @@
 }
 
 /*Fix by Joe */
-.data-box1 {
+.sensor-data-data-box {
   margin-bottom: 10px;
   display: flex;
   font-family: "Inria Serif", serif;
@@ -62,7 +62,7 @@ border-radius: 30px;
 }
 
 /*Fix by Joe */
-.data-box:hover {
+.sensor-data-data-box:hover {
   background-color: #c6e2ce;
 }
 
@@ -94,7 +94,7 @@ border-radius: 30px;
 }
 
 /*Fix by Joe */
-.weather-box1 {
+.sensor-data-weather-box{
   background-color: #d4edda;
   border-radius: 30px;
   width: 100%; /* Make the box take full width of the grid cell */
@@ -108,7 +108,7 @@ border-radius: 30px;
 }
 
 /*Fix by Joe */
-.weather-icon {
+.sensor-data-weather-icon {
   width: 80px;
   height: 80px;
 }

@@ -62,15 +62,15 @@ const UserPermissions = ({ user, onClose }) => {
           </div>
         </div>
         <div className="user-permissions-buttons">
-          <button
+          <button39
             className="user-permissions-submit-btn"
             onClick={handleSubmit}
           >
             Submit
-          </button>
-          <button className="user-permissions-cancel-btn" onClick={onClose}>
+          </button39>
+          <button40 className="user-permissions-cancel-btn" onClick={onClose}>
             Cancel
-          </button>
+          </button40>
         </div>
       </div>
     </div>

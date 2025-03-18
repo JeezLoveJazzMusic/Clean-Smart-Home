@@ -1,5 +1,5 @@
 /* main container for the overall users section  */
-.container {      /*( fix by Joe)*/
+.UserDasboard-container {      /*( fix by Joe)*/
   background-color: rgb(253, 253, 253);
       padding: 10px;
     border-radius: 60px;
@@ -20,14 +20,14 @@
   }
   
   /* to show the list of users */
-  .user-list {
+  .UserDasboard-container-user-list {
     display: flex;
     gap: 10px;
     margin-top: 5px;
   }
   
   /* each individual user avatar */
-  .user-avatar {
+  .UserDasboard-user-avatar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -40,18 +40,18 @@
   }
   
   /* image inside the user avatar */
-  .user-avatar img {
+  .UserDasboard-user-avatar img {
     width: 100%;
     height: 100%;
   }
   
   /* hover effect */
-  .user-avatar img:hover {
+  .UserDasboard-user-avatar img:hover {
     transform: scale(1.1);
   }
   
   /* add user button */
-  .add-user1 {     /*( fix by Joe)*/
+  .UserDasboard-add-user {     /*( fix by Joe)*/
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -64,7 +64,7 @@
 }
 
 /* image of the add user button *//*( fix by Joe)*/
-.add-user1 img {    
+.UserDasboard-add-user img {    
     width: 150%;
     height: 190%;
     object-fit: cover; /* Ensures the image covers the entire circle without distortion */

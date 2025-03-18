@@ -59,20 +59,20 @@ const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
                 className="device-icon"
               />
               <span className="RemoveDevice-device-name">{device.device_name}</span>
-              <button
+              <button3
                 className="RemoveDevice-remove-button"
                 onClick={() => onRemoveDevice(device.device_id)}
               >
                 −
-              </button>
+              </button3>
             </div>
           ))}
         </div>
 
         <div className="RemoveDevice-back-button-container">
-          <button className="RemoveDevice-back-button" onClick={onClose}>
+          <button4 className="RemoveDevice-back-button" onClick={onClose}>
             Back
-          </button>
+          </button4>
         </div>
       </div>
     </div>

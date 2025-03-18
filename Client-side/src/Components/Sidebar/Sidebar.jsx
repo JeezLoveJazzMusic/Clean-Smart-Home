@@ -31,33 +31,33 @@ function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
       {/* Sidebar */}
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         {/* Toggle Button (Remains Attached) */}
-        <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <button28 className="sidebar-toggle" onClick={toggleSidebar}>
           {isOpen ? "✖" : "☰"}
-        </button>
+        </button28>
 
         {/* Home List */}
         <div className="sidebar-list">
           {allHouses && allHouses.map((home) => (
-            <button
+            <button29
               key={home.house_id}
               className="sidebar-container1"
               onClick={() => setCurrentHouseId(home.house_id)}
             >
               <img src={home.image} alt={home.name} className="sidebar-image" />
               <span className="sidebar-home-name">{home.house_name}</span>
-            </button>
+            </button29>
           ))}
         </div>
 
         {/* Add Home Button */}
         <div className="add-sidebar-container1">
-          <button
+          <button30
             onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
             className="add-sidebar1"
           >
             <img src={addButton} alt="Add" className="add-sidebar-icon" />
             Add Home
-          </button>
+          </button30>
         </div>
       </div>
     </div>

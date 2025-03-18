@@ -240,18 +240,18 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
     <div className="smart-home-container">
       <div className="DeviceList-header">
         <div className="dropdown">
-          <button
+          <button14
             className="room-button"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             {selectedRoom} ▽
-          </button>
+          </button14>
           {dropdownOpen && (
             <div
               className="dropdown-menu"
               style={
                 Object.keys(rooms).length > 10
-                  ? { maxHeight: "250px", overflowY: "auto" }
+                  ? { maxHeight: "250px", overflowY: "auto" } // scrollbar 
                   : {}
               }
             >
@@ -272,12 +272,12 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
         <div className="menu-container">
           {currentUserType === "owner" && (
             <>
-              <button
+              <button15
                 className="menu-button"
                 onClick={() => setMenuOpen(!menuOpen)}
               >
                 <FiMoreVertical />
-              </button>
+              </button15>
               {menuOpen && (
                 <div className="menu-dropdown">
                   <div className="menu-option" onClick={() => setAddRoom(true)}>

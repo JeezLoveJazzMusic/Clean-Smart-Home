@@ -108,7 +108,7 @@ const LightLevel = () => {
   return (
     <div className="card2">
       {/* Back Button at Top Right */}
-      <button
+      <button20
         onClick={() => navigate(-1)} // Navigate back when clicked
         style={{
           position: "absolute",
@@ -124,9 +124,9 @@ const LightLevel = () => {
         }}
       >
         ⬅ Back
-      </button>
+      </button20>
 
-      <div className="card-header">
+      <div className="card2-header">
         <h2>Room: {roomName} - Light Level</h2>
         <RWebShare 
           data={{
@@ -136,9 +136,9 @@ const LightLevel = () => {
           }}
           onClick={() => console.log("Shared successfully!")}
         >
-          <button className="share-button">
+          <button21 className="share-button">
             Share Data
-          </button>
+          </button21>
         </RWebShare>
       </div>
 

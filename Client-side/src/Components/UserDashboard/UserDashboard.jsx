@@ -14,21 +14,21 @@ const Users = ({ dwellersList = [], currentHouse, UserID }) => {
   const navigate = useNavigate();
   console.log("house currently in: ", currentHouse);
   return (
-    <div className="container">
+    <div className="UserDasboard-container">
       <h6>Users</h6>
-      <div className="user-list">
+      <div className="UserDasboard-container-user-list">
         {dwellersList.slice(0, 4).map(user => {
           // Use modulus to choose an icon deterministically
           const icon = userIcons[user.user_id % userIcons.length];
           return (
-            <div key={user.user_id} className="user-avatar" title={user.username}>
+            <div key={user.user_id} className="UserDasboard-user-avatar" title={user.username}>
               <img src={icon} alt={user.username} />
             </div>
           );
         })}
-        <button onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="add-user1">
+        <button33 onClick={() => navigate("/Userlist", {state: {dwellersList: dwellersList, currentHouse: currentHouse, UserID: UserID} })  } className="UserDasboard-add-user">
           <img src={addUser} alt="Add User" />
-        </button>
+        </button33>
       </div>
     </div>
   );
