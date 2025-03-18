@@ -131,7 +131,7 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
           </div>
         </div>
         <div className="user-permissions-buttons">
-          <button
+          <button39
             className="user-permissions-submit-btn"
             onClick={handleSubmit}
           >
