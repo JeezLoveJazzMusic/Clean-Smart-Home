@@ -49,6 +49,8 @@
     justify-content: space-between;
     gap: 20px;
     margin-bottom: 15px;
+    width: 100%;
+    max-width: 100%; 
     width: 100px;
     max-width: 100px; 
 }
@@ -62,7 +64,7 @@
     margin-right: 20px;
 }
 
-/* Input Field */
+/* Input Field  */
 .addroom-input-group input {
     font-family: "Inria Serif", serif;
     font-size: 16px;
@@ -73,7 +75,8 @@
     border-radius: 20px; 
     outline: none;
     width: 100%;
-    min-width: 550px;
+    max-width: 100%; 
+    min-width: unset; 
 }
 
 /* Button Group */
@@ -103,7 +106,6 @@
     background: #92c5a3;
 }
 
-/* Align buttons properly */
 .addroom-back-btn {
     margin-left: auto; 
 }
@@ -115,6 +117,29 @@
     color: #666;
     font-size: 0.8rem;
     margin-top: 4px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .addroom-modal {
+        width: 90vw; 
+        padding: 20px;
+    }
+
+    .addroom-input-group {
+        flex-direction: column; 
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .addroom-input-group input {
+        width: 100%;
+        font-size: 14px; 
+    }
+
+    .addroom-title {
+        font-size: 24px;
+    }
 }
 
 .addroom-error-message{
