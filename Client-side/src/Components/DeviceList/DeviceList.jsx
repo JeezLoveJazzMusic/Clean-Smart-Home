@@ -141,6 +141,23 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
 
   // Toggle the device state
   const toggleDevice = async (index) => {
+    const device = deviceStates[index];
+    try {
+      const permissionResponse = await axios.get(
+        `http://localhost:8080/hasPermission/user/${TheUserID}/device/${device.device_id}`
+      );
+      console.log("Permission response:", permissionResponse.data);
+      
+      // If permission is not granted, log and exit
+      if (permissionResponse.data?.hasPermission !== true) {
+        console.log("User does not have permission to toggle this device.");
+        return;
+      }
+    } catch (error) {
+      console.error("Error checking permission:", error);
+      return;
+    }
+
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
         console.log("Device object:", device);
@@ -339,6 +356,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               <span className="device-name">{device.device_name}</span>
               <div
                 className={`toggleSwitch ${device.device_power ? "on" : "off"}`}
+
                 onClick={() => toggleDevice(index)}
               >
                 <div className="toggleKnob">{device.device_power ? "ON" : "OFF"}</div>

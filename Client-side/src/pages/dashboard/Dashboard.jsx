@@ -25,6 +25,31 @@ const Dashboard = () => {
   const [currentHouseId, setCurrentHouseId] = useState(null);
   const [currentRoomID, setCurrentRoomID] = useState(null);
 
+
+  useEffect(() => {
+    const fetchHouseList = async () => {
+      if (userID) {
+        try {
+          const response = await axios.get(`http://localhost:8080/getHouseList/user/${userID}`);
+          const { homeIDList } = response.data;
+          // Update location.state with new houseList
+          const newHouseList = homeIDList || [];
+          if (newHouseList.length > 0) {
+            const savedHouseId = localStorage.getItem('currentHouseId');
+            const parsedId = savedHouseId ? parseInt(savedHouseId) : null;
+            const validHouseId = parsedId && newHouseList.includes(parsedId) ? parsedId : newHouseList[0];
+            setCurrentHouseId(validHouseId);
+            localStorage.setItem('currentHouseId', validHouseId.toString());
+          }
+        } catch (error) {
+          console.error("Error fetching house list:", error);
+        }
+      }
+    };
+  
+    fetchHouseList();
+  }, [userID]); 
+  
   useEffect(() => {
     if (houseList && houseList.length > 0) {
       const savedHouseId = localStorage.getItem('currentHouseId');
