@@ -120,17 +120,17 @@
 
 /* When the toggle is ON */
 .toggleSwitch.on {
-  background-color: #A4C881;
+  background-color: #7fb944;
 }
 
 .toggleSwitch.on .toggleKnob {
   transform: translateX(12px);
-  background-color: #96E548;
+  background-color: #80ff00;
 }
 
 /* When the toggle is OFF */
 .toggleSwitch.off {
-  background-color: #F0BCBC;
+  background-color: #adadad;
 }
 
 .toggleSwitch.off .toggleKnob {
@@ -144,14 +144,29 @@
   top: 100%;
   background-color: #B7E4BD;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
   z-index: 1000px;
 }
 
+.dropdown-menu::-webkit-scrollbar {
+  width: 5px; /* Smaller width */
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #B7E4BD;
+  border-radius: 5px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
+}
+
 .dropdown-option {
   padding: 5px 10px;
+  width: 130px;
   cursor: pointer;
   font-family: Inria, serif;
   /* border-left: 1px solid #000000; */
@@ -161,7 +176,7 @@
 }
 
 .dropdown-option:hover {
-  background-color: #4ab358;
+  background-color: #50cb61;
   border-radius: 5px;
 }
 
