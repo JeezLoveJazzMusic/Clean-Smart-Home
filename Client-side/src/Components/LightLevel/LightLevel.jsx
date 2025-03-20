@@ -126,7 +126,7 @@ const LightLevel = () => {
         ⬅ Back
       </button>
 
-      <div className="card-header">
+      <div className="card2-header">
         <h2>Room: {roomName} - Light Level</h2>
         <RWebShare 
           data={{
