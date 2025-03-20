@@ -1574,7 +1574,7 @@ module.exports = {
   checkPermission,
   updateUserPassword,
   getRoomName,
-  storeEnergyUsage
+  storeEnergyUsage,
   requestDeletion,
   checkDeletionStatus,
   cancelDeletion,
