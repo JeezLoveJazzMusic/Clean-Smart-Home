@@ -8,8 +8,11 @@ const {
   storeEnergyUsage
 } = require("./database.js");
 
-import fs from 'fs';
-import csvParser from 'csv-parser'
+const fs = require('fs');
+const csvParser = require('csv-parser');
+
+// import fs from 'fs';
+// import csvParser from 'csv-parser'
 
 const homeIO_ID = 1;
 
