@@ -74,14 +74,13 @@ async function sensorMap(sensorType){
   return sensorMap[sensorType];
 }
 
-// Call pollHomeIO every minute and log the returned data
+// // Call pollHomeIO every minute and log the returned data
 // setInterval(() => {
 //     pollHomeIO().then((data) => {
 //         console.log('Data returned from pollHomeIO:', data);
 //         storeParsedData(homeIO_ID, data);
 //     });
-
-// }, 6000);
+// }, 60000);
 
 // pollHomeIO().then((data) => {
 //   console.log("Data returned from pollHomeIO:", data);
