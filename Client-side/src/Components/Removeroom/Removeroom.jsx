@@ -63,12 +63,12 @@ const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
                 <span className="removeroom-name">{room.room_name}</span>
 
                 {/* Remove Button */}
-                <button22
+                <button
                   className="removeroom-delete-btn"
                   onClick={() => handleRemoveRoom(room.room_id, room.room_name)}
                 >
                   -
-                </button22>
+                </button>
               </div>
             ))
           ) : (
@@ -77,9 +77,9 @@ const RemoveRoom = ({ isOpen, onClose, currentHouse, rooms }) => {
         </div>
   
           {/* Back Button */}
-        <button23 className="removeroom-back-btn" onClick={onClose}>
+        <button className="removeroom-back-btn" onClick={onClose}>
           Back
-        </button23>
+        </button>
       </div>
     </div>
   );

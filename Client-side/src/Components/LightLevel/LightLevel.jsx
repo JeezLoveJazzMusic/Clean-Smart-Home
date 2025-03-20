@@ -108,7 +108,7 @@ const LightLevel = () => {
   return (
     <div className="card2">
       {/* Back Button at Top Right */}
-      <button20
+      <button
         onClick={() => navigate(-1)} // Navigate back when clicked
         style={{
           position: "absolute",
@@ -124,7 +124,7 @@ const LightLevel = () => {
         }}
       >
         ⬅ Back
-      </button20>
+      </button>
 
       <div className="card2-header">
         <h2>Room: {roomName} - Light Level</h2>

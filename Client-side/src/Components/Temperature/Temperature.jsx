@@ -107,7 +107,7 @@ const Temperature = () => {
   return (
     <div className="card1">
       {/* Back Button at Top Right */}
-      <button31
+      <button
         onClick={() => navigate(-1)} // Navigate back when clicked
         style={{
           position: "absolute",
@@ -123,7 +123,7 @@ const Temperature = () => {
         }}
       >
         ⬅ Back
-      </button31>
+      </button>
       
       <div className="card1-header">
         <h2>Room: {roomName} - Temperature</h2>
@@ -135,9 +135,9 @@ const Temperature = () => {
           }}
           onClick={() => console.log("Shared successfully!")}
         >
-          <button32 className="share-button">
+          <button className="share-button">
             Share Data
-          </button32>
+          </button>
         </RWebShare>
       </div>
 

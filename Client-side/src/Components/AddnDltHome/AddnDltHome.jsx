@@ -106,18 +106,18 @@ const AddHome = () => {
       <div className="AddnDltHome-header1">
         <h2>Home</h2>
         {!isDeleting && (
-          <button5 onClick={() => setShowOptions(!showOptions)} className="AddnDltHome-options-btn">
+          <button onClick={() => setShowOptions(!showOptions)} className="AddnDltHome-options-btn">
             <FaEllipsisH />
-          </button5>
+          </button>
         )}
         {showOptions && (
           <div>
-            <button6 onClick={toggleDeleteMode} className="AddnDltHome-delete-btn">
+            <button onClick={toggleDeleteMode} className="AddnDltHome-delete-btn">
               {isDeleting ? "Cancel" : "Delete Home Profile"}
-            </button6>
-            <button7 onClick={() => setIsAdding(true)} className="add1-addndltbtn">
+            </button>
+            <button onClick={() => setIsAdding(true)} className="add1-addndltbtn">
               Add Home Profile <FaPlusCircle />
-            </button7>
+            </button>
           </div>
         )}
       </div>
@@ -125,12 +125,12 @@ const AddHome = () => {
       <div className="AddnDltHome-list">
         {homes.map((home) => (
           <div key={home.id} className={`AddnDltHome-item-container ${isDeleting ? "deleting" : ""}`}>
-            <button8
+            <button
               className="AddnDltHome-item"
               style={{ backgroundImage: `url(${home.image})`, backgroundSize: "cover", backgroundPosition: "center" }}
             >
               <span>{home.name}</span>
-            </button8>
+            </button>
             {isDeleting && home.user_type === "owner" && (
               <FaTrash className="AddnDltHome-delete-icon" onClick={() => handleDeleteHome(home.id)} />
             )}
@@ -158,13 +158,13 @@ const AddHome = () => {
             onChange={(e) => setNewHomeAddress(e.target.value)}
           />
           <div className="AddnDltHome-modal-buttons">
-            <button9 className="AddnDltHome-create-btn" onClick={handleAddHome}>Create</button9>
-            <button10 className="AddnDltHome-modal-back-btn" onClick={() => setIsAdding(false)}>Back</button10>
+            <button className="AddnDltHome-create-btn" onClick={handleAddHome}>Create</button>
+            <button className="AddnDltHome-modal-back-btn" onClick={() => setIsAdding(false)}>Back</button>
           </div>
         </div>
       )}
 
-      <button11 onClick={() => navigate(-1)} className="AddnDltHome-main-back-btn">⬅ Back</button11>
+      <button onClick={() => navigate(-1)} className="AddnDltHome-main-back-btn">⬅ Back</button>
     </div>
   );
 };

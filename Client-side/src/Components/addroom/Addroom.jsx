@@ -82,12 +82,12 @@ const AddRoom = ({ isOpen, onClose, currentHouse, onRoomAdded }) => {
         </div>
 
         <div className="addroom-button-group">
-          <button12 className="addroom-confirm-btn" onClick={handleConfirm}>
+          <button className="addroom-confirm-btn" onClick={handleConfirm}>
             Confirm
-          </button12>
-          <button13 className="addroom-back-btn" onClick={onClose}>
+          </button>
+          <button className="addroom-back-btn" onClick={onClose}>
             Back
-          </button13>
+          </button>
         </div>
       </div>
     </div>

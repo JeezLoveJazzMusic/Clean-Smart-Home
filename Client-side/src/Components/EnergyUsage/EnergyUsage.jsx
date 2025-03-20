@@ -49,7 +49,7 @@ const EnergyUsage = () => {
   return (
     <div className="card">
       {/* Back Button at Top Right */}
-      <button16
+      <button
         onClick={() => navigate(-1)} // Navigate back when clicked
         style={{
           position: "absolute",
@@ -65,13 +65,13 @@ const EnergyUsage = () => {
         }}
       >
         ⬅ Back
-      </button16>
+      </button>
 
       <div className="card-header">
         <h2>Energy Usage</h2>
-        <button17 className="share-button" onClick={openShareSensorData}>
+        <button className="share-button" onClick={openShareSensorData}>
           Share Data
-        </button17>
+        </button>
       </div>
 
       <div className="EnergyUsage-info">
