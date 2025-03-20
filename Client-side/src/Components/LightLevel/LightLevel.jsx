@@ -18,7 +18,7 @@ const LightLevel = () => {
   const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId ,roomName } = location.state || {};
+  const { houseId, roomId ,roomName, recc } = location.state || {};
 
   // Helper function to convert an array of objects (device data) to a CSV string.
   const convertToCSV = (dataArray) => {
@@ -155,13 +155,19 @@ const LightLevel = () => {
       </div>
 
       <div className="info-section">
-        <div className="tips">
-          <h3>Light Level Tips:</h3>
-          <ul>
-          <li>Above 80%: Use natural light, turn off artificial lights</li>
-          <li>40%-80%: Use task or ambient lighting as needed</li>
-          <li>Below 40%: Use bright, energy-efficient bulbs</li>
-          </ul>
+      <div className="tips">
+          <h3>Tips:</h3>
+          {recc && recc.tips && recc.tips.length > 0 ? (
+            <ul>
+              {recc.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          ) : (
+            <>
+              <p>(No Tips Available)</p>
+            </>
+          )}
         </div>
 
         <div className="energy-alert">
@@ -171,10 +177,20 @@ const LightLevel = () => {
 
         <div className="recommendations">
           <h3>Recommendations:</h3>
-          <p>
-        Dear User, your current light level is above 80%. 
-        We would recommend you to turn off the lights and enjoy the natural sunlight. 
-        </p>
+          {recc && recc.message ? (
+            <>
+              <p>{recc.message}</p>
+              {recc.tips && recc.tips.length > 0 && (
+                <ul>
+                  {recc.tips.map((tip, index) => (
+                    <li key={index}>{tip}</li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : (
+            <p>No recommendations available.</p>
+          )}
         </div>
       </div>
     

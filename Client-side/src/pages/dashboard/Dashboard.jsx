@@ -180,7 +180,11 @@ const Dashboard = () => {
 
        {/* Graph Section */}
        <div className="graph-section">
-        <Graphs />
+       {currentHouseId ? (
+          <Graphs currentHouse={currentHouseId} />
+        ) : (
+          <div>Loading graphs...</div>
+        )}
       </div>
 
       {/* User Dashboard */}
