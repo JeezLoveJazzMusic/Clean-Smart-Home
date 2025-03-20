@@ -819,6 +819,25 @@ async function storeParsedData(house_id, data) {
   console.log("\nData stored successfully!\n");
 }
 
+// Function to store smart meter data into the database
+async function storeEnergyUsage(device_id, state_value)
+{
+  const state_key = "smart meter";
+  const updated_at = new Date().toISOString();
+
+  try
+  {
+    await db.execute({
+      sql: "INSERT INTO device_states (device_id, state_key, state_value, updated_at) VALUES (?, ?, ?, ?)",
+      args: [device_id, state_key, state_value, updated_at]
+    });
+    console.log(`Inserted: Device ${device_id} -> ${state_value} kWh at ${updated_at}`);
+  } catch (error)
+  {
+    console.error("Error inserting smart meter data:", error);
+  }
+}
+
 // --- Function to get the current state of a device ---
 async function getCurrentState(houseId, roomId, deviceType) {
   const query = `
@@ -1555,6 +1574,7 @@ module.exports = {
   checkPermission,
   updateUserPassword,
   getRoomName,
+  storeEnergyUsage,
   requestDeletion,
   checkDeletionStatus,
   cancelDeletion,

@@ -5,7 +5,7 @@
     max-width: 95%;
     min-height: 95vh;
     text-align: center;
-    background: linear-gradient(135deg, #e6f1d8, #8ee782);
+    background: linear-gradient(125deg, #baf3e5, #65c7ba);
     color: black;
     border-radius: 8px;
     font-family: 'Times New Roman', Times, serif;
@@ -32,6 +32,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 40px;
+    font-size: 1.5rem;
 }
 
 .forecastColumn {
