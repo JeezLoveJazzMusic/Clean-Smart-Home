@@ -153,12 +153,11 @@ async function removeUserFromHouse(user_id, house_id) {
 // Code added by: Ahmed Al-Ansi
 // Function to remove a user's permission to use a device/view its data
 async function removePermission(user_id, device_id) {
-  console.log("this is removing ${device_id}");
   try {
-    // Remove user's permission from the permissions table.
+    // Remove the user and device from the permissions table to revoke the user's permission to use the device.
     await turso.execute({
-      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ? AND device_id IN (SELECT device_id FROM devices WHERE house_id = ?)",
-      args: [user_id, device_id, house_id],
+      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ?",
+      args: [user_id, device_id],
     });
     console.log("Permission removed successfully!");
   } catch (error) {
@@ -166,6 +165,7 @@ async function removePermission(user_id, device_id) {
     throw error;
   }
 }
+
 
 //remove all user permissions
 async function removeAllUserPermissions(user_id) {
@@ -664,9 +664,34 @@ function parseHomeIOData(data) {
         deviceData.state_value = parseFloat(value).toFixed(3);
         stateKeyName = "outdoor temperature";
       } else if (key === "rhm") {
-        deviceData.device_type = "rhm";
-        deviceData.state_value = parseFloat(value).toFixed(3);
-        stateKeyName = "humidity";
+        // Define the rooms that should receive humidity readings
+        const rhmRooms = ["A", "D", "E", "G", "H", "I", "J"];
+        
+        // For each room, create a separate device data entry
+        rhmRooms.forEach(room => {
+          const rhmDeviceData = {
+            device_type: "rhm",
+            device_number: null,
+            room_name: room,
+            state_value: parseFloat(value).toFixed(3),
+            state_key: "humidity",
+            updated_at: null,
+          };
+          
+          console.log(`Creating humidity entry for room ${room}:`, {
+            device_type: rhmDeviceData.device_type,
+            room_name: rhmDeviceData.room_name,
+            state_key: rhmDeviceData.state_key,
+            state_value: rhmDeviceData.state_value
+          });
+          
+          // Add this device data to the parsed results
+          parsedData.push(rhmDeviceData);
+        });
+        
+        // Skip the default push since we've handled it above
+        currentLine = [];
+        continue;
       } else if (key === "wdsp") {
         deviceData.device_type = "wdsp";
         deviceData.state_value = parseFloat(value).toFixed(3);
@@ -713,6 +738,7 @@ function parseHomeIOData(data) {
     }
   }
 
+  console.log("\nData parsed successfully!\n");
   return parsedData;
 }
 
@@ -790,6 +816,7 @@ async function storeParsedData(house_id, data) {
       );
     }
   }
+  console.log("\nData stored successfully!\n");
 }
 
 // --- Function to get the current state of a device ---
@@ -1042,6 +1069,115 @@ async function deleteUser(user_id) {
     return { deleted: true };
   } catch (error) {
     console.error("Error deleting user:", error.message);
+    throw error;
+  }
+}
+
+// Request account deletion - marks account for deletion
+async function requestDeletion(user_id) {
+  try {
+    await turso.execute({
+      sql: `UPDATE users 
+            SET account_status = 'pending_deletion', 
+                deletion_requested_at = datetime('now') 
+            WHERE user_id = ?`,
+      args: [user_id],
+    });
+    return { requested: true };
+  } catch (error) {
+    console.error("Error requesting deletion:", error.message);
+    throw error;
+  }
+}
+
+// Check deletion status and handle grace period
+async function checkDeletionStatus(user_id) {
+  try {
+    const result = await turso.execute({
+      sql: `SELECT 
+              account_status,
+              deletion_requested_at,
+              julianday('now') - julianday(deletion_requested_at) as days_since_request
+            FROM users 
+            WHERE user_id = ?`,
+      args: [user_id],
+    });
+
+    if (result.rows.length === 0) {
+      return { exists: false };
+    }
+
+    const user = result.rows[0];
+    
+    if (user.account_status !== 'pending_deletion') {
+      return { status: 'active' };
+    }
+
+    const daysSinceRequest = user.days_since_request;
+    
+    if (daysSinceRequest >= 7) {
+      // Delete the account if grace period has passed
+      await deleteUser(user_id);
+      return { 
+        status: 'deleted',
+        message: 'Account has been permanently deleted after the 7-day grace period.'
+      };
+    }
+
+    // Within grace period - automatically cancel deletion
+    await cancelDeletion(user_id);
+    return {
+      status: 'recovered',
+      message: 'Your account has been recovered automatically upon login.'
+    };
+  } catch (error) {
+    console.error("Error checking deletion status:", error.message);
+    throw error;
+  }
+}
+
+// Cancel deletion request
+async function cancelDeletion(user_id) {
+  try {
+    await turso.execute({
+      sql: `UPDATE users 
+            SET account_status = 'active', 
+                deletion_requested_at = NULL 
+            WHERE user_id = ?`,
+      args: [user_id],
+    });
+    return { cancelled: true };
+  } catch (error) {
+    console.error("Error cancelling deletion:", error.message);
+    throw error;
+  }
+}
+
+async function updateLastLogin(user_id) {
+  try {
+    await turso.execute({
+      sql: `UPDATE users 
+            SET last_login_at = datetime('now') 
+            WHERE user_id = ?`,
+      args: [user_id],
+    });
+    return true;
+  } catch (error) {
+    console.error("Error updating last login:", error.message);
+    throw error;
+  }
+}
+
+// Check if user is a creator of any house
+async function isCreatorOfAnyHouse(user_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT 1 FROM houses WHERE creator_id = ?",
+      args: [user_id],
+    });
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error("Error checking if user is creator of any house:", error.message);
     throw error;
   }
 }
@@ -1336,6 +1472,22 @@ async function updateUserPassword(email, newPassword) {
   }
 }
 
+//get room name
+async function getRoomName(room_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT room_name FROM rooms WHERE room_id = ?",
+      args: [room_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].room_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting room name:", error.message);
+    throw error;
+  }
+}
 
 //exporting functions for routes
 module.exports = {
@@ -1401,6 +1553,11 @@ module.exports = {
   deleteUser,
   getUserPermissionForRoom,
   checkPermission,
-  updateUserPassword
-
+  updateUserPassword,
+  getRoomName,
+  requestDeletion,
+  checkDeletionStatus,
+  cancelDeletion,
+  updateLastLogin,
+  isCreatorOfAnyHouse,
 };

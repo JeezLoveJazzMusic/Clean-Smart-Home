@@ -46,9 +46,16 @@ function SensorData({houseId, userID, roomName, roomList}) {
   const getRoomId = () => {
     if (roomName && roomList && roomList[roomName] && roomList[roomName].length > 0) {
       setRoomId(roomList[roomName][0].room_id);
+    } else {
+      // Set default values when no room data exists
+      setRoomId(null);
+      setCurTemp("N/A");
+      setCurHumidity("N/A");
+      setCurLight("N/A");
+      setCurEnergy("N/A");
     }
-    return null;
   }
+
 
   const fetchData = async () => {
     try {

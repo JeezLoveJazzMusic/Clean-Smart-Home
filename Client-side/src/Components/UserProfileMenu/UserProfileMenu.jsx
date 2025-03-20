@@ -45,28 +45,18 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
 
   const confirmDelete = async () => {
     try {
-      // Call backend to delete the user
-      const response = await axios.delete(`http://localhost:8080/deleteUser/user/${thisUserID}`);
+      // Call backend to request account deletion
+      const response = await axios.post(`http://localhost:8080/requestDeletion/user/${thisUserID}`);
       const result = response.data;
       console.log("Delete user response:", result);
-      if (result.deleted) {
-        // Deletion successful: navigate to signup (or logout)
-        alert("Account deleted successfully.");
+      if (result.requested) {
+        // Deletion requested: navigate to signup
+        alert("Account deletion requested. Your account will be deleted after 7 days.");
         navigate("/Signup");
       }
     } catch (error) {
-      // If the backend returned a 400 status, it will be caught here.
-      if (error.response && error.response.data) {
-        const result = error.response.data;
-        if (result.isCreator) {
-          alert("Your account cannot be deleted because you are the creator of a house.");
-        } else {
-          alert("Unable to delete your account at this time.");
-        }
-      } else {
-        console.error("Error deleting account:", error);
-        alert("An error occurred while deleting your account.");
-      }
+      console.error("Error requesting account deletion:", error);
+      alert("An error occurred while requesting account deletion.");
     } finally {
       setShowDeleteConfirm(false);
     }
@@ -115,6 +105,7 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
         <div className="confirm-overlay">
           <div className="confirm-msg">
             <p>Are you sure you want to delete your account?</p>
+            <p>This action will initiate a 7-day grace period.</p>
             <div className="confirm-buttons">
               <button42 className="confirmdeletebutton" onClick={confirmDelete}>Yes</button42>
               <button43 className="canceldeletebutton" onClick={cancelDelete}>No</button43>

@@ -25,6 +25,31 @@ const Dashboard = () => {
   const [currentHouseId, setCurrentHouseId] = useState(null);
   const [currentRoomID, setCurrentRoomID] = useState(null);
 
+
+  useEffect(() => {
+    const fetchHouseList = async () => {
+      if (userID) {
+        try {
+          const response = await axios.get(`http://localhost:8080/getHouseList/user/${userID}`);
+          const { homeIDList } = response.data;
+          // Update location.state with new houseList
+          const newHouseList = homeIDList || [];
+          if (newHouseList.length > 0) {
+            const savedHouseId = localStorage.getItem('currentHouseId');
+            const parsedId = savedHouseId ? parseInt(savedHouseId) : null;
+            const validHouseId = parsedId && newHouseList.includes(parsedId) ? parsedId : newHouseList[0];
+            setCurrentHouseId(validHouseId);
+            localStorage.setItem('currentHouseId', validHouseId.toString());
+          }
+        } catch (error) {
+          console.error("Error fetching house list:", error);
+        }
+      }
+    };
+  
+    fetchHouseList();
+  }, [userID]); 
+  
   useEffect(() => {
     if (houseList && houseList.length > 0) {
       const savedHouseId = localStorage.getItem('currentHouseId');
@@ -132,21 +157,29 @@ const Dashboard = () => {
 
       {/* Sensor Data */}
       <div className="sensor-data">
-      {Object.keys(sendRoomData).length > 0 &&(
-        <SensorData houseId={27} userID = {userID} roomName={currentRoom} roomList={sendRoomData}/>
-        )}
+        <SensorData 
+          houseId={currentHouseId} 
+          userID={userID} 
+          roomName={currentRoom} 
+          roomList={sendRoomData}
+        />
       </div>
 
       {/* Device List */}
       <div className="device-dashboard">
-        {Object.keys(sendRoomData).length > 0 && (
-          <DeviceList rooms={sendRoomData} initialRoom={Object.keys(sendRoomData)[0]} onRoomChange={setCurrentRoom} 
-          currentHouse={currentHouseId} TheUserID={userID} dashboardData={dashboardData} setRoomID = {handleRoomSelect}/>
-        )}
+        <DeviceList
+          rooms={Object.keys(sendRoomData).length > 0 ? sendRoomData : { "Empty House": [] }}
+          initialRoom={Object.keys(sendRoomData).length > 0 ? Object.keys(sendRoomData)[0] : "Empty House"}
+          onRoomChange={setCurrentRoom}
+          currentHouse={currentHouseId}
+          TheUserID={userID}
+          dashboardData={dashboardData}
+          setRoomID={handleRoomSelect}
+        />
       </div>
 
-      {/* Graph Section */}
-      <div className="graph-section">
+       {/* Graph Section */}
+       <div className="graph-section">
         <Graphs />
       </div>
 

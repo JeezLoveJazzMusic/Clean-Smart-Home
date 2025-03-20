@@ -3,7 +3,7 @@
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
 
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, requestDeletion, checkDeletionStatus, cancelDeletion, updateLastLogin, isCreatorOfAnyHouse } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -40,40 +40,65 @@ router.post("/signup", async (req, res) => {
 
 // Login route ( by Hao Chen ) ##
 router.post("/login", async (req, res) => {
- const { email, password } = req.body;
- 
- 
- try {
-     // Validate input
-     if (!email || !password) {
-         return res.status(400).send({ message: "Routes: Email and password are required" });
-     }
+  const { email, password } = req.body;
 
-     // Check if user exists
-     const user = await getUserByEmail(email);
-     console.log("routes: this is user:",JSON.stringify(user, null, 2));
-     if (!user) {
-         return res.status(401).send({ message: "Routes: Invalid email" });
-     }
+  try {
+    // Validate input
+    if (!email || !password) {
+      return res
+        .status(400)
+        .send({ message: "Routes: Email and password are required" });
+    }
 
-     // Verify password
-     const isValidPassword = await verifyPassword(email, password);
-     if (!isValidPassword) {
-         return res.status(401).send({ message: "Routes: Invalid password" });
-     }
+    // Check if user exists
+    const user = await getUserByEmail(email);
+    console.log("routes: this is user:", JSON.stringify(user, null, 2));
+    if (!user) {
+      return res.status(401).send({ message: "Routes: Invalid email" });
+    }
 
-     // Login successful
-     console.log("routes: this is user.user_id:",user.user_id);
-     homeList = await getHouseList(user.user_id);
-     console.log("Raw homeList:", homeList);
-     houseIDList = homeList.map(home => home.house_id);
-     console.log("houseIDList:", houseIDList);
-     res.status(200).send({ message: "Routes: Login successful",  userID: user.user_id, houseList: houseIDList });
+    // Verify password
+    const isValidPassword = await verifyPassword(email, password);
+    if (!isValidPassword) {
+      return res.status(401).send({ message: "Routes: Invalid password" });
+    }
 
- } catch (error) {
-     console.error(error);
-     res.status(500).send({ message: "Routes: An error occurred during login" });
- }
+    // Update last login timestamp
+    await updateLastLogin(user.user_id);
+
+    // Check deletion status before proceeding with login
+    const deletionStatus = await checkDeletionStatus(user.user_id);
+
+    if (deletionStatus.status === "deleted") {
+      return res.status(401).send({ message: deletionStatus.message });
+    }
+
+    // Login successful
+    console.log("routes: this is user.user_id:", user.user_id);
+    homeList = await getHouseList(user.user_id);
+    console.log("Raw homeList:", homeList);
+    houseIDList = homeList.map((home) => home.house_id);
+    console.log("houseIDList:", houseIDList);
+
+    // If account was recovered, include recovery message
+    if (deletionStatus.status === "recovered") {
+      res.status(200).send({
+        message: "Routes: Login successful",
+        userID: user.user_id,
+        houseList: houseIDList,
+        recoveryMessage: deletionStatus.message,
+      });
+    } else {
+      res.status(200).send({
+        message: "Routes: Login successful",
+        userID: user.user_id,
+        houseList: houseIDList,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred during login" });
+  }
 });
 
 //get dashboard data (by Hao Chen) 
@@ -770,6 +795,44 @@ router.delete("/deleteUser/user/:user_id", async (req, res) => {
   }
 });
 
+// Request account deletion
+router.post("/requestDeletion/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    // Check if user is a house creator first
+    const isHouseCreator = await isCreatorOfAnyHouse(user_id);
+    if (isHouseCreator) {
+      return res.status(400).json({ 
+        requested: false, 
+        message: "Cannot delete account as you are a house creator." 
+      });
+    }
+    
+    const result = await requestDeletion(user_id);
+    res.status(200).json({
+      ...result,
+      message: "Account deletion requested. You have 7 days to recover your account."
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "An error occurred while requesting deletion" });
+  }
+});
+
+// Cancel deletion request
+router.post("/cancelDeletion/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const result = await cancelDeletion(user_id);
+    res.status(200).json({
+      ...result,
+      message: "Account deletion cancelled successfully."
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "An error occurred while cancelling deletion" });
+  }
+});
 
 // Grant permissions for multiple devices in a room
 router.post("/setUserPermissionsForRoom", async (req, res) => {
@@ -842,6 +905,19 @@ router.put("/resetPassword/email/:email/password/:password", async (req, res) =>
     res.status(500).send({ message: "An error occurred while updating the password." });
   }
 });
+
+//get the list of houses that a user has access to(by hao chen)
+router.get("/getHouseList/user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+  try {
+    const houses = await getHouseList(user_id);
+    res.status(200).send({ message: "Routes: Houses successfully retrieved", houses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting houses" });
+  }
+});
+
 
 
 
