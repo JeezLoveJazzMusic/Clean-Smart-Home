@@ -96,9 +96,10 @@ function SensorData({houseId, userID, roomName, roomList}) {
         <p>Loading user name...</p>
       )}
       <div className="sensor-data1">
-        <div className="grid-container1">
+        <div className="sensor-data-grid-container">
           {/* Humidity */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Humidity", { state : {houseId, roomId, roomName} } )} className="data-box1">  
+          <button onClick={() => navigate("/Humidity", { state : {houseId, roomId, roomName} } )} className="sensor-data-data-box
+">  
             <img src={humidityIcon} alt="Humidity" className="icon" />
             <div className="text-container">
               <p className="label">Humidity</p>
@@ -107,7 +108,8 @@ function SensorData({houseId, userID, roomName, roomList}) {
           </button>
 
           {/* Energy */ }
-          <button onClick={() => navigate("/EnergyUsage", { state : {houseId, roomId, roomName} } )} className="data-box1">   
+          <button onClick={() => navigate("/EnergyUsage", { state : {houseId, roomId, roomName} } )} className="sensor-data-data-box
+">   
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
@@ -116,7 +118,8 @@ function SensorData({houseId, userID, roomName, roomList}) {
           </button>
 
           {/* Temperature */ /*Fix by Joe */}
-          <button onClick={() => navigate("/Temperature", { state : {houseId, roomId, roomName} } )} className="data-box1">   
+          <button onClick={() => navigate("/Temperature", { state : {houseId, roomId, roomName} } )} className="sensor-data-data-box
+">   
             <img src={temperatureIcon} alt="Temperature" className="icon" />
             <div className="text-container">
               <p className="label">Temperature</p>
@@ -125,7 +128,8 @@ function SensorData({houseId, userID, roomName, roomList}) {
           </button>
 
           {/* Light */  /*Fix by Joe */}
-          <button onClick={() => navigate("/LightLevel", { state : {houseId, roomId, roomName} } )} className="data-box1">   
+          <button onClick={() => navigate("/LightLevel", { state : {houseId, roomId, roomName} } )} className="sensor-data-data-box
+">   
             <img src={lightIcon} alt="Light" className="icon" />
             <div className="text-container">
               <p className="label">Light</p>
@@ -135,11 +139,13 @@ function SensorData({houseId, userID, roomName, roomList}) {
         </div>
 
         {/* Weather */ /*Fix by Joe */}
-        <div className="weather-box1">
-          <img src={weatherIcon} alt="Weather" className="weather-icon" />
+        <button onClick={() => navigate("/weather")}className="sensor-data-weather-box">
+          <img src={weatherIcon} alt="Weather" className="sensor-data-weather-icon" />
+          <div className="text-container">
         </div>
+        </button>
       </div>
-    </div>
+      </div>
   );
 }
 

@@ -18,9 +18,9 @@
   background-color: #f4f3ee;
   padding: 20px;
   border-radius: 10px;
-  width: 120vw;
-  max-width: 50vw;
-  height: 75vh;
+  width: 60vw;
+  max-width: 60vw;
+  height: 85vh;
 }
 
 .RemoveDevice-popup-title-box {
@@ -40,12 +40,13 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 15px;
-  max-width: 50vw;
-  column-gap: 0px;
+  max-width: 60vw;
+  column-gap: 5px;
   margin-top: 15px;
-  max-height: 52vh; /* Limit the height for scrollable content */
+  max-height: 58vh; /* Limit the height for scrollable content */
   overflow-y: auto; /* Add vertical scrolling */
   padding-right: 0px;
+  
 }
 
 .RemoveDevice-device-card {
@@ -57,22 +58,30 @@
   background-color: white;
   font-size: 18px;
   border-radius: 12px;
-  max-width: 11vw;
+  max-width: 14vw;
   height: 100px;
   padding: 5px;
   border: 2px solid #4caf50;
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
+  
 }
 
 .RemoveDevice-device-name {
   font-size: 14px; /* Adjust as needed */
+  width: 120px;
   font-weight: bold;
   font-family: Arial, sans-serif;
   color: #1b4332;
   text-align: left;
-  width: 60%;
   word-wrap: break-word; /* Break long words */
   overflow-wrap: break-word;
   display: block;
+  max-width: 10ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
 }
 
 .RemoveDevice-remove-button {
@@ -114,6 +123,7 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
+
 }
 
 .RemoveDevice-back-button:hover {

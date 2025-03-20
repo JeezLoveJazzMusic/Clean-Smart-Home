@@ -9,10 +9,11 @@ import partlyCloudyDay from "../../assets/Weather icons/wi-day-cloudy-high.svg";
 import partlyCloudyNight from "../../assets/Weather icons/wi-night-alt-partly-cloudy.svg";
 import rainyDay from "../../assets/Weather icons/wi-day-rain.svg";
 import rainyNight from "../../assets/Weather icons/wi-night-alt-rain.svg";
-
+import { useNavigate } from 'react-router-dom';
 //TODO: DISPLAY THE ICONS CORRECTLY ACCORDING TO THE CLOUD, make everything look better
 
 const Weather = () => {
+    const navigate = useNavigate(); // Navigate function
     // sample data for demonstration purposes
     const currentWeather = {
         time: new Date().toLocaleTimeString(),
@@ -141,6 +142,23 @@ const Weather = () => {
 
     return (
         <div className={styles["main-container"]}>
+                <button
+        onClick={() => navigate(-1)} // Navigate back when clicked
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          padding: "10px 15px",
+          fontSize: "14px",
+          backgroundColor: "#f87171",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        ⬅ Back
+      </button>
             <h1>Today's Weather Report</h1>
             <p><strong>Location:</strong> {location}</p>
             <p><strong>Status:</strong> {currentWeather.description}</p>

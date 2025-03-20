@@ -296,7 +296,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               className="dropdown-menu"
               style={
                 Object.keys(rooms).length > 10
-                  ? { maxHeight: "250px", overflowY: "auto" }
+                  ? { maxHeight: "250px", overflowY: "auto" } // scrollbar 
                   : {}
               }
             >
