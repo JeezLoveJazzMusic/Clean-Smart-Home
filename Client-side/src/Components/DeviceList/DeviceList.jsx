@@ -181,7 +181,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
           console.log("Toggling light:", device.device_number + " in room " + selectedRoom);
           // Determine action based on the new state
           const action = newPowerState ? "turn_on" : "turn_off";
-          const homeIOControlUrl = `http://IP.Home.IO:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
+          const homeIOControlUrl = `http://localhost:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
           
           axios.get(homeIOControlUrl)
             .then(() => {

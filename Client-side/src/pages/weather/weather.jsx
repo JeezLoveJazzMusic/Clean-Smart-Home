@@ -21,34 +21,6 @@ const Weather = () => {
         description: 'Sunny',
         weather: 'clear-day'
     };
-
-    // sample forecast array for 6 one-hour intervals
-    const initialForecast = [
-        { time: "12:00 AM", windSpeed: '8 km/h', temperature: '18°C', description: 'Clear' },
-        { time: "1:00 AM", windSpeed: '7 km/h', temperature: '17°C', description: 'Clear' },
-        { time: "2:00 AM", windSpeed: '6 km/h', temperature: '16°C', description: 'Clear' },
-        { time: "3:00 AM", windSpeed: '5 km/h', temperature: '15°C', description: 'Clear' },
-        { time: "4:00 AM", windSpeed: '5 km/h', temperature: '15°C', description: 'Partly Cloudy' },
-        { time: "5:00 AM", windSpeed: '6 km/h', temperature: '16°C', description: 'Partly Cloudy' },
-        { time: "6:00 AM", windSpeed: '7 km/h', temperature: '17°C', description: 'Partly Cloudy' },
-        { time: "7:00 AM", windSpeed: '8 km/h', temperature: '19°C', description: 'Sunny' },
-        { time: "8:00 AM", windSpeed: '9 km/h', temperature: '21°C', description: 'Sunny' },
-        { time: "9:00 AM", windSpeed: '10 km/h', temperature: '23°C', description: 'Sunny' },
-        { time: "10:00 AM", windSpeed: '12 km/h', temperature: '24°C', description: 'Sunny' },
-        { time: "11:00 AM", windSpeed: '14 km/h', temperature: '25°C', description: 'Sunny' },
-        { time: "12:00 PM", windSpeed: '15 km/h', temperature: '26°C', description: 'Sunny' },
-        { time: "1:00 PM", windSpeed: '16 km/h', temperature: '26°C', description: 'Partly Cloudy' },
-        { time: "2:00 PM", windSpeed: '17 km/h', temperature: '25°C', description: 'Partly Cloudy' },
-        { time: "3:00 PM", windSpeed: '16 km/h', temperature: '24°C', description: 'Cloudy' },
-        { time: "4:00 PM", windSpeed: '15 km/h', temperature: '23°C', description: 'Cloudy' },
-        { time: "5:00 PM", windSpeed: '14 km/h', temperature: '22°C', description: 'Cloudy' },
-        { time: "6:00 PM", windSpeed: '12 km/h', temperature: '21°C', description: 'Partly Cloudy' },
-        { time: "7:00 PM", windSpeed: '10 km/h', temperature: '20°C', description: 'Partly Cloudy' },
-        { time: "8:00 PM", windSpeed: '9 km/h', temperature: '19°C', description: 'Clear' },
-        { time: "9:00 PM", windSpeed: '8 km/h', temperature: '18°C', description: 'Clear' },
-        { time: "10:00 PM", windSpeed: '7 km/h', temperature: '17°C', description: 'Clear' },
-        { time: "11:00 PM", windSpeed: '6 km/h', temperature: '16°C', description: 'Clear' }
-    ];
     
     const [startIndex, setStartIndex] = useState(0);
     const [location, setLocation] = useState('Malaysia');
@@ -155,17 +127,17 @@ const Weather = () => {
       const visibleForecast = forecastData.slice(startIndex, startIndex + forecastPerPage);
 
     // For demonstration pagination handlers just log to console.
-    const handlePrev = () => {
-        if (startIndex > 0) {
-            setStartIndex(prev => Math.max(prev - forecastPerPage, 0));
-        }
-    };
-
     const handleNext = () => {
-        if (startIndex + forecastPerPage < initialForecast.length) {
-            setStartIndex(prev => Math.min(prev + forecastPerPage, initialForecast.length - forecastPerPage));
+        if (startIndex + forecastPerPage < forecastData.length) {
+          setStartIndex(prev => Math.min(prev + forecastPerPage, forecastData.length - forecastPerPage));
         }
-    };
+      };
+      
+      const handlePrev = () => {
+        if (startIndex > 0) {
+          setStartIndex(prev => Math.max(prev - forecastPerPage, 0));
+        }
+      };
 
     return (
         <div className={styles["main-container"]}>
