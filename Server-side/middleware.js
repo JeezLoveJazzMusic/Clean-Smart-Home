@@ -5,7 +5,11 @@ const {
   removePermission,
   getUserPermissions,
   storeParsedData,
+  storeEnergyUsage
 } = require("./database.js");
+
+import fs from 'fs';
+import csvParser from 'csv-parser'
 
 const homeIO_ID = 1;
 
@@ -74,6 +78,32 @@ async function sensorMap(sensorType){
   return sensorMap[sensorType];
 }
 
+// Function to get a variation of smart meter values
+function getRandomizedValue(value) {
+  const variation = value * (Math.random() * 0.3 - 0.15); // ±15%
+  return value + variation;
+}
+
+// Read data from .csv file and insert into DB
+async function getSmartMeterData(filepath, device_id)
+{
+  fs.createReadStream(filePath)
+    .pipe(csvParser())
+    .on('data', async (row) => {
+      if (row['Cumulative Energy Usage (kWh)']) {
+        const originalValue = parseFloat(row['Cumulative Energy Usage (kWh)']);
+        if (!isNaN(originalValue)) {
+          const modifiedValue = getRandomizedValue(originalValue);
+          await storeEnergyUsage(device_id, modifiedValue);
+        } else {
+          console.warn("Skipping invalid row:", row);
+        }
+      }
+    })
+    .on('end', () => {
+      console.log("CSV processing completed.");
+    });
+}
 
 // Call pollHomeIO every minute and log the returned data
 // setInterval(() => {
@@ -90,42 +120,72 @@ async function sensorMap(sensorType){
 // });
 
 // Function for whole house energy suggestions
-function analyzeEnergyUsage(Energy_prediciton, prev_month_usage ,energy_rate, carbon_factor) {
+function analyzeEnergyUsage(Energy_prediction, prev_month_usage, energy_rate, carbon_factor) {
   const carbon_emissions = prev_month_usage * carbon_factor; // kg CO2
   const cost = prev_month_usage * energy_rate; // Cost
   
-  let prediction = Energy_prediciton;
+  let prediction = Energy_prediction;
   let expected_usage = prev_month_usage;
   let savings = { energy: 0, cost: 0, carbon: 0 };
   let suggestions = [];
   
-  if (prediction == "Reduce usage") {
-      expected_usage = prev_month_usage * 0.85; // Suggest reducing by 15%
-      savings.energy = prev_month_usage - expected_usage;
-      savings.cost = savings.energy * energy_rate;
-      savings.carbon = savings.energy * carbon_factor;
-      suggestions = [
-          "Turn off unnecessary lights and appliances.",
-          "Use energy-efficient lighting and appliances.",
-          "Adjust thermostat settings for better efficiency.",
-          "Unplug devices when not in use."
-      ];
-  }
-
-  else if (prediction == "Usage is okay")
-  {
-    suggestions = ["Keep up the green living!"]
+  if (prediction === "Reduce usage") {
+    expected_usage = prev_month_usage * 0.85; // Suggest reducing by 15%
+    savings.energy = prev_month_usage - expected_usage;
+    savings.cost = savings.energy * energy_rate;
+    savings.carbon = savings.energy * carbon_factor;
+    suggestions = [
+      "Turn off unnecessary lights and appliances.",
+      "Use energy-efficient lighting and appliances.",
+      "Adjust thermostat settings for better efficiency.",
+      "Unplug devices when not in use."
+    ];
+  } else if (prediction === "Usage is okay") {
+    suggestions = ["Keep up the green living!"];
   }
   
-  return {
-      prediction,
-      expected_usage,
-      carbon_emissions,
-      cost,
-      savings,
-      suggestions
-  }
+  const response = {
+    prediction,
+    expected_usage,
+    carbon_emissions,
+    cost,
+    savings,
+    suggestions
+  };
+
+  return JSON.stringify(response, null, 2); // Convert to JSON
 }
+
+// Function for single room tips
+function analyzeRoomEnergy(prev_month_average, current_average, temperature, occupancy) {
+  let response = {
+    message: "",
+    tips: []
+  };
+
+  if (current_average > prev_month_average) {
+    response.message = "Your energy usage is predicted to increase if you follow this trend!";
+    
+    // Energy-saving tips based on conditions
+    if (temperature < 27) {
+      response.tips.push("Consider reducing AC usage as the temperature is already cool.");
+    }
+
+    if (new Date().getHours() >= 6 && new Date().getHours() <= 18) {
+      response.tips.push("Make use of natural daylight to reduce lighting costs.");
+    }
+
+    response.tips.push("Turn off unused appliances when no one is in the room.");
+    response.tips.push("Use energy-efficient LED lights.");
+    response.tips.push("Unplug devices that are not in use to reduce phantom energy consumption.");
+    
+  } else {
+    response.message = "Good job on green living! Your energy usage is stable or decreasing.";
+  }
+
+  return JSON.stringify(response, null, 2); // Convert to JSON
+}
+
 
 // ML model API
 async function getPrediction(temperature, occupancy, energyUsage) {
