@@ -85,7 +85,7 @@ function getRandomizedValue(value) {
 }
 
 // Read data from .csv file and insert into DB
-async function getSmartMeterData(filepath, device_id)
+async function getSmartMeterData(filePath, device_id)
 {
   fs.createReadStream(filePath)
     .pipe(csvParser())
@@ -120,9 +120,11 @@ async function getSmartMeterData(filepath, device_id)
 // });
 
 // Function for whole house energy suggestions
-function analyzeEnergyUsage(Energy_prediction, prev_month_usage, energy_rate, carbon_factor) {
+function analyzeEnergyUsage(Energy_prediction, prev_month_usage) {
   const carbon_emissions = prev_month_usage * carbon_factor; // kg CO2
   const cost = prev_month_usage * energy_rate; // Cost
+  const energy_rate = 0.218;
+  const carbon_factor = 0.5;
   
   let prediction = Energy_prediction;
   let expected_usage = prev_month_usage;
@@ -208,4 +210,4 @@ async function getPrediction(temperature, occupancy, energyUsage) {
 
 // getPrediction(34,1,500);
 
-module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage }
+module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData }
