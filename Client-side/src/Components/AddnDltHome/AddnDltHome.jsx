@@ -16,7 +16,7 @@ const selectImage = (house_id) => {
 const AddHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { allHouses , currentUserID} = location.state || {};
+  const { allHouses, currentUserID } = location.state || {};
   const MAX_LENGTH = 20; // Maximum character limit
 
   const [homes, setHomes] = useState(() => {
@@ -70,10 +70,9 @@ const AddHome = () => {
           address: newHomeAddress,
         });
         console.log("New house response:", response.data);
-  
+
         // Get fresh house list after adding
         fetchRefreshHomes();
-  
       } catch (error) {
         console.error("Error adding house:", error);
       }
@@ -81,30 +80,34 @@ const AddHome = () => {
   };
 
   const fetchRefreshHomes = async () => {
-    const refreshResponse = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${currentUserID}`);
-        console.log("Refresh response:", refreshResponse.data);
-        
-        // Note: API returns { allUserHouseData: [...] }, not { newHouseList: [...] }
-        const { allUserHouseData } = refreshResponse.data;
-        
-        if (allUserHouseData && Array.isArray(allUserHouseData)) {
-          // Update local state with the refreshed data
-          setHomes(allUserHouseData.map(house => ({
-            id: house.house_id,
-            name: house.house_name,
-            image: selectImage(house.house_id),
-            user_type: house.user_type // Make sure to include user_type
-          })));
-  
-          // Reset form and close modals
-          setNewHomeName("");
-          setNewHomeAddress("");
-          setIsAdding(false);
-          setShowOptions(false);
-        } else {
-          console.error("Invalid house data received:", refreshResponse.data);
-        }
-      };
+    const refreshResponse = await axios.get(
+      `http://localhost:8080/getAllUserHouseData/user/${currentUserID}`
+    );
+    console.log("Refresh response:", refreshResponse.data);
+
+    // Note: API returns { allUserHouseData: [...] }, not { newHouseList: [...] }
+    const { allUserHouseData } = refreshResponse.data;
+
+    if (allUserHouseData && Array.isArray(allUserHouseData)) {
+      // Update local state with the refreshed data
+      setHomes(
+        allUserHouseData.map((house) => ({
+          id: house.house_id,
+          name: house.house_name,
+          image: selectImage(house.house_id),
+          user_type: house.user_type, // Make sure to include user_type
+        }))
+      );
+
+      // Reset form and close modals
+      setNewHomeName("");
+      setNewHomeAddress("");
+      setIsAdding(false);
+      setShowOptions(false);
+    } else {
+      console.error("Invalid house data received:", refreshResponse.data);
+    }
+  };
 
   const handleDeleteHome = async (id) => {
     try {
@@ -125,16 +128,25 @@ const AddHome = () => {
       <div className="AddnDltHome-header1">
         <h2>Home</h2>
         {!isDeleting && (
-          <button onClick={() => setShowOptions(!showOptions)} className="AddnDltHome-options-btn">
+          <button
+            onClick={() => setShowOptions(!showOptions)}
+            className="AddnDltHome-options-btn"
+          >
             <FaEllipsisH />
           </button>
         )}
         {showOptions && (
           <div>
-            <button onClick={toggleDeleteMode} className="AddnDltHome-delete-btn">
+            <button
+              onClick={toggleDeleteMode}
+              className="AddnDltHome-delete-btn"
+            >
               {isDeleting ? "Cancel" : "Delete Home Profile"}
             </button>
-            <button onClick={() => setIsAdding(true)} className="add1-addndltbtn">
+            <button
+              onClick={() => setIsAdding(true)}
+              className="add1-addndltbtn"
+            >
               Add Home Profile <FaPlusCircle />
             </button>
           </div>
@@ -143,15 +155,27 @@ const AddHome = () => {
 
       <div className="AddnDltHome-list">
         {homes.map((home) => (
-          <div key={home.id} className={`AddnDltHome-item-container ${isDeleting ? "deleting" : ""}`}>
+          <div
+            key={home.id}
+            className={`AddnDltHome-item-container ${
+              isDeleting ? "deleting" : ""
+            }`}
+          >
             <button
               className="AddnDltHome-item"
-              style={{ backgroundImage: `url(${home.image})`, backgroundSize: "cover", backgroundPosition: "center" }}
+              style={{
+                backgroundImage: `url(${home.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
             >
-              <span>{home.name}</span>
+              <span className="AddnDltHome-home-name">{home.name}</span>
             </button>
             {isDeleting && home.user_type === "owner" && (
-              <FaTrash className="AddnDltHome-delete-icon" onClick={() => handleDeleteHome(home.id)} />
+              <FaTrash
+                className="AddnDltHome-delete-icon"
+                onClick={() => handleDeleteHome(home.id)}
+              />
             )}
           </div>
         ))}
@@ -177,13 +201,25 @@ const AddHome = () => {
             onChange={(e) => setNewHomeAddress(e.target.value)}
           />
           <div className="AddnDltHome-modal-buttons">
-            <button className="AddnDltHome-create-btn" onClick={handleAddHome}>Create</button>
-            <button className="AddnDltHome-modal-back-btn" onClick={() => setIsAdding(false)}>Back</button>
+            <button className="AddnDltHome-create-btn" onClick={handleAddHome}>
+              Create
+            </button>
+            <button
+              className="AddnDltHome-modal-back-btn"
+              onClick={() => setIsAdding(false)}
+            >
+              Back
+            </button>
           </div>
         </div>
       )}
 
-      <button onClick={() => navigate(-1)} className="AddnDltHome-main-back-btn">⬅ Back</button>
+      <button
+        onClick={() => navigate(-1)}
+        className="AddnDltHome-main-back-btn"
+      >
+        ⬅ Back
+      </button>
     </div>
   );
 };

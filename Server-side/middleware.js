@@ -114,8 +114,7 @@ async function getSmartMeterData(filePath, device_id)
 //         console.log('Data returned from pollHomeIO:', data);
 //         storeParsedData(homeIO_ID, data);
 //     });
-
-// }, 6000);
+// }, 60000);
 
 // pollHomeIO().then((data) => {
 //   console.log("Data returned from pollHomeIO:", data);
@@ -213,4 +212,4 @@ async function getPrediction(temperature, occupancy, energyUsage) {
 
 // getPrediction(34,1,500);
 
-module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData }
+module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData };
