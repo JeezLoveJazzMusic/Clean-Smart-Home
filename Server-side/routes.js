@@ -2,7 +2,8 @@
 //Database imports
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser } = require("./database.js"); 
+
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -769,6 +770,90 @@ router.delete("/deleteUser/user/:user_id", async (req, res) => {
   }
 });
 
+
+// Grant permissions for multiple devices in a room
+router.post("/setUserPermissionsForRoom", async (req, res) => {
+  const { user_id, device_ids } = req.body;
+  
+  // Validate input
+  if (!user_id || !device_ids || !Array.isArray(device_ids)) {
+    return res.status(400).json({ message: "Invalid input: user_id, room_id and an array of device_ids are required." });
+  }
+  
+  try {
+    // Iterate over the device IDs and add permission for each
+    await Promise.all(device_ids.map(async (device_id) => {
+      await addPermission(user_id, device_id);
+    }));
+    
+    res.status(200).json({ message: "Permissions granted for selected devices." });
+  } catch (error) {
+    console.error("Error setting permissions:", error);
+    res.status(500).json({ message: "An error occurred while setting permissions." });
+  }
+});
+
+//get user permission for room (by Hao Chen)
+router.get("/getUserPermissionForRoom/house/:house_id/user/:user_id/room/:room_id", async (req, res) => {
+  const {  user_id, house_id, room_id } = req.params;
+  try {
+    const userPermission = await getUserPermissionForRoom(user_id, house_id, room_id);
+    res.status(200).send({ message: "Routes: User permission successfully retrieved", userPermission });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting user permission" });
+  }
+});
+
+//check user permission for device (by Hao Chen)
+router.get("/hasPermission/user/:user_id/device/:device_id", async (req, res) => {
+  const { user_id, device_id } = req.params;
+  try {
+    const hasPermission = await checkPermission(user_id, device_id);
+    if (hasPermission) {
+      res.status(200).send({ message: "Routes: User has permission for device", hasPermission: true });
+    } else {
+      res.status(200).send({ message: "Routes: User does not have permission for device", hasPermission: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while checking user permission" });
+  }
+});
+
+
+//resetPassword (by ing ji)
+router.put("/resetPassword/email/:email/password/:password", async (req, res) => {
+  const { email, password } = req.params;
+  if (!email || !password) {
+    const result = await updateUserPassword(email, password);
+    // If result indicates 0 rows updated, then the email might not exist.
+    if (result && result.rowsAffected === 0) {
+      return res.status(404).send({ message: "No user found with that email." });
+    }
+  }
+
+
+  try {
+    await updateUserPassword(email, password);
+    res.status(200).send({ message: "Password updated successfully." });
+  } catch (error) {
+    console.error("Routes: Error updating password:", error);
+    res.status(500).send({ message: "An error occurred while updating the password." });
+  }
+});
+
+//get the list of houses that a user has access to(by hao chen)
+router.get("/getHouseList/user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+  try {
+    const houses = await getHouseList(user_id);
+    res.status(200).send({ message: "Routes: Houses successfully retrieved", houses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting houses" });
+  }
+});
 
 
 

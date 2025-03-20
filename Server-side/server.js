@@ -5,6 +5,7 @@ const app = express();
 const routes = require("./routes.js");
 const path = require("path");
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 //Coded by: Ing Ji for the next 4 lines of code
 //vite server runs on port 5173 on default
@@ -24,6 +25,36 @@ app.use("/Client-side", express.static("Client-side"));
 app.get("/", function(req, res)
 {
 res.sendFile(path.join(__dirname, "../Client-side/src/index.js"));
+});
+
+//forgot password from ing ji
+app.post("/forgotPassword/:email", async function(req, res){
+    const { email } = req.params;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        },
+    });
+  
+    try {
+        // send mail with defined transport object
+        const info = await transporter.sendMail({
+            from: process.env.EMAIL , // sender address
+            to: email, // list of receivers
+            subject: "DDT Smart Home Password Reset", // Subject line
+            html: `<p>Please click the link to reset your password \n</p><a href="http://localhost:5173/ResetPassword?email=${encodeURIComponent(email)}">RESET PASSWORD</a>`, // html body
+        });
+      
+        console.log("Message sent: %s", info.messageId);
+        res.status(200).send("Email sent successfully!");
+    } catch (error) {
+        console.error("Error sending email: ", error);
+        res.status(500).send("Failed to send email.");
+    }
+
 });
 
 //404 not found error

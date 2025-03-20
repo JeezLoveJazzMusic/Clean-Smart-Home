@@ -30,8 +30,8 @@
     position: absolute;
     top: 70px;
     LEFT: 10px;
-    background: #4CAF50;
-    color: white;
+    background: #B7E4BD;
+    color: black;
     padding: 10px 25px;
     margin: 5px;
     cursor: pointer;
@@ -45,8 +45,8 @@
     right: 20px;
     padding: 10px 15px;
     font-size: 14px;
-    background-color: #f87171;
-    color: white;
+    background-color: #B7E4BD;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -64,20 +64,27 @@
     border-radius: 5px;
     cursor: pointer;
    }
+
+   .AddnDltHome-options-btn:hover {
+    background-color: #7d7979;
+  }
   
    .AddnDltHome-delete-btn {/*Made by Joe */
     position: absolute;
-    top: 60px;
+    top: 70px;
     right: 20px;
     padding: 10px 25px;
     font-size: 14px;
-    background-color: #f87171;
+    background-color: rgb(255, 49, 49);
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
-  
+
+  .AddnDltHome-delete-btn:hover {
+    background-color: rgb(255, 105, 105);
+  }
   .AddnDltHome-list {/*Made by Joe */
     margin-top: 120px;
     display: flex;
@@ -175,7 +182,7 @@
   
   /* CREATE BUTTON */
   .AddnDltHome-create-btn {/*Made by Joe */
-    background-color: #6eeb84;
+    background-color: #B7E4BD;
     color: rgb(12, 12, 12);
     border: none;
     border-radius: 8px;
@@ -194,6 +201,10 @@
     padding: 10px 20px;
     cursor: pointer;
   }
+
+  .AddnDltHome-modal-back-btn:hover {
+    background-color: #939393;
+  } 
   
   /* MAIN BACK BUTTON (For Page) */
   .AddnDltHome-back-btn {/*Made by Joe */
