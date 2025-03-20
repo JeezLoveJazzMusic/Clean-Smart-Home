@@ -95,7 +95,7 @@
 
 /*Fix by Joe */
 .sensor-data-weather-box {
-  background-color: #d4edda;
+  background-color: #B7E4BD;
   border-radius: 30px;
   width: 100%; /* Make the box take full width of the grid cell */
   height: 330px; /* Make the box take full height of the grid cell */
@@ -109,6 +109,7 @@
 
 /*Fix by Joe */
 .sensor-data-weather-icon {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
+ 
 }

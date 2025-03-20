@@ -152,6 +152,10 @@
   position: relative;
   z-index: 2;
   opacity: 1;
+  max-width: 10ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
 }
 
 .AddnDltHome-delete-icon {

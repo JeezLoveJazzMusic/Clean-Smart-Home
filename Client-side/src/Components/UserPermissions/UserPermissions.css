@@ -75,6 +75,10 @@
   color: #1b4332;
   text-align: left;
   flex-grow: 1;
+  max-width: 15ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
 }
 
 /* Checkbox */

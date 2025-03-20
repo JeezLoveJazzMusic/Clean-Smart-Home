@@ -149,6 +149,7 @@
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
   z-index: 1000px;
+
 }
 
 .dropdown-menu::-webkit-scrollbar {
@@ -167,13 +168,17 @@
 
 .dropdown-option {
   padding: 5px 10px;
-  width: 130px;
+  width: 150px;
   cursor: pointer;
   font-family: Inria, serif;
   /* border-left: 1px solid #000000; */
   /* border-right: 1px solid #000000; */
   /* border-top: 1px solid #000000; */ 
   /* border-bottom: 1px solid #000000; */
+  max-width: 15ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
 }
 
 .dropdown-option:hover {

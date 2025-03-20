@@ -136,9 +136,9 @@ const LightLevel = () => {
           }}
           onClick={() => console.log("Shared successfully!")}
         >
-          <button21 className="share-button">
+          <button className="share-button">
             Share Data
-          </button21>
+          </button>
         </RWebShare>
       </div>
 

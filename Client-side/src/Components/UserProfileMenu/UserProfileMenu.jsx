@@ -73,7 +73,7 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
   return (
     <div className="profile-card">
       {/* Back Button to Close Pop-up */}
-      <button44 onClick={onClose} className="back-UserProfileMenubtn">Back</button44>
+      <button onClick={onClose} className="back-UserProfileMenubtn">Back</button>
       
       <div className="profile-image">
         <input type="file" accept="image/*" onChange={handleImageChange} hidden id="fileUpload" />
@@ -98,7 +98,7 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
         </p>
       )}
       <div className="profile-actions">
-        <button41 className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button41>  
+        <button className="delete-UserProfileMenubtn" onClick={handleDeleteClick}>Delete Account</button>  
       </div>
 
       {showDeleteConfirm && (
@@ -107,8 +107,8 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
             <p>Are you sure you want to delete your account?</p>
             <p>This action will initiate a 7-day grace period.</p>
             <div className="confirm-buttons">
-              <button42 className="confirmdeletebutton" onClick={confirmDelete}>Yes</button42>
-              <button43 className="canceldeletebutton" onClick={cancelDelete}>No</button43>
+              <button className="confirmdeletebutton" onClick={confirmDelete}>Yes</button>
+              <button className="canceldeletebutton" onClick={cancelDelete}>No</button>
             </div>
           </div>
         </div>

@@ -89,6 +89,7 @@
   width: 90%; /* Make sure it takes the full width */
   height: 18vh;
   text-align: center; /* Centers text horizontally */
+  
 }
 
 .sidebar-container1 button {
@@ -117,6 +118,10 @@
   transform: translate(-50%, -50%); /* Adjust alignment */
   color: rgb(0, 0, 0); /* Make text visible */
   font-size: 18px;
+  max-width: 10ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+  white-space: normal; /* Allows text wrapping at spaces */
 }
 
 /* Add Home Container (Fixed to Bottom) */

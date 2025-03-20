@@ -139,11 +139,13 @@ function SensorData({houseId, userID, roomName, roomList}) {
         </div>
 
         {/* Weather */ /*Fix by Joe */}
-        <div className="sensor-data-weather-box">
+        <button onClick={() => navigate("/weather")}className="sensor-data-weather-box">
           <img src={weatherIcon} alt="Weather" className="sensor-data-weather-icon" />
+          <div className="text-container">
         </div>
+        </button>
       </div>
-    </div>
+      </div>
   );
 }
 

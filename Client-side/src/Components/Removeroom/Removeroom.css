@@ -88,6 +88,10 @@
     overflow: hidden;
     text-overflow: ellipsis; 
     white-space: nowrap; 
+    max-width: 15ch; /* Limits the width to approximately 10 characters */
+    word-wrap: break-word; /* Allows long words to break */
+    overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+    white-space: normal; /* Allows text wrapping at spaces */
 }
 
 /* Delete Button */
