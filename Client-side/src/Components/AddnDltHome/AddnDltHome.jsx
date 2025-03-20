@@ -57,35 +57,54 @@ const AddHome = () => {
 
   useEffect(() => {
     localStorage.setItem("homes", JSON.stringify(homes));
+    fetchRefreshHomes();
   }, []);
 
   const handleAddHome = async () => {
     if (newHomeName.trim() && newHomeAddress.trim()) {
       try {
+        // Create the new house
         const response = await axios.post("http://localhost:8080/createHouse", {
           user_id: currentUserID,
           house_name: newHomeName,
           address: newHomeAddress,
         });
-        console.log("newHomeName: ", newHomeName);
-        console.log("newHomeAddress: ", newHomeAddress);
-        console.log("currentUserId: ", currentUserID);
-        // Assuming the created house is returned in response.data.house
-        const createdHouse = response.data.house;
-        const newHouse = {
-          id: createdHouse.house_id,
-          name: createdHouse.house_name,
-          image: selectImage(createdHouse.house_id),
-        };
-        setHomes(homes.filter((home) => home.id !== newHouse.id).concat(newHouse));
-        setNewHomeName("");
-        setNewHomeAddress("");
-        setIsAdding(false);
+        console.log("New house response:", response.data);
+  
+        // Get fresh house list after adding
+        fetchRefreshHomes();
+  
       } catch (error) {
         console.error("Error adding house:", error);
       }
     }
   };
+
+  const fetchRefreshHomes = async () => {
+    const refreshResponse = await axios.get(`http://localhost:8080/getAllUserHouseData/user/${currentUserID}`);
+        console.log("Refresh response:", refreshResponse.data);
+        
+        // Note: API returns { allUserHouseData: [...] }, not { newHouseList: [...] }
+        const { allUserHouseData } = refreshResponse.data;
+        
+        if (allUserHouseData && Array.isArray(allUserHouseData)) {
+          // Update local state with the refreshed data
+          setHomes(allUserHouseData.map(house => ({
+            id: house.house_id,
+            name: house.house_name,
+            image: selectImage(house.house_id),
+            user_type: house.user_type // Make sure to include user_type
+          })));
+  
+          // Reset form and close modals
+          setNewHomeName("");
+          setNewHomeAddress("");
+          setIsAdding(false);
+          setShowOptions(false);
+        } else {
+          console.error("Invalid house data received:", refreshResponse.data);
+        }
+      };
 
   const handleDeleteHome = async (id) => {
     try {

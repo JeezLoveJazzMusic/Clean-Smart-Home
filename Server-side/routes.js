@@ -843,6 +843,19 @@ router.put("/resetPassword/email/:email/password/:password", async (req, res) =>
   }
 });
 
+//get the list of houses that a user has access to(by hao chen)
+router.get("/getHouseList/user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+  try {
+    const houses = await getHouseList(user_id);
+    res.status(200).send({ message: "Routes: Houses successfully retrieved", houses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting houses" });
+  }
+});
+
+
 
 
 

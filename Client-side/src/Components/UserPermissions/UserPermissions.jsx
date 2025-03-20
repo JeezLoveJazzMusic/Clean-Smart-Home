@@ -7,6 +7,23 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
   const [permissions, setPermissions] = useState({});
   // Save a copy of the initial permissions so we can compare later.
   const [initialPermissions, setInitialPermissions] = useState({});
+  const [roomName, setRoomName] = useState("");
+  
+  //function to get the room name from the roomID
+  useEffect(() => {
+    if (currentRoom) {
+      const fetchRoomName = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/getRoomName/room/${currentRoom}`);
+          // Assuming the endpoint returns { roomName: "Living Room" }
+          setRoomName(response.data.roomName);
+        } catch (error) {
+          console.error("Error fetching room name:", error);
+        }
+      };
+      fetchRoomName();
+    }
+  }, [currentRoom]);
 
   // Fetch user permissions
   useEffect(() => {
@@ -109,12 +126,12 @@ const UserPermissions = ({ user, onClose, currentRoom, houseId }) => {
       console.error("Error updating permissions:", error);
     }
   };
-  
+
   return (
     <div className="user-permissions-overlay">
       <div className="user-permissions-popup">
         <div className="user-permissions-top">
-          <h2>User Permissions for {user.name} in Room {currentRoom}</h2>
+          <h2>User Permissions for {user.name} in {roomName}</h2>
           <div className="userpermissions-list">
             {devices.map((device) => (
               <div key={device.device_id} className="userpermissions-item">
