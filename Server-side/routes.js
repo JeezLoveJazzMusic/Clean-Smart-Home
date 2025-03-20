@@ -3,7 +3,7 @@
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
 
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, getPreviousMonthHouseAverage } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap} = require("./middleware.js");
@@ -854,6 +854,41 @@ router.get("/getHouseList/user/:user_id", async (req, res) => {
     res.status(500).send({ message: "Routes: An error occurred while getting houses" });
   }
 });
+
+//get the previous month's average temperature of entire house (by hao chen)
+router.get("/getPreviousMonthAverageTemperature/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const previousMonthAverageTemperature = await getPreviousMonthHouseAverage(house_id, "temp");
+    res.status(200).send({ message: "Routes: Previous month's average temperature successfully retrieved", previousMonthAverageTemperature });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting previous month's average temperature" });
+  }
+});
+
+//get the previous month's average energy consumption of entire house (by hao chen)
+router.get("/getPreviousMonthAverageEnergyConsumption/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  try {
+    const previousMonthAverageEnergyConsumption = await getPreviousMonthHouseAverage(house_id, "smart meter");
+    res.status(200).send({ message: "Routes: Previous month's average energy consumption successfully retrieved", previousMonthAverageEnergyConsumption });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Routes: An error occurred while getting previous month's average energy consumption" });
+  }
+});
+
+
+//get the reccomendation for the house (by hao chen)
+router.get("/getHouseRecommendation/house/:house_id", async (req, res) => {
+  const house_id = req.params.house_id;
+  const energyConsumption = await getPreviousMonthHouseAverage(house_id, "smart meter");
+  const temperature = await getPreviousMonthHouseAverage(house_id, "temp");
+  const recommendation = analyseEnergyUsage(energyConsumption, temperature);
+  res.status(200).send({ message: "Routes: House recommendation successfully retrieved", recommendation });
+}
+);
 
 
 

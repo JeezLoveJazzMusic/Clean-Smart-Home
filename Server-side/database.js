@@ -1353,6 +1353,30 @@ async function getRoomName(room_id) {
   }
 }
 
+async function getPreviousMonthHouseAverage(house_id, device_type) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
+        FROM device_states ds
+        JOIN devices d ON ds.device_id = d.device_id
+        WHERE d.house_id = ? AND d.device_type = ?
+          AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+          AND ds.updated_at < DATE('now', 'start of month')
+      `,
+      args: [house_id, device_type],
+    });
+    if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
+      return result.rows[0].avg_value;
+    }
+    return null;
+  }
+  catch (error) {
+    console.error("Error getting previous month house average:", error.message);
+    throw error;
+  }
+}
+
 //exporting functions for routes
 module.exports = {
   createUser,
@@ -1418,6 +1442,7 @@ module.exports = {
   getUserPermissionForRoom,
   checkPermission,
   updateUserPassword,
-  getRoomName
+  getRoomName,
+  getPreviousMonthHouseAverage
 
 };

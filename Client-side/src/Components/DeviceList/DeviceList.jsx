@@ -191,10 +191,36 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               console.error("Error sending light command:", err);
             });
         }
+         if (device.device_type.toLowerCase() === "light") {
+            console.log("Toggling light:", device.device_number + " in room " + selectedRoom);
+            const action = newPowerState ? "turn_on" : "turn_off";
+            const homeIOControlUrl = `http://localhost:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
+            axios.get(homeIOControlUrl)
+              .then(() => {
+                console.log(`Light command sent: ${homeIOControlUrl}`);
+              })
+              .catch(err => {
+                console.error("Error sending light command:", err);
+              });
+          }
+        
+          else if (device.device_type.toLowerCase() === "air conditioner") {
+            console.log("Toggling heater (mapped from air conditioner):", device.device_number + " in room " + selectedRoom);
+            const action = newPowerState ? "turn_on" : "turn_off";
+            const heaterControlUrl = `http://localhost:9797/swh/${action}/${device.device_number}/${selectedRoom}`;
+            axios.get(heaterControlUrl)
+              .then(() => {
+                console.log(`Heater command sent: ${heaterControlUrl}`);
+              })
+              .catch(err => {
+                console.error("Error sending heater command:", err);
+              });
+          }
           
           // Toggle the device_power boolean
           return { ...device, device_power: newPowerState };
         }
+        
         return device;
       });
       
