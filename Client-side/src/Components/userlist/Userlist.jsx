@@ -4,6 +4,7 @@ import Addndeleteuser from "../AddnDeleteUser/AddnDeleteUser";
 import UserPermissions from "../UserPermissions/UserPermissions";
 import axios from "axios";
 import "./userlist.css";
+import { FaPlusCircle } from "react-icons/fa";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -222,26 +223,26 @@ function UserList() {
         <div className="header-container">
           <h2 className="users-title">Users</h2>
           {currentUserType === "owner" && (
-            <button className="menu-btn" onClick={toggleMenu}>
+            <button34 className="menu-btn" onClick={toggleMenu}>
               ⋯
-            </button>
+            </button34>
           )}
         </div>
 
         <div className="button-container">
           {currentUserType === "owner" && (
             <>
-              <button
+              <button35
                 className="AddUserbtn-user-btn"
                 onClick={() => setShowModal(true)}
               >
-                Add Users
-              </button>
+                Add Users <FaPlusCircle />
+              </button35>
 
               {showMenu && (
-                <button className="delete-user-btn" onClick={toggleDeleteMode}>
+                <button36 className="delete-user-btn" onClick={toggleDeleteMode}>
                   {deleteMode ? "Cancel" : "Delete Users"}
-                </button>
+                </button36>
               )}
             </>
           )}
@@ -289,14 +290,14 @@ function UserList() {
         {deleteMode &&
           selectedUsers.length > 0 &&
           currentUserType === "owner" && (
-            <button className="confirm-delete-btn" onClick={handleDeleteUsers}>
+            <button37 className="confirm-delete-btn" onClick={handleDeleteUsers}>
               Confirm Delete
-            </button>
+            </button37>
           )}
 
-        <button className="BackBtn1-btn" onClick={() => navigate(-1)}>
-          Back
-        </button>
+        <button38 className="BackBtn1-btn" onClick={() => navigate(-1)}>
+        ⬅ Back
+        </button38>
       </div>
 
       {showModal && currentUserType === "owner" && (

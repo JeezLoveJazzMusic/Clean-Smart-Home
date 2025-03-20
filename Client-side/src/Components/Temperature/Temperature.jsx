@@ -125,7 +125,7 @@ const Temperature = () => {
         ⬅ Back
       </button>
       
-      <div className="card-header">
+      <div className="card1-header">
         <h2>Room: {roomName} - Temperature</h2>
         <RWebShare 
           data={{

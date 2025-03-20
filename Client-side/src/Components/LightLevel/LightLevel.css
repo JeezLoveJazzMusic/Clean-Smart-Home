@@ -24,7 +24,7 @@
 
 /*Made by Joe */
 
-.card-header {
+.card2-header {
   grid-area: header;
   display: flex;
   justify-content: space-between;

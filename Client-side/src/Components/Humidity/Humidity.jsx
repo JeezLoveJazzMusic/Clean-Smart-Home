@@ -124,7 +124,7 @@ const Humidity = () => {
 
 
 
-      <div className="card-header">
+      <div className="card3-header">
         <h2>Room: {roomName} - Humidity</h2>
         <RWebShare 
           data={{
