@@ -110,7 +110,7 @@ body {
   top: 90px;
   width: auto;
   display: none;
-  background: rgb(255, 67, 67);
+  background: rgb(255, 49, 49);
   padding: 10px 15px;
   border-radius: 5px;
   font-size: 16px;
@@ -125,7 +125,7 @@ body {
 }
 
 .delete-user-btn:hover {
-  background: #ff3e3e;
+  background: #ff7575;
 }
 
 .delete-user-btn:active {
