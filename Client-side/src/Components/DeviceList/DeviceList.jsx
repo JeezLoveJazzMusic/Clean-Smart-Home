@@ -49,23 +49,24 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData }) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData, setRoomID }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
 
   useEffect(() => {
     onRoomChange(initialRoom);
   }, []);
+  
 
   useEffect(() => {
     const fetchUserType = async () => {
-      if (!TheUserID) {
-        console.error("UserID is undefined - cannot fetch user type");
-        setCurrentUserType("dweller"); // Set default
+      if (!TheUserID || !currentHouse) {
+        console.log("Missing required data - UserID:", TheUserID, "HouseID:", currentHouse);
         return;
       }
   
       try {
         const userTypeResponse = await axios.get(`http://localhost:8080/getUserType/user/${TheUserID}/house/${currentHouse}`);
+    
         console.log("User type response:", userTypeResponse.data);
         const { userType } = userTypeResponse.data;
         setCurrentUserType(userType?.toLowerCase() );
@@ -76,7 +77,24 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
     };
   
     fetchUserType();
-  }, [TheUserID]); // Remove dwellersList dependency
+  }, [TheUserID, currentHouse]); // Remove dwellersList dependency
+
+  useEffect(() => {
+    // If rooms is not empty (has actual rooms), update selected room
+    if (Object.keys(rooms).length > 0 && rooms["Empty House"] === undefined) {
+      const firstRoom = Object.keys(rooms)[0];
+      setSelectedRoom(firstRoom);
+      setDeviceStates(processDevices(rooms[firstRoom] || []));
+      onRoomChange(firstRoom);
+      
+      // Update room ID if needed
+      const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === firstRoom);
+      if (roomInfo) {
+        setRoomID(roomInfo.room_id);
+      }
+    }
+  }, [rooms, dashboardData]);
+
 
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
@@ -109,10 +127,37 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
     setDeviceStates(processDevices(rooms[room]));
     onRoomChange(room);
     setDropdownOpen(false);
+    console.log("Room changed to:", room);
+
+     // Look up the room info in dashboardData.roomList based on room name
+  const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === room);
+  if (roomInfo) {
+    console.log("Current room id:", roomInfo.room_id);
+    setRoomID(roomInfo.room_id);
+  } else {
+    console.error("Room ID not found for:", room);
+  }
   };
 
   // Toggle the device state
   const toggleDevice = async (index) => {
+    const device = deviceStates[index];
+    try {
+      const permissionResponse = await axios.get(
+        `http://localhost:8080/hasPermission/user/${TheUserID}/device/${device.device_id}`
+      );
+      console.log("Permission response:", permissionResponse.data);
+      
+      // If permission is not granted, log and exit
+      if (permissionResponse.data?.hasPermission !== true) {
+        console.log("User does not have permission to toggle this device.");
+        return;
+      }
+    } catch (error) {
+      console.error("Error checking permission:", error);
+      return;
+    }
+
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
         console.log("Device object:", device);
@@ -136,7 +181,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
           console.log("Toggling light:", device.device_number + " in room " + selectedRoom);
           // Determine action based on the new state
           const action = newPowerState ? "turn_on" : "turn_off";
-          const homeIOControlUrl = `http://IP.Home.IO:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
+          const homeIOControlUrl = `http://localhost:9797/swl/${action}/${device.device_number}/${selectedRoom}`;
           
           axios.get(homeIOControlUrl)
             .then(() => {
@@ -311,6 +356,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               <span className="device-name">{device.device_name}</span>
               <div
                 className={`toggleSwitch ${device.device_power ? "on" : "off"}`}
+
                 onClick={() => toggleDevice(index)}
               >
                 <div className="toggleKnob">{device.device_power ? "ON" : "OFF"}</div>

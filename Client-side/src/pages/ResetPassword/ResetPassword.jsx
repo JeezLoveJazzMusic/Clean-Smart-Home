@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ResetPassword.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation} from "react-router-dom";
+import axios from 'axios';
 
 function ResetPassword() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get("email");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -15,7 +20,7 @@ function ResetPassword() {
     return password.length >= 8 && specialCharacterRegex.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
     
@@ -33,8 +38,16 @@ function ResetPassword() {
       return;
     }
 
-    setSuccess(true);
-    setTimeout(() => navigate('/login'), 2000);
+    try{
+      const response = await axios.put(`http://localhost:8080/resetPassword/email/${email}/password/${password}`);
+      console.log(response);
+      setSuccess(true);
+      setTimeout(() => navigate('/login'), 2000);
+    }catch(error){
+      console.log("Error resetting password",error);
+      alert("Error resetting password");
+    }
+
   };
 
   return (
