@@ -74,6 +74,7 @@ async function sensorMap(sensorType){
   return sensorMap[sensorType];
 }
 
+
 // Call pollHomeIO every minute and log the returned data
 // setInterval(() => {
 //     pollHomeIO().then((data) => {
@@ -88,4 +89,63 @@ async function sensorMap(sensorType){
 //   storeParsedData(homeIO_ID, data);
 // });
 
-module.exports = { addUser, removeUser, sensorMap };
+// Function for whole house energy suggestions
+function analyzeEnergyUsage(Energy_prediciton, prev_month_usage ,energy_rate, carbon_factor) {
+  const carbon_emissions = prev_month_usage * carbon_factor; // kg CO2
+  const cost = prev_month_usage * energy_rate; // Cost
+  
+  let prediction = Energy_prediciton;
+  let expected_usage = prev_month_usage;
+  let savings = { energy: 0, cost: 0, carbon: 0 };
+  let suggestions = [];
+  
+  if (prediction == "Reduce usage") {
+      expected_usage = prev_month_usage * 0.85; // Suggest reducing by 15%
+      savings.energy = prev_month_usage - expected_usage;
+      savings.cost = savings.energy * energy_rate;
+      savings.carbon = savings.energy * carbon_factor;
+      suggestions = [
+          "Turn off unnecessary lights and appliances.",
+          "Use energy-efficient lighting and appliances.",
+          "Adjust thermostat settings for better efficiency.",
+          "Unplug devices when not in use."
+      ];
+  }
+
+  else if (prediction == "Usage is okay")
+  {
+    suggestions = ["Keep up the green living!"]
+  }
+  
+  return {
+      prediction,
+      expected_usage,
+      carbon_emissions,
+      cost,
+      savings,
+      suggestions
+  }
+}
+
+// ML model API
+async function getPrediction(temperature, occupancy, energyUsage) {
+  const response = await fetch("http://127.0.0.1:5000/predict", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+          temperature: temperature,
+          occupancy: occupancy,
+          energy_usage: energyUsage
+      })
+  });
+
+  const data = await response.json();
+  console.log("Prediction:", data.prediction);
+  return data.prediction;
+}
+
+// getPrediction(34,1,500);
+
+module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage }
