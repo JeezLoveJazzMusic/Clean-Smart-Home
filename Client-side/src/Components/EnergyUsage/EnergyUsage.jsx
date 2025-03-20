@@ -1,6 +1,6 @@
 /*Made by Joe */
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom"; 
 import "./EnergyUsage.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
@@ -10,6 +10,9 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 const EnergyUsage = () => {
   const navigate = useNavigate(); // Navigate function
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+
+  const location = useLocation();
+  const { houseId, roomId ,roomName, recc } = location.state || {};
 
   const data = {
     labels: ["High", "Average", "Low"],
@@ -89,12 +92,17 @@ const EnergyUsage = () => {
       <div className="info-section">
         <div className="tips">
           <h3>Tips:</h3>
-          <p>(Energy Usage Tips)</p>
-          <ul>
-            <li>High Energy Usage (Above 6000W): Turn off lights/appliances, use fans over AC</li>
-            <li>Moderate Energy Usage (4500W-6000W): Use LED lights, set AC to moderate, use fans</li>
-            <li>Low Energy Usage (Below 4500W): Use energy-saving lights and AC/heating settings</li>
-          </ul>
+          {recc && recc.tips && recc.tips.length > 0 ? (
+            <ul>
+              {recc.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          ) : (
+            <>
+              <p>(No Tips Available)</p>
+            </>
+          )}
         </div>
 
         <div className="energy-alert">
@@ -103,11 +111,21 @@ const EnergyUsage = () => {
         </div>
 
         <div className="recommendations">
-          <h3>Recommendations:</h3>
-          <p>
-            Dear User, your current energy usage level is below 4500W. We would recommend you to use energy-saving
-            lights and AC settings.
-          </p>
+        <h3>Recommendations:</h3>
+          {recc && recc.message ? (
+            <>
+              <p>{recc.message}</p>
+              {recc.tips && recc.tips.length > 0 && (
+                <ul>
+                  {recc.tips.map((tip, index) => (
+                    <li key={index}>{tip}</li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : (
+            <p>No recommendations available.</p>
+          )}
         </div>
       </div>
 
