@@ -123,10 +123,10 @@ async function getSmartMeterData(filePath, device_id)
 
 // Function for whole house energy suggestions
 function analyzeEnergyUsage(Energy_prediction, prev_month_usage) {
-  const carbon_emissions = prev_month_usage * carbon_factor; // kg CO2
-  const cost = prev_month_usage * energy_rate; // Cost
   const energy_rate = 0.218;
   const carbon_factor = 0.5;
+  const carbon_emissions = prev_month_usage * carbon_factor; // kg CO2
+  const cost = prev_month_usage * energy_rate; // Cost
   
   let prediction = Energy_prediction;
   let expected_usage = prev_month_usage;
@@ -157,11 +157,11 @@ function analyzeEnergyUsage(Energy_prediction, prev_month_usage) {
     suggestions
   };
 
-  return JSON.stringify(response, null, 2); // Convert to JSON
+  return response;
 }
 
 // Function for single room tips
-function analyzeRoomEnergy(prev_month_average, current_average, temperature, occupancy) {
+function analyzeRoomEnergy(prev_month_average, current_average, temperature) {
   let response = {
     message: "",
     tips: []
@@ -187,7 +187,7 @@ function analyzeRoomEnergy(prev_month_average, current_average, temperature, occ
     response.message = "Good job on green living! Your energy usage is stable or decreasing.";
   }
 
-  return JSON.stringify(response, null, 2); // Convert to JSON
+  return response;
 }
 
 
@@ -212,4 +212,4 @@ async function getPrediction(temperature, occupancy, energyUsage) {
 
 // getPrediction(34,1,500);
 
-module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData };
+module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData,analyzeRoomEnergy };

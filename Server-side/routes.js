@@ -3,10 +3,10 @@
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
 
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, requestDeletion, checkDeletionStatus, cancelDeletion, updateLastLogin, isCreatorOfAnyHouse, getPreviousMonthHouseAverage } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, requestDeletion, checkDeletionStatus, cancelDeletion, updateLastLogin, isCreatorOfAnyHouse, getPreviousMonthHouseAverage,getPreviousMonthRoomAverage, getCurrentMonthRoomAverage } = require("./database.js"); 
 
 //Middleware imports
-const {addUser, removeUser, sensorMap} = require("./middleware.js");
+const {addUser, removeUser, sensorMap, analyzeEnergyUsage, analyzeRoomEnergy} = require("./middleware.js");
 const express = require("express");
 const router = express.Router();
 
@@ -948,16 +948,22 @@ router.get("/getHouseRecommendation/house/:house_id", async (req, res) => {
   const house_id = req.params.house_id;
   const energyConsumption = await getPreviousMonthHouseAverage(house_id, "smart meter");
   const temperature = await getPreviousMonthHouseAverage(house_id, "temp");
-  const recommendation = analyseEnergyUsage(energyConsumption, temperature);
+  const recommendation = analyzeEnergyUsage(energyConsumption, temperature);
   res.status(200).send({ message: "Routes: House recommendation successfully retrieved", recommendation });
 }
 );
 
 
-
-
-
-
+//get the reccomendation for the room (by hao chen)
+router.get("/getRoomRecommendation/room/:room_id", async (req, res) => {
+  const room_id = req.params.room_id;
+  const prevenergyConsumption = await getPreviousMonthRoomAverage(room_id, "smart meter");
+  const currentenergyConsumption = await getPreviousMonthRoomAverage(room_id, "smart meter");
+  const temperature = await getPreviousMonthRoomAverage(room_id, "temp");
+  const recommendation = analyzeRoomEnergy(prevenergyConsumption, currentenergyConsumption, temperature);
+  res.status(200).send({ message: "Routes: Room recommendation successfully retrieved", recommendation });
+}
+);
 
 
 
@@ -1055,4 +1061,5 @@ router.get("/printAllDeviceStates", async (req, res) => {
    res.status(500).send({ message: "Routes: An error occurred while printing device states" });
  }
 });
+
 module.exports = router ;
