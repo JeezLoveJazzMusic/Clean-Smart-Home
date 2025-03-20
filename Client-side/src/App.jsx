@@ -14,6 +14,7 @@ import AddRoom from "./Components/AddRoom/AddRoom.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"
 import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx"
 import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"
+import Weather from "./pages/weather/weather.jsx";
 
 function App() {
   const route = createBrowserRouter([
@@ -80,6 +81,10 @@ function App() {
     {
       path: "/SuccessfulRequestResetPassword",
       element:<SuccessfulRequestResetPassword />,
+    },
+    {
+      path: "/weather",
+      element:<Weather />
     }
   ]);
 

@@ -153,12 +153,11 @@ async function removeUserFromHouse(user_id, house_id) {
 // Code added by: Ahmed Al-Ansi
 // Function to remove a user's permission to use a device/view its data
 async function removePermission(user_id, device_id) {
-  console.log("this is removing ${device_id}");
   try {
-    // Remove user's permission from the permissions table.
+    // Remove the user and device from the permissions table to revoke the user's permission to use the device.
     await turso.execute({
-      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ? AND device_id IN (SELECT device_id FROM devices WHERE house_id = ?)",
-      args: [user_id, device_id, house_id],
+      sql: "DELETE FROM permissions WHERE user_id = ? AND device_id = ?",
+      args: [user_id, device_id],
     });
     console.log("Permission removed successfully!");
   } catch (error) {
@@ -166,6 +165,7 @@ async function removePermission(user_id, device_id) {
     throw error;
   }
 }
+
 
 //remove all user permissions
 async function removeAllUserPermissions(user_id) {
@@ -1472,6 +1472,22 @@ async function updateUserPassword(email, newPassword) {
   }
 }
 
+//get room name
+async function getRoomName(room_id) {
+  try {
+    const result = await turso.execute({
+      sql: "SELECT room_name FROM rooms WHERE room_id = ?",
+      args: [room_id],
+    });
+    if (result.rows.length > 0) {
+      return result.rows[0].room_name;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting room name:", error.message);
+    throw error;
+  }
+}
 
 //exporting functions for routes
 module.exports = {
@@ -1538,9 +1554,10 @@ module.exports = {
   getUserPermissionForRoom,
   checkPermission,
   updateUserPassword,
+  getRoomName,
   requestDeletion,
   checkDeletionStatus,
   cancelDeletion,
   updateLastLogin,
-  isCreatorOfAnyHouse
+  isCreatorOfAnyHouse,
 };
