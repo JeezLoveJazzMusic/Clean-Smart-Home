@@ -1,223 +1,262 @@
-.AddnDltHome-container {/*Made by Joe */
-    position: fixed;
-    top: 80px;  /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1200px;
-    height: 700px;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    background-color: #ffffff;
-    font-family: Arial, sans-serif;
-    gap: 20px;
-    overflow: auto;  /* To make sure content inside can scroll if needed */
-  }
-  
-  
-  .AddnDltHome-header1 { /*Made by Joe */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1px;
-    font-size: 5rem;
-    font-weight: bold;
-    color: #333333;
-    margin: 0;
-  }
-  
-  .add1-addndltbtn  {/*Made by Joe */
-    position: absolute;
-    top: 70px;
-    LEFT: 10px;
-    background: #B7E4BD;
-    color: black;
-    padding: 10px 25px;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 1rem;
-  }
-  
-  .AddnDltHome-main-back-btn {/*Made by Joe */
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 15px;
-    font-size: 14px;
-    background-color: #B7E4BD;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-   .AddnDltHome-options-btn{/*Made by Joe */
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px 30px;
-    font-size: 14px;
-    background-color: #bdb6b6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-   }
+.AddnDltHome-container {
+  /*Made by Joe */
+  position: fixed;
+  top: 80px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1200px;
+  height: 700px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  gap: 20px;
+  overflow: auto; /* To make sure content inside can scroll if needed */
+}
 
-   .AddnDltHome-options-btn:hover {
-    background-color: #7d7979;
-  }
-  
-   .AddnDltHome-delete-btn {/*Made by Joe */
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    padding: 10px 25px;
-    font-size: 14px;
-    background-color: rgb(255, 49, 49);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.AddnDltHome-header1 {
+  /*Made by Joe */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1px;
+  font-size: 5rem;
+  font-weight: bold;
+  color: #333333;
+  margin: 0;
+}
 
-  .AddnDltHome-delete-btn:hover {
-    background-color: rgb(255, 105, 105);
-  }
-  .AddnDltHome-list {/*Made by Joe */
-    margin-top: 120px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-  
-  .AddnDltHome-item {/*Made by Joe */
-    background-size: cover;
-    background-position: center;
-    width: 150px;
-    height: 150px;
-    border: none;
-    cursor: pointer;
-    color: rgb(2, 2, 2);
-    font-weight: bold;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-   opacity: 0.5;
-   word-wrap: break-word; /* Break long words */
-   overflow-wrap: break-word;
-  }
+.add1-addndltbtn {
+  /*Made by Joe */
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  background: #b7e4bd;
+  color: black;
+  padding: 10px 25px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1rem;
+}
 
-  .AddnDltHome-item-container {/*Made by Joe */
-    position: relative;
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    word-wrap: break-word; /* Break long words */
-    overflow-wrap: break-word;
-  }
-  
-  .AddnDltHome-delete-icon {/*Made by Joe */
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: red;
-    cursor: pointer;
-    font-size: 1.2rem;
-    background: white;
-    border-radius: 50%;
-    padding: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .AddnDltHome-modal {/*Made by Joe */
-    width: 500px;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    background-color: #ffffff;
-    font-family: Arial, sans-serif;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  
-  .AddnDltHome-modal h3 {/*Made by Joe */
-    color: #333;
-    font-size: 22px;
-    margin-bottom: 15px;
-  }
-  
-  .AddnDltHome-modal label {/*Made by Joe */
-    display: block;
-    font-size: 16px;
-    margin-top: 10px;
-    color: #555;
-    text-align: left;
-  }
-  
-  .AddnDltHome-modal input {/*Made by Joe */
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .AddnDltHome-modal-buttons {/*Made by Joe */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  /* CREATE BUTTON */
-  .AddnDltHome-create-btn {/*Made by Joe */
-    background-color: #B7E4BD;
-    color: rgb(12, 12, 12);
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  /* BACK BUTTON INSIDE MODAL */
-  .AddnDltHome-modal-back-btn {/*Made by Joe */
-    background-color: #ccc;
-    color: black;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
+.AddnDltHome-main-back-btn {
+  /*Made by Joe */
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #b7e4bd;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .AddnDltHome-modal-back-btn:hover {
-    background-color: #939393;
-  } 
-  
-  /* MAIN BACK BUTTON (For Page) */
-  .AddnDltHome-back-btn {/*Made by Joe */
-    background-color: #ddd;
-    color: black;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 20px;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-  }
-  
+.AddnDltHome-options-btn {
+  /*Made by Joe */
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 30px;
+  font-size: 14px;
+  background-color: #bdb6b6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.AddnDltHome-options-btn:hover {
+  background-color: #7d7979;
+}
+
+.AddnDltHome-delete-btn {
+  /*Made by Joe */
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  padding: 10px 25px;
+  font-size: 14px;
+  background-color: rgb(255, 49, 49);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.AddnDltHome-delete-btn:hover {
+  background-color: rgb(255, 105, 105);
+}
+.AddnDltHome-list {
+  /*Made by Joe */
+  margin-top: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.AddnDltHome-item {
+  /*Made by Joe */
+  background-size: cover;
+  background-position: center;
+  width: 150px;
+  height: 150px;
+  border: none;
+  cursor: pointer;
+  color: rgb(2, 2, 2);
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0.7;
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word;
+}
+
+/* Create a semi-transparent overlay using a pseudo-element */
+.AddnDltHome-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Adjust color and opacity as desired */
+  z-index: 1;
+}
+
+.AddnDltHome-item-container {
+  /*Made by Joe */
+  position: relative;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word;
+}
+
+.AddnDltHome-home-name {
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+}
+
+.AddnDltHome-delete-icon {
+  /*Made by Joe */
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: red;
+  cursor: pointer;
+  font-size: 1.2rem;
+  background: white;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.AddnDltHome-modal {
+  /*Made by Joe */
+  width: 500px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.AddnDltHome-modal h3 {
+  /*Made by Joe */
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.AddnDltHome-modal label {
+  /*Made by Joe */
+  display: block;
+  font-size: 16px;
+  margin-top: 10px;
+  color: #555;
+  text-align: left;
+}
+
+.AddnDltHome-modal input {
+  /*Made by Joe */
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.AddnDltHome-modal-buttons {
+  /*Made by Joe */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* CREATE BUTTON */
+.AddnDltHome-create-btn {
+  /*Made by Joe */
+  background-color: #b7e4bd;
+  color: rgb(12, 12, 12);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* BACK BUTTON INSIDE MODAL */
+.AddnDltHome-modal-back-btn {
+  /*Made by Joe */
+  background-color: #ccc;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.AddnDltHome-modal-back-btn:hover {
+  background-color: #939393;
+}
+
+/* MAIN BACK BUTTON (For Page) */
+.AddnDltHome-back-btn {
+  /*Made by Joe */
+  background-color: #ddd;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
