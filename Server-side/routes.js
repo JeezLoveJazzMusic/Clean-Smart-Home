@@ -984,7 +984,7 @@ router.get("/getRoomRecommendation/room/:room_id", async (req, res) => {
 router.get("/getAverageEnergyConsumption/house/:house_id", async (req, res) => {
   try{
   const house_id = req.params.house_id;
-  const averageEnergyConsumption = await getAverageLast12Months(house_id, "smart meter");
+  const averageEnergyConsumption = await getAverageLast12Months(house_id, "sensor");
   res.status(200).send({ message: "Routes: Average energy consumption for the past 12 months successfully retrieved", averageEnergyConsumption });
   } catch (error) {
     console.error(error);

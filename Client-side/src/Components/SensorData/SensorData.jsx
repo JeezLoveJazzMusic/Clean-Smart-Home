@@ -82,9 +82,11 @@ function SensorData({houseId, userID, roomName, roomList}) {
       const response = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/Temperature`);
       const response1 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/humidity`);
       const response2 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
+      const response3 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
       setCurTemp(response.data.currentState);
       setCurHumidity(response1.data.currentState);
       setCurLight(response2.data.currentState);
+      setCurEnergy(response3.data.currentState);
     } catch (error) {
       console.error("Error fetching temperature data:", error);
     }
@@ -133,7 +135,7 @@ function SensorData({houseId, userID, roomName, roomList}) {
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
-              <p className="value">5500W</p>
+              <p className="value">{curEnergy}%</p>
             </div>
           </button>
 
