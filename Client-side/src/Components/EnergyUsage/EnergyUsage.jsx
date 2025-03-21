@@ -1,9 +1,11 @@
 /*Made by Joe */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import "./EnergyUsage.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
+import axios from "axios";
+import { RWebShare} from "react-web-share";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
@@ -11,20 +13,59 @@ const EnergyUsage = () => {
   const navigate = useNavigate(); // Navigate function
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
+    const [prevMonth, setPrevMonth] = useState([]);
+    const [curMonth, setCurMonth] = useState([]);
+    const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
+
   const location = useLocation();
   const { houseId, roomId ,roomName, recc } = location.state || {};
+
+  const getData = async () => {
+    try {
+      let tempLastMonth = [];
+      let tempCurrentMonth = [];
+
+      const prevHigh = await axios.get(`http://localhost:8080/getHighestLastMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      const prevAvg  = await axios.get(`http://localhost:8080/getAverageLastMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      const prevLow  = await axios.get(`http://localhost:8080/getLowestLastMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      tempLastMonth.push(prevHigh.data.highestLastMonth, prevAvg.data.averageLastMonth, prevLow.data.lowestLastMonth);
+
+      const curHigh  = await axios.get(`http://localhost:8080/getHighestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      const curAvg   = await axios.get(`http://localhost:8080/getAverageCurrentMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      const curLow   = await axios.get(`http://localhost:8080/getLowestCurrentMonth/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      tempCurrentMonth.push(curHigh.data.highestCurrentMonth, curAvg.data.averageCurrentMonth, curLow.data.lowestCurrentMonth);
+
+      // Fetch complete device data if needed
+      const allDeviceData = await axios.get(`http://localhost:8080/getAllDeviceData/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
+      console.log("All Device Data", allDeviceData.data);
+      setFetchedDeviceData(allDeviceData.data.deviceData);
+
+      console.log("Previous Month:", tempLastMonth);
+      console.log("Current Month:", tempCurrentMonth);
+
+      setPrevMonth(tempLastMonth);
+      setCurMonth(tempCurrentMonth);
+    } catch (error) {
+      console.error("Error during energy usage data fetch:", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
 
   const data = {
     labels: ["High", "Average", "Low"],
     datasets: [
       {
         label: "Previous Month",
-        data: [5000, 4500, 4000],
+        data: prevMonth,
         backgroundColor: "#34D399",
       },
       {
         label: "Current Month",
-        data: [6500, 5500, 4500],
+        data: curMonth,
         backgroundColor: "#60A5FA",
       },
     ],
@@ -80,8 +121,12 @@ const EnergyUsage = () => {
       <div className="EnergyUsage-info">
         <h3>Energy Usage Comparison</h3>
         <div className="comparison-data">
-          <p>Previous Month: High: 5000W | Avg: 4500W | Low: 4000W</p>
-          <p>Current Month: High: 6500W | Avg: 5500W | Low: 4500W</p>
+          <p>
+            Previous Month: High: {prevMonth[0] || '-'}W | Avg: {prevMonth[1] || '-'}W | Low: {prevMonth[2] || '-'}W
+          </p>
+          <p>
+            Current Month: High: {curMonth[0] || '-'}W | Avg: {curMonth[1] || '-'}W | Low: {curMonth[2] || '-'}W
+          </p>
         </div>
       </div>
 
@@ -90,6 +135,11 @@ const EnergyUsage = () => {
       </div>
 
       <div className="info-section">
+      <div className="energy-alert">
+          <h3>Energy Usage Alert:</h3>
+          <p>{recc.message}</p>
+        </div>
+
         <div className="tips">
           <h3>Tips:</h3>
           {recc && recc.tips && recc.tips.length > 0 ? (
@@ -105,28 +155,9 @@ const EnergyUsage = () => {
           )}
         </div>
 
-        <div className="energy-alert">
-          <h3>Energy Usage Alert:</h3>
-          <p>Your energy usage went up from last month.</p>
-        </div>
 
-        <div className="recommendations">
-        <h3>Recommendations:</h3>
-          {recc && recc.message ? (
-            <>
-              <p>{recc.message}</p>
-              {recc.tips && recc.tips.length > 0 && (
-                <ul>
-                  {recc.tips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
-                  ))}
-                </ul>
-              )}
-            </>
-          ) : (
-            <p>No recommendations available.</p>
-          )}
-        </div>
+
+      
       </div>
 
       {/* Modal */}

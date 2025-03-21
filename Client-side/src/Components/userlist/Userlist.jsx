@@ -255,6 +255,9 @@ function UserList() {
                 key={user.id}
                 className={`user-item ${deleteMode ? "delete-mode" : ""}`}
                 onClick={() => {
+                  if (user.userType.toLowerCase() === "owner") {
+                    return;
+                  }
                   if (currentUserType === "owner" && !deleteMode) {
                   setSelectedUser(user);
                   }

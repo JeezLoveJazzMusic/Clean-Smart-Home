@@ -49,7 +49,7 @@ const getDeviceIcon = (deviceType) => {
   }
 };  
 
-const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData, setRoomID }) => {
+const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID, dashboardData, setRoomID, fetchDashboardData }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
 
   useEffect(() => {
@@ -142,6 +142,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   // Toggle the device state
   const toggleDevice = async (index) => {
     const device = deviceStates[index];
+    if (!isOwner(currentUserType)) {
     try {
       const permissionResponse = await axios.get(
         `http://localhost:8080/hasPermission/user/${TheUserID}/device/${device.device_id}`
@@ -157,6 +158,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       console.error("Error checking permission:", error);
       return;
     }
+  }
 
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
@@ -286,20 +288,25 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
           ...response.data,
           device_power: response.data.device_power === "true"
         };
-        setDeviceStates(prevDevices => [...prevDevices, processedDevice]);
+        setDeviceStates(prevDevices => {
+          const updated = [...prevDevices, processedDevice];
+          console.log("Updated deviceStates:", updated);
+          return updated;
+        });
         
         // Initialize the room array if it doesn't exist
         if (!rooms[selectedRoom]) {
           rooms[selectedRoom] = [];
         }
         rooms[selectedRoom] = [...rooms[selectedRoom], processedDevice];
+        handleRoomChange(selectedRoom);
       }
     })
     .catch(error => {
       console.error("Error adding device:", error);
       alert("Failed to add device. Please try again.");
     });
-    
+    fetchDashboardData(currentHouse);
     setAddDevice(false);
   };
 
@@ -323,6 +330,14 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
     });
   };
   
+  useEffect(() => {
+    if (rooms && rooms[selectedRoom]) {
+      const newDevices = processDevices(rooms[selectedRoom]);
+      console.log("Refreshing deviceStates with new rooms data:", newDevices);
+      setDeviceStates(newDevices);
+    }
+  }, [rooms, selectedRoom]);
+
   const isOwner = (userType) => userType && userType.toLowerCase() === 'owner';
 
   return (

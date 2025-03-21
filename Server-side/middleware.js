@@ -78,7 +78,7 @@ async function sensorMap(sensorType){
     "Temperature": "temp",
     "humidity": "rhm",
     "LightLevel": "bgs",
-    "EnergyUsage ": "smart meter"
+    "EnergyUsage": "sensor"
   };
   return sensorMap[sensorType];
 }
