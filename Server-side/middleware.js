@@ -122,18 +122,28 @@ async function getSmartMeterData(filePath) {
     });
 }
 
+// // Initial HomeIO poll
+// pollHomeIO().then((data) => {
+//   if (data) {
+//     console.log("Data returned from pollHomeIO:", data);
+//     storeParsedData(homeIO_ID, data);
+//   } else {
+//     console.log("No HomeIO data available - continuing with smart meter data only");
+//   }
+// });
+
 // // Call pollHomeIO every minute and log the returned data
 // setInterval(() => {
 //     pollHomeIO().then((data) => {
-//         console.log('Data returned from pollHomeIO:', data);
-//         storeParsedData(homeIO_ID, data);
+//         if (data) {
+//             console.log('Data returned from pollHomeIO:', data);
+//             storeParsedData(homeIO_ID, data);
+//         }
+//         // Silently continue if no HomeIO data
+//     }).catch(error => {
+//         console.log("HomeIO polling failed - continuing with smart meter data only");
 //     });
 // }, 60000);
-
-// pollHomeIO().then((data) => {
-//   console.log("Data returned from pollHomeIO:", data);
-//   storeParsedData(homeIO_ID, data);
-// });
 
 // // Process smart meter data
 // setInterval(() => {
