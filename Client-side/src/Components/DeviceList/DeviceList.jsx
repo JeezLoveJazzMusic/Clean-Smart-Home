@@ -142,6 +142,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   // Toggle the device state
   const toggleDevice = async (index) => {
     const device = deviceStates[index];
+    if (!isOwner(currentUserType)) {
     try {
       const permissionResponse = await axios.get(
         `http://localhost:8080/hasPermission/user/${TheUserID}/device/${device.device_id}`
@@ -157,6 +158,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
       console.error("Error checking permission:", error);
       return;
     }
+  }
 
     setDeviceStates((prevDevices) => {
       const updatedDevices = prevDevices.map((device, i) => {
