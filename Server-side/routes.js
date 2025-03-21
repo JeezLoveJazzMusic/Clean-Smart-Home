@@ -934,7 +934,7 @@ router.get("/getPreviousMonthAverageTemperature/house/:house_id", async (req, re
 router.get("/getPreviousMonthAverageEnergyConsumption/house/:house_id", async (req, res) => {
   const house_id = req.params.house_id;
   try {
-    const previousMonthAverageEnergyConsumption = await getPreviousMonthHouseAverage(house_id, "smart meter");
+    const previousMonthAverageEnergyConsumption = await getPreviousMonthHouseAverage(house_id, "sensor");
     res.status(200).send({ message: "Routes: Previous month's average energy consumption successfully retrieved", previousMonthAverageEnergyConsumption });
   } catch (error) {
     console.error(error);
@@ -947,9 +947,11 @@ router.get("/getPreviousMonthAverageEnergyConsumption/house/:house_id", async (r
 router.get("/getHouseRecommendation/house/:house_id", async (req, res) => {
   try {
   const house_id = req.params.house_id;
-  const energyConsumption = await getPreviousMonthHouseAverage(house_id, "smart meter");
+  const energyConsumption = await getPreviousMonthHouseAverage(house_id, "sensor");
   const temperature = await getPreviousMonthHouseAverage(house_id, "temp");
   const recommendation = analyzeEnergyUsage(energyConsumption, temperature);
+  console.log("routes: this is energyConsumption:",energyConsumption);
+  console.log("routes: this is temperature:",temperature);
   res.status(200).send({ message: "Routes: House recommendation successfully retrieved", recommendation });
   } catch (error) {
     console.error(error);
@@ -963,10 +965,13 @@ router.get("/getHouseRecommendation/house/:house_id", async (req, res) => {
 router.get("/getRoomRecommendation/room/:room_id", async (req, res) => {
   try{
   const room_id = req.params.room_id;
-  const prevenergyConsumption = await getPreviousMonthRoomAverage(room_id, "smart meter");
-  const currentenergyConsumption = await getCurrentMonthRoomAverage(room_id, "smart meter");
+  const prevenergyConsumption = await getPreviousMonthRoomAverage(room_id, "sensor");
+  const currentenergyConsumption = await getCurrentMonthRoomAverage(room_id, "sensor");
   const temperature = await getPreviousMonthRoomAverage(room_id, "temp");
   const recommendation = analyzeRoomEnergy(prevenergyConsumption, currentenergyConsumption, temperature);
+  console.log("routes: this is prevenergyConsumption:",prevenergyConsumption);
+  console.log("routes: this is currentenergyConsumption:",currentenergyConsumption);
+  console.log("routes: this is temperature:",temperature);
   res.status(200).send({ message: "Routes: Room recommendation successfully retrieved", recommendation });
   } catch (error) {
     console.error(error);

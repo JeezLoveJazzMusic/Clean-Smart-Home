@@ -1581,7 +1581,7 @@ async function getCurrentMonthRoomAverage(room_id, device_type) {
   }
 }
 
-//function to get average energy usage for everymonth for the past 12 monts
+//function to get average energy usage for everymonth for the past 12 months including current month
 async function getAverageLast12Months(house_id, device_type) {
   try {
     const result = await turso.execute({
@@ -1591,9 +1591,9 @@ async function getAverageLast12Months(house_id, device_type) {
         FROM device_states ds
         JOIN devices d ON ds.device_id = d.device_id
         WHERE d.house_id = ? AND d.device_type = ?
-          AND ds.updated_at >= DATE('now', '-12 months')
+          AND ds.updated_at >= DATE('now', 'start of month', '-12 months')
         GROUP BY strftime('%Y-%m', ds.updated_at)
-        ORDER BY strftime('%Y-%m', ds.updated_at) DESC
+        ORDER BY strftime('%Y-%m', ds.updated_at) ASC
       `,
       args: [house_id, device_type],
     });
@@ -1604,6 +1604,7 @@ async function getAverageLast12Months(house_id, device_type) {
     throw error;
   }
 }
+
 
 
 

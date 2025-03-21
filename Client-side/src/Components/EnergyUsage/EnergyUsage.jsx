@@ -90,6 +90,11 @@ const EnergyUsage = () => {
       </div>
 
       <div className="info-section">
+      <div className="energy-alert">
+          <h3>Energy Usage Alert:</h3>
+          <p>{recc.message}</p>
+        </div>
+        
         <div className="tips">
           <h3>Tips:</h3>
           {recc && recc.tips && recc.tips.length > 0 ? (
@@ -105,28 +110,9 @@ const EnergyUsage = () => {
           )}
         </div>
 
-        <div className="energy-alert">
-          <h3>Energy Usage Alert:</h3>
-          <p>Your energy usage went up from last month.</p>
-        </div>
 
-        <div className="recommendations">
-        <h3>Recommendations:</h3>
-          {recc && recc.message ? (
-            <>
-              <p>{recc.message}</p>
-              {recc.tips && recc.tips.length > 0 && (
-                <ul>
-                  {recc.tips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
-                  ))}
-                </ul>
-              )}
-            </>
-          ) : (
-            <p>No recommendations available.</p>
-          )}
-        </div>
+
+      
       </div>
 
       {/* Modal */}
