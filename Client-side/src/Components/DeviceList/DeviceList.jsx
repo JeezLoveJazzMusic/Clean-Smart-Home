@@ -191,10 +191,54 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               console.error("Error sending light command:", err);
             });
         }
+        
+          else if (  
+            device.device_type.toLowerCase() === "air conditioner" ||
+            device.device_type.toLowerCase() === "aircond") 
+            {
+            console.log("Toggling heater (mapped from air conditioner):", device.device_number + " in room " + selectedRoom);
+            const action = newPowerState ? "turn_on" : "turn_off";
+            const heaterControlUrl = `http://localhost:9797/swh/${action}/${selectedRoom}`;
+            axios.get(heaterControlUrl)
+              .then(() => {
+                console.log(`Heater command sent: ${heaterControlUrl}`);
+              })
+              .catch(err => {
+                console.error("Error sending heater command:", err);
+              });
+          }
           
+          else if (device.device_type.toLowerCase() === "garage door") {
+            console.log("Toggling garage door:", device.device_number + " in room " + selectedRoom);
+            // For garage door, use "open" if turning on, "close" if turning off.
+            const action = newPowerState ? "open" : "close";
+            const garageDoorUrl = `http://localhost:9797/cgate/${action}/garage_door`;
+            axios.get(garageDoorUrl)
+              .then(() => {
+                console.log(`Garage door command sent: ${garageDoorUrl}`);
+              })
+              .catch(err => {
+                console.error("Error sending garage door command:", err);
+              });
+          }
+          else if (device.device_type.toLowerCase() === "alarm") {
+            console.log("Toggling alarm:", device.device_number + " in room " + selectedRoom);
+            // For alarm, use "on" to activate and "off" to deactivate.
+            const action = newPowerState ? "on" : "off";
+            const alarmUrl = `http://localhost:9797/sal/${action}`;
+            axios.get(alarmUrl)
+              .then(() => {
+                console.log(`Alarm command sent: ${alarmUrl}`);
+              })
+              .catch(err => {
+                console.error("Error sending alarm command:", err);
+              });
+          }
+
           // Toggle the device_power boolean
           return { ...device, device_power: newPowerState };
         }
+        
         return device;
       });
       
@@ -296,7 +340,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
               className="dropdown-menu"
               style={
                 Object.keys(rooms).length > 10
-                  ? { maxHeight: "250px", overflowY: "auto" }
+                  ? { maxHeight: "250px", overflowY: "auto" } // scrollbar 
                   : {}
               }
             >

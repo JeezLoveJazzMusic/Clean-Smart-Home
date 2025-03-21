@@ -18,7 +18,11 @@ const Humidity = () => {
   const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId , roomName} = location.state || {};
+  const { houseId, roomId , roomName, recc} = location.state || {};
+
+  useEffect(() => {
+    console.log("reccomendation:", recc);
+  }, [recc]);
 
   // Helper function to convert an array of objects (device data) to a CSV string.
   const convertToCSV = (dataArray) => {
@@ -124,7 +128,7 @@ const Humidity = () => {
 
 
 
-      <div className="card-header">
+      <div className="card3-header">
         <h2>Room: {roomName} - Humidity</h2>
         <RWebShare 
           data={{
@@ -153,15 +157,21 @@ const Humidity = () => {
       </div>
 
       <div className="info-section">
-        <div className="tips">
-          <h3>Tips:</h3>
-          <p>(Air Conditioner Tips)</p>
+      <div className="tips">
+        <h3>Tips:</h3>
+        {recc && recc.tips && recc.tips.length > 0 ? (
           <ul>
-            <li>Above 80% (High Temp & Humidity): Use AC for cooling and dehumidification</li>
-            <li>70%-80% (Moderate Temp & Humidity): Set AC to moderate or "dry mode"</li>
-            <li>Below 70% (Low Temp & Humidity): Use AC minimally or open windows for ventilation.</li>
+            {recc.tips.map((tip, index) => (
+              <li key={index}>{tip}</li>
+            ))}
           </ul>
-        </div>
+        ) : (
+          <>
+            <p>(No Tips Available)</p>
+            
+          </>
+        )}
+      </div>
 
         <div className="energy-alert">
           <h3>Energy Usage Alert:</h3>
@@ -169,9 +179,22 @@ const Humidity = () => {
         </div>
 
         <div className="recommendations">
-          <h3>Recommendations:</h3>
-          <p>Dear User, your current humidity is around 75%. We recommend you turn on the AC.</p>
-        </div>
+        <h3>Recommendations:</h3>
+        {recc && recc.message ? (
+          <>
+            <p>{recc.message}</p>
+            {recc.tips && recc.tips.length > 0 && (
+              <ul>
+                {recc.tips.map((tip, index) => (
+                  <li key={index}>{tip}</li>
+                ))}
+              </ul>
+            )}
+          </>
+        ) : (
+          <p>No recommendations available.</p>
+        )}
+      </div>
       </div>
     
 

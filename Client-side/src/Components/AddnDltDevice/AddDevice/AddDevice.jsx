@@ -116,6 +116,8 @@ const AddDevice = ({ isOpen, onAddDevice, onClose }) => {
             <option value="computer">Computer</option>
             <option value="cctv">CCTV</option>
             <option value="sensor">Sensor</option>
+            <option value="alarm">Alarm</option>
+            <option value="garage door">Garage Door</option>
           </select>
         </div>
 
