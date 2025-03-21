@@ -855,7 +855,7 @@ async function parseSmartMeterData(row) {
 // Store smart meter data
 async function storeSmartMeterData(parsedData) {
   const house_id = 27;
-  const device_type = "sensor";
+  const device_type = "smd";
   const device_number = 1;
   const state_key = "smart meter";
 
