@@ -5,7 +5,9 @@ const {
   removePermission,
   getUserPermissions,
   storeParsedData,
-  storeEnergyUsage
+  storeEnergyUsage,
+  parseSmartMeterData,
+  storeSmartMeterData
 } = require("./database.js");
 
 const fs = require('fs');
@@ -81,26 +83,38 @@ async function sensorMap(sensorType){
   return sensorMap[sensorType];
 }
 
-// Function to get a variation of smart meter values
+// Function to get a variation of smart meter values with 3 decimal places
 function getRandomizedValue(value) {
   const variation = value * (Math.random() * 0.3 - 0.15); // ±15%
-  return value + variation;
+  return parseFloat((value + variation).toFixed(3));
 }
 
-// Read data from .csv file and insert into DB
-async function getSmartMeterData(filePath, device_id)
-{
+// Read data from .csv file and process it
+async function getSmartMeterData(filePath) {
+  // Define the specific rooms we want to use
+  const validRooms = ['A', 'D', 'E', 'G', 'H', 'I', 'J'];
+
   fs.createReadStream(filePath)
     .pipe(csvParser())
     .on('data', async (row) => {
-      if (row['Cumulative Energy Usage (kWh)']) {
+      try {
         const originalValue = parseFloat(row['Cumulative Energy Usage (kWh)']);
         if (!isNaN(originalValue)) {
+          // Randomize the energy usage value and format to 3 decimal places
           const modifiedValue = getRandomizedValue(originalValue);
-          await storeEnergyUsage(device_id, modifiedValue);
+          row['Cumulative Energy Usage (kWh)'] = modifiedValue.toFixed(3);
+          
+          // Randomly select a room from the valid rooms
+          const randomRoomIndex = Math.floor(Math.random() * validRooms.length);
+          row['Room'] = validRooms[randomRoomIndex];
+          
+          const parsedData = await parseSmartMeterData(row);
+          await storeSmartMeterData(parsedData);
         } else {
-          console.warn("Skipping invalid row:", row);
+          console.warn("Skipping invalid row - energy usage is not a number:", row);
         }
+      } catch (error) {
+        console.warn("Error processing row:", error);
       }
     })
     .on('end', () => {
@@ -108,7 +122,7 @@ async function getSmartMeterData(filePath, device_id)
     });
 }
 
-// Call pollHomeIO every minute and log the returned data
+// // Call pollHomeIO every minute and log the returned data
 // setInterval(() => {
 //     pollHomeIO().then((data) => {
 //         console.log('Data returned from pollHomeIO:', data);
@@ -119,6 +133,26 @@ async function getSmartMeterData(filePath, device_id)
 // pollHomeIO().then((data) => {
 //   console.log("Data returned from pollHomeIO:", data);
 //   storeParsedData(homeIO_ID, data);
+// });
+
+// // Process smart meter data
+// setInterval(() => {
+//   const csvFilePath = "../smart_meter_readings.csv";
+//   getSmartMeterData(csvFilePath)
+//     .then(() => {
+//       console.log("Smart meter data processing completed");
+//     })
+//     .catch((error) => {
+//       console.error("Error processing smart meter data:", error);
+//     });
+// }, 3600000); 
+
+// // Initial processing of smart meter data
+// const csvFilePath = "../smart_meter_readings.csv";
+// getSmartMeterData(csvFilePath).then(() => {
+//     console.log('Initial smart meter data processing completed');
+// }).catch(error => {
+//     console.error('Error processing initial smart meter data:', error);
 // });
 
 // Function for whole house energy suggestions
