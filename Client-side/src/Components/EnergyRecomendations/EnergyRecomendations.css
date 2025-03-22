@@ -1,5 +1,6 @@
 /* Made by Joe */
 .cardforEnergyRecomendations {
+    position: relative;
     width: 1350px;
     height: 820px;
     margin: 80px auto;
@@ -118,3 +119,16 @@
 
 }
 
+.back-ButtonInEnergyRecommendations {
+    position: absolute;
+    bottom: 9px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #f87171;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+  }
