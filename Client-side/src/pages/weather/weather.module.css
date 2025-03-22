@@ -17,16 +17,6 @@
     margin-bottom: 20px;
 }
 
-.forecastColumn .weather-Icon {
-    max-width: 200px;
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto 10px auto;
-    transform: scale(0.8);
-    align-self: center;
-}
-
 .forecastContainer {
     display: flex;
     justify-content: center;
@@ -44,10 +34,21 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    min-width: 140px;
 }
 
 .forecastColumn:last-child {
     border-right: none;
+}
+
+.weather-Icon {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+    transform: scale(0.8);
+    align-self: center;
 }
 
 .navButton {
@@ -57,4 +58,44 @@
     cursor: pointer;
     padding: 10px;
     color: black;
+}
+
+@media (max-width: 600px) {
+    .main-container {
+        text-align: left; /* Align texts to left */
+        padding-top: 70px; /* Add extra top padding to avoid overlap with back button */
+    }
+    .forecastContainer {
+        position: relative;
+        /* Keep block-layout so the forecast items are full-width */
+        display: block;
+    }
+    .forecastColumn {
+        width: 90%;
+        margin: 0 auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+    .forecastColumn:last-child {
+        border-bottom: none;
+    }
+    .navButton {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        padding: 5px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        cursor: pointer;
+    }
+    /* Position the previous button on the left */
+    .navButton.prev {
+        left: 5px;
+    }
+    /* Position the next button on the right */
+    .navButton.next {
+        right: 5px;
+    }
 }
