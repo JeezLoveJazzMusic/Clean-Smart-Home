@@ -1,0 +1,120 @@
+/* Made by Joe */
+.cardforEnergyRecomendations {
+    width: 1350px;
+    height: 820px;
+    margin: 80px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+    border: 2px solid #000000;
+    grid-template-areas:
+      "header header"
+      "chart info";
+}
+
+/* Header Section */
+.cardforEnergyRecomendations-header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.cardforEnergyRecomendations-header h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+/* Share Button */
+.share-button {
+    padding: 12px 25px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.share-button:hover {
+    background-color: #60A5FA;
+}
+
+
+
+/* Line Chart Section */
+.line-box1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 590px;
+    overflow: hidden;
+}
+
+/* Information Section */
+.info-section1 {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 430px;
+    
+}
+
+.tips1, .energy-alert1, .recommendations1 {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    height: 200px;
+    
+}
+
+.tips1 ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.tips1 h9 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.tips ul li { 
+    line-height: 1.5;
+}
+
+/* Alerts and Recommendations */
+.energy-alert1 {
+    border-left: 5px solid #ff9800;
+    border-right: 5px solid #ff9800;
+
+}
+
+.recommendations1 {
+    border-left: 5px solid #2196f3;
+    border-right: 5px solid #2196f3;
+
+}
+
+.tips1 {
+    border-left: 5px solid #e54c4c;
+    border-right: 8px solid #e54c4c;
+
+}
+
