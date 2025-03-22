@@ -18,7 +18,7 @@ const Temperature = () => {
   const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
 
   const location = useLocation();
-  const { houseId, roomId , roomName} = location.state || {};
+  const { houseId, roomId , roomName, recc} = location.state || {};
 
   // Helper function to convert an array of objects (device data) to a CSV string.
   const convertToCSV = (dataArray) => {
@@ -154,14 +154,19 @@ const Temperature = () => {
       </div>
 
       <div className="info-section">
-        <div className="tips">
+      <div className="tips">
           <h3>Tips:</h3>
-          <p>(Air Conditioner Tips)</p>
-          <ul>
-            <li>Above 39°C: AC (cooling mode)</li>
-            <li>29°C - 39°C: AC (moderate)</li>
-            <li>Below 29°C: Don’t turn on the AC</li>
-          </ul>
+          {recc && recc.tips && recc.tips.length > 0 ? (
+            <ul>
+              {recc.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          ) : (
+            <>
+              <p>(No Tips Available)</p>
+            </>
+          )}
         </div>
 
         <div className="energy-alert">
@@ -171,10 +176,20 @@ const Temperature = () => {
 
         <div className="recommendations">
           <h3>Recommendations:</h3>
-          <p>
-            Dear User, your current temperature is 35°C. We would recommend you
-            to turn on the air conditioner with normal Temperature.
-          </p>
+          {recc && recc.message ? (
+            <>
+              <p>{recc.message}</p>
+              {recc.tips && recc.tips.length > 0 && (
+                <ul>
+                  {recc.tips.map((tip, index) => (
+                    <li key={index}>{tip}</li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : (
+            <p>No recommendations available.</p>
+          )}
         </div>
         </div>
 
