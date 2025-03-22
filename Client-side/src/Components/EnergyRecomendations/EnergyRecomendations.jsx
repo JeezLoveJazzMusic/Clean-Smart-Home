@@ -110,25 +110,6 @@ const EnergyRecomendations = () => {
 
   return (
     <div className="cardforEnergyRecomendations">
-      {/* Back Button at Top Right */}
-      <button
-        onClick={() => navigate(-1)} // Navigate back when clicked
-        style={{
-          position: "absolute",
-          top: "850px",
-          right: "110px",
-          padding: "10px 15px",
-          fontSize: "14px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        ⬅ Back
-      </button>
-
       <div className="cardforEnergyRecomendations-header">
         <h2>Energy Recommendations</h2>
         <button className="share-button" onClick={openShareSensorData}>
@@ -172,6 +153,9 @@ const EnergyRecomendations = () => {
             recommend turning off lights/appliances and using fans over AC.
           </p>
         </div>
+      <button onClick={() => navigate(-1)} className="back-ButtonInEnergyRecommendations">
+        ⬅ Back
+      </button>
       </div>
 
       {/* Modal */}

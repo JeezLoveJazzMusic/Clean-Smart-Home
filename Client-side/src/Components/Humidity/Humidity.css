@@ -1,5 +1,6 @@
 /*Made by Joe */
 .card3{ 
+  position: relative;
   width: 1200px;
   height: 770px;
   margin: 80px auto;
@@ -135,4 +136,18 @@
 .tips {
   border-left: 8px solid #e54c4c;
   border-right: 8px solid #e54c4c;
+}
+
+.back-ButtonInHumidity{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #f87171;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
 }

@@ -108,24 +108,6 @@ const EnergyUsage = () => {
 
   return (
     <div className="card">
-      <button
-        onClick={() => navigate(-1)} // Navigate back when clicked
-        style={{
-          position: "absolute",
-          top: "820px",
-          right: "180px",
-          padding: "10px 15px",
-          fontSize: "14px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        ⬅ Back
-      </button>
-
       <div className="card-header">
         <h2>Energy Usage</h2>
         <RWebShare 
@@ -178,10 +160,10 @@ const EnergyUsage = () => {
             </>
           )}
         </div>
-
-
-
-      
+              {/* Back Button at Top Right */}
+      <button onClick={() => navigate(-1)} className="back-ButtonInEnergyUsage">
+        ⬅ Back
+      </button>
       </div>
 
       {/* Modal */}
