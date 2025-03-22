@@ -13,12 +13,28 @@ const EnergyUsage = () => {
   const navigate = useNavigate(); // Navigate function
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
-    const [prevMonth, setPrevMonth] = useState([]);
-    const [curMonth, setCurMonth] = useState([]);
-    const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
+  const [prevMonth, setPrevMonth] = useState([]);
+  const [curMonth, setCurMonth] = useState([]);
+  const [fetchedDeviceData, setFetchedDeviceData] = useState([]);
 
   const location = useLocation();
   const { houseId, roomId ,roomName, recc } = location.state || {};
+
+  // Helper function to convert an array of objects (device data) to a CSV string.
+  const convertToCSV = (dataArray) => {
+    if (!dataArray?.length) return "";
+    // Use object keys from the first item as headers.
+    const headers = Object.keys(dataArray[0]).join(",");
+    const rows = dataArray.map(item => Object.values(item).join(","));
+    return [headers, ...rows].join("\r\n");
+  };
+
+  // Prepare a CSV file (as a File object) so it can be shared.
+  const prepareCSVFile = () => {
+    const csvData = convertToCSV(fetchedDeviceData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    return new File([blob], "energy-data.csv", { type: "text/csv" });
+  };
 
   const getData = async () => {
     try {
@@ -113,9 +129,18 @@ const EnergyUsage = () => {
 
       <div className="card-header">
         <h2>Energy Usage</h2>
-        <button className="share-button" onClick={openShareSensorData}>
-          Share Data
-        </button>
+        <RWebShare 
+          data={{
+            files: [prepareCSVFile()],
+            text: `See the attached CSV file for ${roomName} Energy sensor data.`,
+            title: `${roomName} Energy Data`
+          }}
+          onClick={() => console.log("Shared successfully!")}
+        >
+          <button className="share-button">
+            Share Data
+          </button>
+        </RWebShare>
       </div>
 
       <div className="EnergyUsage-info">
