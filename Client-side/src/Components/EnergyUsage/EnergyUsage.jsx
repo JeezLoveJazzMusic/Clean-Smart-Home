@@ -48,13 +48,12 @@ const EnergyUsage = () => {
 
   return (
     <div className="card">
-      {/* Back Button at Top Right */}
       <button
         onClick={() => navigate(-1)} // Navigate back when clicked
         style={{
           position: "absolute",
-          top: "20px",
-          right: "20px",
+          top: "820px",
+          right: "180px",
           padding: "10px 15px",
           fontSize: "14px",
           backgroundColor: "#f87171",
