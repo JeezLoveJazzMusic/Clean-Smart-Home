@@ -22,7 +22,6 @@ const Weather = () => {
     };
 
     const [startIndex, setStartIndex] = useState(0);
-    // Set forecastPerPage based on window width: 1 for mobile, 6 for desktop.
     const [forecastPerPage, setForecastPerPage] = useState(window.innerWidth < 600 ? 1 : 6);
     const [forecast, setForecast] = useState(null);
     const [location, setLocation] = useState('Malaysia');
@@ -63,12 +62,8 @@ const Weather = () => {
         const [time, modifier] = timeString.split(" ");
         let [hours] = time.split(":");
         hours = parseInt(hours, 10);
-        if (modifier === "PM" && hours !== 12) {
-            hours += 12;
-        }
-        if (modifier === "AM" && hours === 12) {
-            hours = 0;
-        }
+        if (modifier === "PM" && hours !== 12) hours += 12;
+        if (modifier === "AM" && hours === 12) hours = 0;
         return hours;
     };
 
@@ -127,19 +122,7 @@ const Weather = () => {
         <div className={styles["main-container"]}>
             <button
                 onClick={() => navigate(-1)}
-                style={{
-                    position: "absolute",
-                    top: "20px",
-                    right: "20px",
-                    padding: "10px 15px",
-                    fontSize: "14px",
-                    backgroundColor: "#f87171",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    zIndex: 10, // Ensures the button stays on top
-                }}
+                className={styles.backButton}
             >
                 ⬅ Back
             </button>
