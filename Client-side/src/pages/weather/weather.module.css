@@ -1,6 +1,6 @@
 .main-container {
     position: relative;
-    padding: 20px;
+    padding: 20px 20px 80px;
     margin: 20px auto;
     max-width: 95%;
     min-height: 95vh;
@@ -12,21 +12,22 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.time {
-    font-size: 2rem;
-    margin-bottom: 20px;
+/* Default backButton style: Mobile view (top right) */
+.backButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #f87171;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
 }
 
-.forecastColumn .weather-Icon {
-    max-width: 200px;
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto 10px auto;
-    transform: scale(0.8);
-    align-self: center;
-}
-
+/* Other existing CSS rules */
 .forecastContainer {
     display: flex;
     justify-content: center;
@@ -44,10 +45,21 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    min-width: 140px;
 }
 
 .forecastColumn:last-child {
     border-right: none;
+}
+
+.weather-Icon {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+    transform: scale(0.8);
+    align-self: center;
 }
 
 .navButton {
@@ -57,4 +69,48 @@
     cursor: pointer;
     padding: 10px;
     color: black;
+}
+
+.backButton {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 600px) {
+    .main-container {
+        text-align: left;
+        padding-top: 70px;
+    }
+    .forecastContainer {
+        position: relative;
+        display: block;
+    }
+    .forecastColumn {
+        width: 90%;
+        margin: 0 auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+    .forecastColumn:last-child {
+        border-bottom: none;
+    }
+    .navButton {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        padding: 5px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        cursor: pointer;
+    }
+    .navButton.prev {
+        left: 5px;
+    }
+    .navButton.next {
+        right: 5px;
+    }
 }

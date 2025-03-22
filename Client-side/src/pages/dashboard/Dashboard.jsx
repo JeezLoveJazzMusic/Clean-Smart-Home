@@ -175,6 +175,7 @@ const Dashboard = () => {
           TheUserID={userID}
           dashboardData={dashboardData}
           setRoomID={handleRoomSelect}
+          fetchDashboardData={fetchDashboardData}
         />
       </div>
 
@@ -183,7 +184,7 @@ const Dashboard = () => {
        {currentHouseId ? (
           <Graphs currentHouse={currentHouseId} />
         ) : (
-          <div>Loading graphs...</div>
+          <div></div>
         )}
       </div>
 

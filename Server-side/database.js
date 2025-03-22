@@ -827,7 +827,7 @@ async function storeEnergyUsage(device_id, state_value)
 
   try
   {
-    await db.execute({
+    await turso.execute({
       sql: "INSERT INTO device_states (device_id, state_key, state_value, updated_at) VALUES (?, ?, ?, ?)",
       args: [device_id, state_key, state_value, updated_at]
     });
@@ -835,6 +835,66 @@ async function storeEnergyUsage(device_id, state_value)
   } catch (error)
   {
     console.error("Error inserting smart meter data:", error);
+  }
+}
+
+// Parse smart meter data
+async function parseSmartMeterData(row) {
+  const currentTimestamp = new Date()
+    .toISOString()
+    .replace("T", " ")
+    .replace(/\..+/, "");
+
+  return {
+    room_name: row["Room"],
+    state_value: parseFloat(row["Cumulative Energy Usage (kWh)"]),
+    updated_at: currentTimestamp,
+  };
+}
+
+// Store smart meter data
+async function storeSmartMeterData(parsedData) {
+  const house_id = 27;
+  const device_type = "smd";
+  const device_number = 1;
+  const state_key = "smart meter";
+
+  try {
+    // Step 1: Get room_id based on room_name and house_id
+    const roomQuery = "SELECT room_id FROM rooms WHERE room_name = ? AND house_id = ?";
+    const roomResult = await turso.execute({
+      sql: roomQuery,
+      args: [parsedData.room_name, house_id]
+    });
+
+    if (!roomResult.rows.length) {
+      throw new Error(`Room not found: ${parsedData.room_name}`);
+    }
+    const room_id = roomResult.rows[0].room_id;
+
+    // Step 2: Get device_id based on device_type, room_id, house_id, and device_number
+    const deviceQuery = "SELECT device_id FROM devices WHERE device_type = ? AND room_id = ? AND house_id = ? AND device_number = ?";
+    const deviceResult = await turso.execute({
+      sql: deviceQuery,
+      args: [device_type, room_id, house_id, device_number]
+    });
+
+    if (!deviceResult.rows.length) {
+      throw new Error(`Device not found for room: ${parsedData.room_name}`);
+    }
+    const device_id = deviceResult.rows[0].device_id;
+
+    // Step 3: Insert into device_states
+    const insertQuery = "INSERT INTO device_states (device_id, state_key, state_value, updated_at) VALUES (?, ?, ?, ?)";
+    await turso.execute({
+      sql: insertQuery,
+      args: [device_id, state_key, parsedData.state_value, parsedData.updated_at]
+    });
+
+    console.log(`Stored smart meter data: Room=${parsedData.room_name}, Value=${parsedData.state_value}, Time=${parsedData.updated_at}`);
+  } catch (error) {
+    console.error("Error storing smart meter data:", error);
+    throw error;
   }
 }
 
@@ -1581,7 +1641,7 @@ async function getCurrentMonthRoomAverage(room_id, device_type) {
   }
 }
 
-//function to get average energy usage for everymonth for the past 12 monts
+//function to get average energy usage for everymonth for the past 12 months including current month
 async function getAverageLast12Months(house_id, device_type) {
   try {
     const result = await turso.execute({
@@ -1591,9 +1651,9 @@ async function getAverageLast12Months(house_id, device_type) {
         FROM device_states ds
         JOIN devices d ON ds.device_id = d.device_id
         WHERE d.house_id = ? AND d.device_type = ?
-          AND ds.updated_at >= DATE('now', '-12 months')
+          AND ds.updated_at >= DATE('now', 'start of month', '-12 months')
         GROUP BY strftime('%Y-%m', ds.updated_at)
-        ORDER BY strftime('%Y-%m', ds.updated_at) DESC
+        ORDER BY strftime('%Y-%m', ds.updated_at) ASC
       `,
       args: [house_id, device_type],
     });
@@ -1604,6 +1664,7 @@ async function getAverageLast12Months(house_id, device_type) {
     throw error;
   }
 }
+
 
 
 
@@ -1682,5 +1743,7 @@ module.exports = {
   getPreviousMonthHouseAverage,
   getPreviousMonthRoomAverage,
   getCurrentMonthRoomAverage,
-  getAverageLast12Months
+  getAverageLast12Months,
+  parseSmartMeterData,
+  storeSmartMeterData
 };

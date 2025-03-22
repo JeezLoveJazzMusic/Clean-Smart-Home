@@ -56,7 +56,8 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
       }
     } catch (error) {
       console.error("Error requesting account deletion:", error);
-      alert("An error occurred while requesting account deletion.");
+      const errorMessage = error.response?.data?.message || "An error occurred while requesting account deletion.";
+      alert(errorMessage);
     } finally {
       setShowDeleteConfirm(false);
     }

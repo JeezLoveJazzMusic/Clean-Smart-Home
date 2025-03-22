@@ -30,7 +30,6 @@ function SensorData({houseId, userID, roomName, roomList}) {
     //     console.error("Error fetching user data:", error);
     //   }
     // };
-    getReccomendation();
     const fetchHouseName = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/getHouseName/house/${houseId}`);
@@ -44,9 +43,16 @@ function SensorData({houseId, userID, roomName, roomList}) {
     // fetchDisplay();
   }, [userID, houseId]);
 
+  useEffect(() => {
+    if (roomId) {
+      getReccomendation();
+    }
+  }, [roomId]);
+
   const getReccomendation = async () => {
   try{
     const response = await axios.get(`http://localhost:8080/getRoomRecommendation/room/${roomId}`);
+    console.log("reccomendation room id:", roomId);
     const recommendationObj = response.data.recommendation;
     console.log("Recommendation object:", recommendationObj);
     setRecc(recommendationObj);
@@ -76,9 +82,11 @@ function SensorData({houseId, userID, roomName, roomList}) {
       const response = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/Temperature`);
       const response1 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/humidity`);
       const response2 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/LightLevel`);
+      const response3 = await axios.get(`http://localhost:8080/getCurrentState/house/${houseId}/room/${roomId}/deviceType/EnergyUsage`);
       setCurTemp(response.data.currentState);
       setCurHumidity(response1.data.currentState);
       setCurLight(response2.data.currentState);
+      setCurEnergy(response3.data.currentState);
     } catch (error) {
       console.error("Error fetching temperature data:", error);
     }
@@ -107,7 +115,7 @@ function SensorData({houseId, userID, roomName, roomList}) {
         {houseName}, {roomName}
       </h2>
       ) : (
-        <p>Loading user name...</p>
+        <p></p>
       )}
       <div className="sensor-data1">
         <div className="sensor-data-grid-container">
@@ -127,7 +135,7 @@ function SensorData({houseId, userID, roomName, roomList}) {
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
-              <p className="value">5500W</p>
+              <p className="value">{curEnergy}%</p>
             </div>
           </button>
 
