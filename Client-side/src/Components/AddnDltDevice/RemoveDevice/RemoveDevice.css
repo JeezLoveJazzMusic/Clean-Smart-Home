@@ -43,7 +43,7 @@
   max-width: 60vw;
   column-gap: 5px;
   margin-top: 15px;
-  max-height: 58vh; /* Limit the height for scrollable content */
+  max-height: 60vh; /* Limit the height for scrollable content */
   overflow-y: auto; /* Add vertical scrolling */
   padding-right: 0px;
   
@@ -123,6 +123,8 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  bottom: 80px;
+  right: 400px;
 
 }
 

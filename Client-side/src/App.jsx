@@ -12,9 +12,11 @@ import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import RemoveRoom from "./Components/RemoveRoom/RemoveRoom.jsx";
 import AddRoom from "./Components/AddRoom/AddRoom.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"
-import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx"
-import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx"
+import RequestResetPassword from "./pages/RequestResetPassword/RequestResetPassword.jsx";
+import SuccessfulRequestResetPassword from "./pages/SuccessfulRequestResetPassword/SuccessfulRequestResetPassword.jsx";
 import Weather from "./pages/weather/weather.jsx";
+import EnergyRecomendations from "./Components/EnergyRecomendations/EnergyRecomendations.jsx";
+
 
 function App() {
   const route = createBrowserRouter([
@@ -85,6 +87,10 @@ function App() {
     {
       path: "/weather",
       element:<Weather />
+    },
+    {
+      path: "/EnergyRecomendations",
+      element:<EnergyRecomendations />
     }
   ]);
 

@@ -108,23 +108,7 @@ const Humidity = () => {
   return (
     <div className="card3">
       {/* Back Button at Top Right */}
-      <button
-        onClick={() => navigate(-1)} // Navigate back when clicked
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          padding: "10px 15px",
-          fontSize: "14px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        ⬅ Back
-      </button>
+
 
 
 
@@ -178,6 +162,10 @@ const Humidity = () => {
             </>
           )}
         </div>
+              {/* Back Button at Top Right */}
+      <button onClick={() => navigate(-1)} className="back-ButtonInHumidity">
+        ⬅ Back
+      </button>
       </div>
     
 

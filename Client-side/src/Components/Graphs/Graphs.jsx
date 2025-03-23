@@ -1,12 +1,7 @@
 import React from "react";
-// import pieIcon from "../../assets/Pie.png";
-// import chartIcon from "../../assets/Chart.png";
-import { useState, useEffect } from "react";
-import { Doughnut } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
-import axios, { Axios } from "axios";
-// import { faker } from "@faker-js/faker";
-
+import { useNavigate } from "react-router-dom";
+import AIBot from "../../assets/AIbot.png";
 
 import {
   Chart as ChartJS,
@@ -20,6 +15,8 @@ import {
   Legend,
 } from "chart.js";
 
+import "./Graphs.css";
+
 ChartJS.register(
   ArcElement,
   CategoryScale,
@@ -31,87 +28,16 @@ ChartJS.register(
   Legend
 );
 
-import "./Graphs.css";
+function Graphs() {
+  const navigate = useNavigate();  
 
-/* Data for Doughnut Chart */
-const doughnutData = {
-  datasets: [
-    {
-      label: "My First Dataset",
-      data: [75, 75, 50],
-      backgroundColor: [
-        "rgb(56, 110, 61)",
-        "rgb(32, 120, 34)",
-        "rgb(150, 218, 152)",
-      ],
-      hoverOffset: 4,
-    },
-  ],
-};
-
-/* Options for Doughnut Chart */
-const doughnutOptions = {
-  cutout: "70%", // Adjust this value to make the hole bigger or smaller
-};
-
-/* Data for Line Chart */
-
-
-/* Options for Line Chart */
-const lineOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: {
-      title: {
-        display: true,
-        text: "Time",
-      },
-    },
-    y: {
-      title: {
-        display: true,
-        text: "Usage",
-      },
-      beginAtZero: true,
-    },
-  },
-};
-
-const fetchData = async (houseID) => {
-  response = axios.get(`http://localhost:8080/getAverageEnergyConsumption/house/${houseID}`);
-  console.log("Graphs response", response);
-  return response.data;
-};
-
-function Graphs({ currentHouse }) {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    console.log("Graphs currentHouse", currentHouse);
-    const data = fetchData(currentHouse);
-    setData(data);
-  }, [currentHouse]);
-
+  /* Data for Line Chart */
   const lineData = {
-    labels: [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-   
-    ],
+    labels: Array.from({ length: 16 }, (_, i) => (i + 1).toString()),
     datasets: [
       {
         label: "Power Usage",
-        data: data,
+        data: [200, 300, 260, 230, 360, 350, 250, 400, 320, 280, 230, 300, 350, 220, 340, 345],
         borderColor: "green",
         borderWidth: 2,
         pointRadius: 5,
@@ -121,27 +47,30 @@ function Graphs({ currentHouse }) {
     ],
   };
 
+  /* Options for Line Chart */
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { title: { display: true, text: "Time" } },
+      y: { title: { display: true, text: "Usage" }, beginAtZero: true },
+    },
+  };
+
   return (
     <div className="graphs-container1">
-      <div className="chart-container1">
-        {/* Energy Saving Section */}
-        <div className="doughnut-container1">
+      <div className="grid-container">
+        <div className="left-column">
           <div className="chart-text">
-            <h3>• Energy Saving</h3>
+            <h3>Power Recommendations</h3>
           </div>
-          <div className="doughnut-box">
-            <Doughnut data={doughnutData} options={doughnutOptions} />
-          </div>
+          <button onClick={() => navigate("/EnergyRecomendations")} className="Navigate-btn">
+            <img src={AIBot} alt="AIBOT" className="iconfoaibot" />
+            AI Generated Recommendations
+          </button>
         </div>
-
-        {/* Power Usage Section */}
-        <div className="line-container">
-          <div className="chart-text">
-            <h3>• Power Usage</h3>
-          </div>
-          <div className="line-box">
-            <Line data={lineData} options={lineOptions} />
-          </div>
+        <div className="line-boxingraph">
+          <Line data={lineData} options={lineOptions} />
         </div>
       </div>
     </div>

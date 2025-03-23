@@ -107,25 +107,6 @@ const LightLevel = () => {
 
   return (
     <div className="card2">
-      {/* Back Button at Top Right */}
-      <button
-        onClick={() => navigate(-1)} // Navigate back when clicked
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          padding: "10px 15px",
-          fontSize: "14px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        ⬅ Back
-      </button>
-
       <div className="card2-header">
         <h2>Room: {roomName} - Light Level</h2>
         <RWebShare 
@@ -176,6 +157,10 @@ const LightLevel = () => {
             </>
           )}
         </div>
+              {/* Back Button at Top Right */}
+      <button onClick={() => navigate(-1)} className="back-ButtonInLightLevel">
+        ⬅ Back
+      </button>
       </div>
     
      {/* Modal */}

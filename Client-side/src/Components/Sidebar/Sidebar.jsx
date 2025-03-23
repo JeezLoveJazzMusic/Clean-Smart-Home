@@ -32,7 +32,7 @@ function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         {/* Toggle Button (Remains Attached) */}
         <button className="sidebar-toggle" onClick={toggleSidebar}>
-          {isOpen ? "✖" : "☰"}
+          {isOpen ? "✖" : "🏠"}
         </button>
 
         {/* Home List */}
@@ -55,8 +55,9 @@ function Sidebar({ allHouses, currentUserID, setCurrentHouseId }) {
             onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
             className="add-sidebar1"
           >
-            <img src={addButton} alt="Add" className="add-sidebar-icon" />
-            Add Home
+            <div className="add-sidebar-icon"  >
+              </div>
+             Home Configuration
           </button>
         </div>
       </div>

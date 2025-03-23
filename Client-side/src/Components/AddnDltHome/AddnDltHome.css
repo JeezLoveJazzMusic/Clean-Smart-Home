@@ -48,11 +48,13 @@
   right: 20px;
   padding: 10px 15px;
   font-size: 14px;
-  background-color: #b7e4bd;
-  color: black;
+  background-color: #f87171;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  z-index: 10;
+
 }
 
 .AddnDltHome-options-btn {
