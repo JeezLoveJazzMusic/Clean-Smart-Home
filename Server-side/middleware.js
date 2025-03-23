@@ -91,46 +91,85 @@ function getRandomizedValue(value) {
 
 // Read data from .csv file and process it
 async function getSmartMeterData(filePath) {
-  // Define the specific rooms we want to use
-  const validRooms = ['A', 'D', 'E', 'G', 'H', 'I', 'J'];
+  const validRooms = ['A', 'D', 'E', 'H', 'J'];
   
   return new Promise((resolve, reject) => {
-    const processedRows = [];
-    let insertCount = 0;
+    let finalRow = null;
 
     fs.createReadStream(filePath)
       .pipe(csvParser())
-      .on('data', async (row) => {
-        try {
-          const originalValue = parseFloat(row['Cumulative Energy Usage (kWh)']);
-          if (!isNaN(originalValue)) {
-            // Randomize the energy usage value and format to 3 decimal places
-            const modifiedValue = getRandomizedValue(originalValue);
-            row['Cumulative Energy Usage (kWh)'] = modifiedValue.toFixed(3);
-            
-            // Randomly select a room from the valid rooms
-            const randomRoomIndex = Math.floor(Math.random() * validRooms.length);
-            row['Room'] = validRooms[randomRoomIndex];
-            
-            processedRows.push(row);
-          } else {
-            console.warn("Skipping invalid row - energy usage is not a number:", row);
-          }
-        } catch (error) {
-          reject(error);
+      .on('data', (row) => {
+        // Keep updating finalRow with the latest row that has valid energy usage
+        if (row['Cumulative Energy Usage (kWh)']) {
+          finalRow = row;
         }
       })
       .on('end', async () => {
         try {
-          for (const row of processedRows) {
-            const parsedData = await parseSmartMeterData(row);
-            await storeSmartMeterData(parsedData);
-            insertCount++;
-            console.log(`Insert ${insertCount}/${processedRows.length}: Room=${parsedData.room_name}, Value=${parsedData.state_value}, Time=${parsedData.updated_at}`);
+          if (!finalRow) {
+            console.log("No valid data found in CSV.");
+            resolve();
+            return;
           }
-          console.log(`Smart meter data storage completed successfully! Total inserts: ${insertCount}`);
+
+          const originalValue = parseFloat(finalRow['Cumulative Energy Usage (kWh)']);
+          if (isNaN(originalValue)) {
+            console.warn("Invalid energy usage value in final row:", finalRow);
+            resolve();
+            return;
+          }
+
+          // Parse the original timestamp
+          const originalDate = new Date(finalRow['Timestamp']);
+          let insertCount = 0;
+          
+          // Loop through current and previous month only
+          for (let monthsAgo = 0; monthsAgo <= 1; monthsAgo++) {
+            const currentDate = new Date(originalDate);
+            currentDate.setMonth(currentDate.getMonth() - monthsAgo);
+            
+            // For each month, create entries for every day
+            const daysInMonth = new Date(
+              currentDate.getFullYear(), 
+              currentDate.getMonth() + 1, 
+              0
+            ).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+              // Use UTC methods to ensure consistent time
+              currentDate.setUTCDate(day);
+              currentDate.setUTCHours(23, 59, 0, 0); // Set time to 23:59:00 UTC
+
+              // Format timestamp as YYYY-MM-DD HH:mm:ss
+              const timestamp = currentDate.toISOString()
+                .replace('T', ' ')
+                .replace(/\.\d+Z$/, '');
+
+              // Create entries for all rooms for this timestamp
+              for (const room of validRooms) {
+                const modifiedValue = getRandomizedValue(originalValue);
+                
+                const roomData = {
+                  'Cumulative Energy Usage (kWh)': modifiedValue.toFixed(3),
+                  'Room': room,
+                  'Timestamp': timestamp
+                };
+
+                const parsedData = await parseSmartMeterData(roomData);
+                await storeSmartMeterData(parsedData);
+                insertCount++;
+
+                if (insertCount % 50 === 0) {
+                  console.log(`Processed ${insertCount} entries... Current: Room=${room}, Date=${timestamp}, Value=${modifiedValue.toFixed(3)}`);
+                }
+              }
+            }
+          }
+
+          console.log(`Smart meter data storage completed! Total inserts: ${insertCount}`);
           resolve();
         } catch (error) {
+          console.error("Error processing smart meter data:", error);
           reject(error);
         }
       })

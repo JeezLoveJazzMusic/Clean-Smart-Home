@@ -840,15 +840,10 @@ async function storeEnergyUsage(device_id, state_value)
 
 // Parse smart meter data
 async function parseSmartMeterData(row) {
-  const currentTimestamp = new Date()
-    .toISOString()
-    .replace("T", " ")
-    .replace(/\..+/, "");
-
   return {
     room_name: row["Room"],
     state_value: parseFloat(row["Cumulative Energy Usage (kWh)"]),
-    updated_at: currentTimestamp,
+    updated_at: row["Timestamp"], // Use the timestamp provided in the row data
   };
 }
 
