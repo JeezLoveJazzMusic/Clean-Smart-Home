@@ -273,3 +273,72 @@ body {
   display: inline-block;
   margin-bottom: 15px;
 }
+@media screen and (max-width: 480px) {
+  .user-list-container {
+    width: 95vw;
+    height: auto;
+    padding: 10px;
+    border-radius: 12px;
+    top: 0;
+    left: 0;
+    transform: none;
+    position: relative;
+    box-shadow: none;
+  }
+
+  .user-grid {
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .user-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 10px;
+    background: #f4f4f4;
+    border-radius: 10px;
+  }
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .users-title {
+    font-size: 18px;
+    text-align: left;
+  }
+
+  .AddUserbtn-user-btn,
+  .delete-user-btn,
+  .BackBtn1-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin-top: 10px;
+  }
+
+  .BackBtn1-btn {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    align-self: flex-end;
+    margin-top: 16px;
+    margin-right: 8px;
+  }
+  
+  .show-confirm-delete .confirm-delete-btn {
+    display: inline-block !important;
+    width: 100%;
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .confirm-delete-btn {
+    font-size: 14px;
+    padding: 10px 16px;
+    margin: 0 auto;
+  }
+}

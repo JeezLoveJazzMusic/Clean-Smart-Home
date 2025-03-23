@@ -128,3 +128,56 @@
 .user-permissions-cancel-btn:hover {
   background-color: #95d5b2;
 }
+@media screen and (max-width: 480px) {
+  .user-permissions-popup {
+    width: 95vw;
+    height: 90vh;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .user-permissions-popup h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .userpermissions-list {
+    grid-template-columns: 1fr; /* Stack items in a single column */
+    max-height: none;
+    overflow-y: visible;
+    gap: 10px;
+  }
+
+  .userpermissions-item {
+    font-size: 16px;
+    padding: 10px 14px;
+    height: auto;
+    flex-wrap: wrap;
+  }
+
+  .userpermissions-name {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+
+  .user-permissions-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .user-permissions-submit-btn,
+  .user-permissions-cancel-btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 10px;
+  }
+}
