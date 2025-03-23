@@ -273,7 +273,7 @@ body {
   display: inline-block;
   margin-bottom: 15px;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
   .user-list-container {
     width: 95vw;
     height: auto;
