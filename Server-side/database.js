@@ -744,7 +744,7 @@ function parseHomeIOData(data) {
 
 // Function to store the parsed data in the database.
 async function storeParsedData(house_id, data) {
-  house_id = 1;
+  house_id = 27;
 
   // Step 1: Parse the data
   const parsedData = parseHomeIOData(data);
@@ -854,7 +854,7 @@ async function parseSmartMeterData(row) {
 
 // Store smart meter data
 async function storeSmartMeterData(parsedData) {
-  const house_id = 1;
+  const house_id = 27;
   const device_type = "smd";
   const device_number = 1;
   const state_key = "smart meter";
@@ -1569,6 +1569,7 @@ async function getRoomName(room_id) {
 }
 
 // New version for calculating average energy usage across rooms in a house
+// New version for calculating average energy usage across rooms in an entire house using latest daily data
 async function getPreviousMonthHouseAverage(house_id, device_type) {
   try {
     // Step 1: Get all room IDs for the house.
@@ -1582,37 +1583,37 @@ async function getPreviousMonthHouseAverage(house_id, device_type) {
       return null;
     }
 
-    // Step 2: For each room, get the previous month average energy usage.
+    // Step 2: For each room, get the previous month average energy usage
+    // using the latest reading per day.
     const roomAverages = await Promise.all(
       roomIds.map(async (roomId) => {
-        const avgUsage = await getPreviousMonthRoomAverage(roomId, device_type);
+        const avgUsage = await getPreviousMonthRoomAverageEnergy(roomId, device_type);
         // Log each room's average for debugging.
         console.log(`Room ${roomId} average:`, avgUsage);
         return avgUsage;
       })
     );
 
-    // Step 3: Filter out null averages (rooms with no data).
+    // Step 3: Filter out null values (rooms with no valid data).
     const validAverages = roomAverages.filter(avg => avg !== null);
     if (validAverages.length === 0) {
       console.warn("No valid average energy usage found for any room.");
       return null;
     }
 
-    // Step 4: Sum up the valid averages and divide by the number of valid rooms.
+    // Step 4: Sum up all valid averages and divide by the number of valid rooms.
     const total = validAverages.reduce((sum, value) => sum + parseFloat(value), 0);
     const overallAverage = total / validAverages.length;
-    console.log("Overall average energy usage:", overallAverage);
+    console.log("Overall average energy usage for house:", overallAverage);
 
     return parseFloat(overallAverage.toFixed(3));
   } catch (error) {
-    console.error("Error computing previous month house average:", error.message);
+    console.error("Error computing previous month house average energy:", error.message);
     throw error;
   }
 }
 
-//get previous month room average energy usage
-async function getPreviousMonthRoomAverage(room_id, device_type) {
+async function getPreviousMonthRoomAverageEnergy(room_id, device_type) {
   try {
     const result = await turso.execute({
       sql: `
@@ -1636,6 +1637,30 @@ async function getPreviousMonthRoomAverage(room_id, device_type) {
     }
     return null;
   } catch (error) {
+    console.error("Error getting previous month room average:", error.message);
+    throw error;
+  }
+}
+//get previous month room average energy usage
+async function getPreviousMonthRoomAverage(room_id, device_type) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
+        FROM device_states ds
+        JOIN devices d ON ds.device_id = d.device_id
+        WHERE d.room_id = ? AND d.device_type = ?
+          AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+          AND ds.updated_at < DATE('now', 'start of month')
+      `,
+      args: [room_id, device_type],
+    });
+    if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
+      return result.rows[0].avg_value;
+    }
+    return null;
+  }
+  catch (error) {
     console.error("Error getting previous month room average:", error.message);
     throw error;
   }
@@ -1794,5 +1819,6 @@ module.exports = {
   getAverageLast12Months,
   parseSmartMeterData,
   storeSmartMeterData,
-  getCurrentMonthHouseAverage
+  getCurrentMonthHouseAverage,
+  getPreviousMonthRoomAverageEnergy
 };

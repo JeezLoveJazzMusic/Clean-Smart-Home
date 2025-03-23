@@ -3,7 +3,7 @@
 const { createUser, getUserByEmail, removeAllDevicesFromRoom, verifyPassword, addPermission, addUserToHouse, getUserList, removePermission, getHouseList,checkUserExists,getHouseDevices,getRoomDevices,addDeviceToRoom, getSensorData, removeDeviceFromRoom, addRoomToHouse, removeRoomFromHouse, getRoomList,addHouseToUser, removeHouseFromUser, removeHousePermissions,getAllUserHouseData, getUserData,getUserName, toggleDevice, getUserListWithType, getAllDeviceData,  getUserType,
   removeHouseDevices,removeHouseRooms,removeHouseMembers,removeHouse, printAllUsers, printAllHouses, printAllRooms, printAllDevices, printAllPermissions, printAllHouseMembers, printAllDeviceStates, removeHouseDeviceStates, getHouseID, checkHouseExists, getCurrentState, getHighestLastMonth, getAverageLastMonth, getLowestLastMonth, getAverageCurrentMonth, getHighestCurrentMonth, getLowestCurrentMonth, testdb, getHouseName, getRoomName,
 
-  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, requestDeletion, checkDeletionStatus, cancelDeletion, updateLastLogin, isCreatorOfAnyHouse, getPreviousMonthHouseAverage,getPreviousMonthRoomAverage, getCurrentMonthRoomAverage,getAverageLast12Months,getCurrentMonthHouseAverage } = require("./database.js"); 
+  addAllPermission, removeAllUserPermissions, isCreator, getHouseCreator, deleteUser, getUserPermissionForRoom, checkPermission, updateUserPassword, requestDeletion, checkDeletionStatus, cancelDeletion, updateLastLogin, isCreatorOfAnyHouse, getPreviousMonthHouseAverage,getPreviousMonthRoomAverage, getCurrentMonthRoomAverage,getAverageLast12Months,getCurrentMonthHouseAverage, getPreviousMonthRoomAverageEnergy } = require("./database.js"); 
 
 //Middleware imports
 const {addUser, removeUser, sensorMap, analyzeEnergyUsage, analyzeRoomEnergy, getPrediction} = require("./middleware.js");
@@ -949,7 +949,7 @@ router.get("/getHouseRecommendation/house/:house_id/occupants/:occ_no", async (r
   const house_id = req.params.house_id;
   const occ_no = req.params.occ_no;
 
-  const pastEnergyConsumption = await getPreviousMonthHouseAverage(house_id, "smd");
+  const pastEnergyConsumption = await getPreviousMonthRoomAverageEnergy(house_id, "smd");
   console.log("routes: this is pastEnergyConsumption:",pastEnergyConsumption);
   const pastTemperature = await getPreviousMonthHouseAverage(house_id, "temp");
   console.log("routes: this is pastTemperature:",pastTemperature  );
