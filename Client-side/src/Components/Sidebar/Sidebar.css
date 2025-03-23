@@ -140,6 +140,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+   text-align: center;
   padding: 10px;
   border: none;
   background: rgb(207, 207, 207);
@@ -151,11 +152,4 @@
   font-size: 16px;
 }
 
-/* Add Home Icon (Left of Text) */
-.add-sidebar-icon {
-  /*Fix by Joe */
-  width: 20px; /* Adjust size as needed */
-  height: 20px;
-  margin-right: 8px;
-  object-fit: contain;
-}
+

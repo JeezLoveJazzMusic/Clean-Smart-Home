@@ -1,6 +1,6 @@
 .main-container {
     position: relative;
-    padding: 20px;
+    padding: 20px 20px 80px;
     margin: 20px auto;
     max-width: 95%;
     min-height: 95vh;
@@ -12,11 +12,22 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.time {
-    font-size: 2rem;
-    margin-bottom: 20px;
+/* Default backButton style: Mobile view (top right) */
+.backButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #f87171;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
 }
 
+/* Other existing CSS rules */
 .forecastContainer {
     display: flex;
     justify-content: center;
@@ -60,14 +71,20 @@
     color: black;
 }
 
+.backButton {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* Mobile-specific styles */
 @media (max-width: 600px) {
     .main-container {
-        text-align: left; /* Align texts to left */
-        padding-top: 70px; /* Add extra top padding to avoid overlap with back button */
+        text-align: left;
+        padding-top: 70px;
     }
     .forecastContainer {
         position: relative;
-        /* Keep block-layout so the forecast items are full-width */
         display: block;
     }
     .forecastColumn {
@@ -90,11 +107,9 @@
         border: none;
         cursor: pointer;
     }
-    /* Position the previous button on the left */
     .navButton.prev {
         left: 5px;
     }
-    /* Position the next button on the right */
     .navButton.next {
         right: 5px;
     }

@@ -78,7 +78,7 @@ async function sensorMap(sensorType){
     "Temperature": "temp",
     "humidity": "rhm",
     "LightLevel": "bgs",
-    "EnergyUsage": "sensor"
+    "EnergyUsage": "smd"
   };
   return sensorMap[sensorType];
 }
@@ -93,33 +93,51 @@ function getRandomizedValue(value) {
 async function getSmartMeterData(filePath) {
   // Define the specific rooms we want to use
   const validRooms = ['A', 'D', 'E', 'G', 'H', 'I', 'J'];
+  
+  return new Promise((resolve, reject) => {
+    const processedRows = [];
+    let insertCount = 0;
 
-  fs.createReadStream(filePath)
-    .pipe(csvParser())
-    .on('data', async (row) => {
-      try {
-        const originalValue = parseFloat(row['Cumulative Energy Usage (kWh)']);
-        if (!isNaN(originalValue)) {
-          // Randomize the energy usage value and format to 3 decimal places
-          const modifiedValue = getRandomizedValue(originalValue);
-          row['Cumulative Energy Usage (kWh)'] = modifiedValue.toFixed(3);
-          
-          // Randomly select a room from the valid rooms
-          const randomRoomIndex = Math.floor(Math.random() * validRooms.length);
-          row['Room'] = validRooms[randomRoomIndex];
-          
-          const parsedData = await parseSmartMeterData(row);
-          await storeSmartMeterData(parsedData);
-        } else {
-          console.warn("Skipping invalid row - energy usage is not a number:", row);
+    fs.createReadStream(filePath)
+      .pipe(csvParser())
+      .on('data', async (row) => {
+        try {
+          const originalValue = parseFloat(row['Cumulative Energy Usage (kWh)']);
+          if (!isNaN(originalValue)) {
+            // Randomize the energy usage value and format to 3 decimal places
+            const modifiedValue = getRandomizedValue(originalValue);
+            row['Cumulative Energy Usage (kWh)'] = modifiedValue.toFixed(3);
+            
+            // Randomly select a room from the valid rooms
+            const randomRoomIndex = Math.floor(Math.random() * validRooms.length);
+            row['Room'] = validRooms[randomRoomIndex];
+            
+            processedRows.push(row);
+          } else {
+            console.warn("Skipping invalid row - energy usage is not a number:", row);
+          }
+        } catch (error) {
+          reject(error);
         }
-      } catch (error) {
-        console.warn("Error processing row:", error);
-      }
-    })
-    .on('end', () => {
-      console.log("CSV processing completed.");
-    });
+      })
+      .on('end', async () => {
+        try {
+          for (const row of processedRows) {
+            const parsedData = await parseSmartMeterData(row);
+            await storeSmartMeterData(parsedData);
+            insertCount++;
+            console.log(`Insert ${insertCount}/${processedRows.length}: Room=${parsedData.room_name}, Value=${parsedData.state_value}, Time=${parsedData.updated_at}`);
+          }
+          console.log(`Smart meter data storage completed successfully! Total inserts: ${insertCount}`);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      })
+      .on('error', (error) => {
+        reject(error);
+      });
+  });
 }
 
 // // Initial HomeIO poll

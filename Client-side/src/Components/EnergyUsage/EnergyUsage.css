@@ -1,7 +1,9 @@
 /*Made by Joe */
 .card {
+  position: relative;
+
   width: 1200px;
-  height: 720px;
+  height: 790px;
   margin: 80px auto;
   padding: 20px;
   border-radius: 20px;
@@ -135,4 +137,32 @@
 .tips {
   border-left: 8px solid #e54c4c;
   border-right: 8px solid #e54c4c;
+}
+
+.EnergyUsage-back-btn {
+  /*Made by Joe */
+  background-color: #ddd;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+.back-ButtonInEnergyUsage {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #f87171;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
 }

@@ -43,7 +43,7 @@
 .userpermissions-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  max-height: 500px;
+  max-height: 440px;
   overflow-y: auto;
   gap: 12px 20px;
   justify-content: center;

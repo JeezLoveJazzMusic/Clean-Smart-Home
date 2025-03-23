@@ -105,26 +105,7 @@ const Temperature = () => {
     };
 
   return (
-    <div className="card1">
-      {/* Back Button at Top Right */}
-      <button
-        onClick={() => navigate(-1)} // Navigate back when clicked
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          padding: "10px 15px",
-          fontSize: "14px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        ⬅ Back
-      </button>
-      
+    <div className="card1">   
       <div className="card1-header">
         <h2>Room: {roomName} - Temperature</h2>
         <RWebShare 
@@ -175,13 +156,18 @@ const Temperature = () => {
             </>
           )}
         </div>
-
+      {/* Back Button at Top Right */}
+      <button onClick={() => navigate(-1)} className="back-ButtonInTemperature">
+        ⬅ Back
+      </button>
       
         </div>
 
       {/* Modal */}
       {isModalOpen && <ShareSensorData closeModal={closeShareSensorData} />}
     </div>
+
+    
   );
 };
 
