@@ -30,7 +30,7 @@
 .add1-addndltbtn {
   /*Made by Joe */
   position: absolute;
-  top: 70px;
+  top: 60px;
   left: 10px;
   background: #b7e4bd;
   color: black;
@@ -78,10 +78,10 @@
 .AddnDltHome-delete-btn {
   /*Made by Joe */
   position: absolute;
-  top: 70px;
+  top: 65px;
   right: 20px;
   padding: 10px 25px;
-  font-size: 14px;
+  font-size: 1rem;
   background-color: rgb(255, 49, 49);
   color: white;
   border: none;
@@ -99,6 +99,8 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+  overflow-y: hidden; /* Prevent vertical scrolling */
 }
 
 .AddnDltHome-item {
@@ -265,4 +267,140 @@
   position: absolute;
   bottom: 20px;
   left: 20px;
+}
+
+
+@media  (max-width: 768px) {
+  .AddnDltHome-container {
+    position: relative; /* Ensures positioning works within the container */
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    height: 200px;
+    min-height: 100vh; /* Ensure full viewport coverage */
+    grid-template-columns: 1fr;
+    overflow: hidden; /* Prevents content from overflowing */
+    overflow-y: auto;
+  }
+
+  .AddnDltHome-header1 {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .add1-addndltbtn,
+  .AddnDltHome-options-btn,
+  .AddnDltHome-delete-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+
+
+  .add1-addmdltbtn, 
+.AddnDltHome-delete-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block; /* Ensures they appear in a row */
+    text-align: center;
+}
+
+.AddnDltHome-delete-btn {
+  max-width: 15ch; /* Limits the width to approximately 10 characters */
+  word-wrap: break-word; /* Allows long words to break */
+  overflow-wrap: break-word; /* Ensures breaking works in all browsers */
+}
+
+  .AddnDltHome-main-back-btn {
+    position: absolute; /* Positions relative to the container */
+    bottom: 10px;
+    right: 10px;
+    background-color: #ff6b6b; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.AddnDltHome-list {
+  margin-top: 70px;
+  display: flex;
+  align-items: center;
+  overflow-y: auto; /* Enables vertical scrolling */
+  max-height: 60vh; /* Limits height to allow scrolling */
+  width: 80%; /* Ensures it takes full container width */
+  padding-right: 10px; /* Prevents content from hiding under scrollbar */
+
+}
+
+/* Optional: Style the scrollbar for better UX */
+.AddnDltHome-list::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+}
+
+.AddnDltHome-list::-webkit-scrollbar-thumb {
+  background: #ccc; /* Scrollbar color */
+  border-radius: 10px;
+}
+
+.AddnDltHome-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+  .AddnDltHome-item-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .AddnDltHome-item {
+    font-size: 1rem;
+    width: 100px;
+    height: 100px;
+  }
+
+  .AddnDltHome-home-name {
+    max-width: 8ch;
+    font-size: 1rem;
+  }
+
+  .AddnDltHome-modal {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .AddnDltHome-modal h3 {
+    font-size: 20px;
+  }
+
+  .AddnDltHome-modal label {
+    font-size: 14px;
+  }
+
+  .AddnDltHome-modal input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .AddnDltHome-modal-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .AddnDltHome-create-btn,
+  .AddnDltHome-modal-back-btn {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+
+  .AddnDltHome-back-btn {
+
+    font-size: 14px;
+    padding: 8px 15px;
+    bottom: 10px;
+    right: 10px;
+  }
 }

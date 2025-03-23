@@ -13,7 +13,6 @@
   gap: 10px;
   overflow: hidden;
   box-sizing: border-box;
-
 }
 
 /* Header styling */  /*( fix by Joe)*/
@@ -64,7 +63,7 @@
 /* Sensor Data Section */     /*( fix by Joe)*/
 .sensor-data {
   grid-column: 1;
-  padding-left:10%;
+
 }
 
 /* Device List Section */     /*( fix by Joe)*/
@@ -75,10 +74,42 @@
 /* Graphs Section */     /*( fix by Joe)*/
 .graph-section {
   grid-column: 1;
-  padding-left: 10%;
+
 }
 
 /* Users Section */     /*( fix by Joe)*/
 .user-dashboard {
   grid-column: 2;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 600px) and (orientation: portrait) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 5px;
+    height: auto;
+    overflow-x: auto;
+  }
+
+  .dashboard-header {
+    height: 80px;
+  }
+
+
+  .device-dashboard,
+  .user-dashboard {
+    grid-column: 1;
+  }
+
+  .profile-menu {
+    width: 90%;
+    right: 5%;
+  }
+
+  .sensor-data,
+  .graph-section{
+  grid-column: 1;
+  margin-left: 0px;
+  }
 }

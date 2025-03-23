@@ -15,7 +15,7 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  z-index: 1;
+
 }
 
 .room-button {
@@ -26,6 +26,10 @@
   font-weight: bold;
   cursor: pointer;
   font-family: Inria, serif;
+  position: relative; /* Change to absolute position */
+  top: 0px; /* Adjust top position as needed */
+  left: 0px; /* Adjust right position as needed */
+  display: flex;
 }
 
 .menu-button {
@@ -35,6 +39,9 @@
   border-radius: 50%;
   font-size: 15px;
   cursor: pointer;
+  position: absolute; /* Change to absolute position */
+  top: 0px; /* Adjust top position as needed */
+  right: 0px; /* Adjust right position as needed */
 }
 
 .device-grid {
@@ -76,7 +83,6 @@
   justify-content: center; /* Centers content vertically */
   flex: 1; /* Ensures equal spacing */
 }
-
 
 .device-name {
   font-size: 13px;
@@ -143,13 +149,13 @@
 .dropdown-menu {
   position: absolute;
   top: 100%;
+  top: 29px;
   background-color: #B7E4BD;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
-  z-index: 1000px;
-
+  z-index: 1000;
 }
 
 .dropdown-menu::-webkit-scrollbar {
@@ -169,12 +175,8 @@
 .dropdown-option {
   padding: 5px 10px;
   width: 150px;
-  cursor: pointer;
+  display: flex;
   font-family: Inria, serif;
-  /* border-left: 1px solid #000000; */
-  /* border-right: 1px solid #000000; */
-  /* border-top: 1px solid #000000; */ 
-  /* border-bottom: 1px solid #000000; */
   max-width: 15ch; /* Limits the width to approximately 10 characters */
   word-wrap: break-word; /* Allows long words to break */
   overflow-wrap: break-word; /* Ensures breaking works in all browsers */
@@ -210,4 +212,90 @@
 
 .menu-option:hover {
   background-color: #a1d9b0;
+}
+
+/* Mobile-specific styles for portrait mode */
+@media (max-width: 600px) and (orientation: portrait) {
+  .smart-home-container {
+    padding: 10px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+  }
+
+  .DeviceList-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-button {
+    margin-bottom: 10px;
+    position: absolute; /* Ensure it stays in the right position */
+    top: 0px; /* Adjust top position as needed */
+    right: 3px; /* Adjust right position as needed */
+  }
+
+  .room-button {
+    margin-bottom: 10px;
+    right: 0px;
+    width: 120px;
+    
+  }
+
+  .device-grid {
+    grid-template-columns: repeat(2, 1fr); /* Change to 2 columns */
+    row-gap: 10px;
+    column-gap: 5px;
+    max-height: 270px;
+    max-width: 100%;
+  }
+
+  .device-card {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .device-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .device-name {
+    font-size: 12px;
+  }
+
+  .toggleSwitch {
+    width: 30px;
+    height: 12px;
+  }
+
+  .toggleKnob {
+    width: 15px;
+    height: 15px;
+  }
+
+  .dropdown-menu {
+    width: 100px;
+  }
+
+  .dropdown-option {
+    width: 10px;
+  }
+
+  .menu-dropdown {
+    width: 150px;
+    top: 40px;
+  }
+
+  .menu-option {
+    width: 140px;
+    top: 40px;
+  }
+
+  .menu-container {
+    top: 20px;
+    right: 10px;
+  }
 }

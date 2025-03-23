@@ -1,83 +1,70 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './Signup.css';
 import axios from "axios";
 
-// signup component
 function Signup() {
-  // variable to store input 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  // validation error state
   const [errors, setErrors] = useState({});
-
-  // validation for success
   const [success, setSuccess] = useState(false);
-
-  // password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // password strength
   const validatePassword = (password) => {
     const specialCharacterRegex = /[!@#$%^&*_]/;
     return password.length >= 8 && specialCharacterRegex.test(password);
   };
 
-  // handle the form submission
   const handleSignup = async (e) => {
     e.preventDefault();
-
-    // check if empty
     let newErrors = {};
     if (!username) newErrors.username = "Username is required";
     if (!email) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
     if (!confirmPassword) newErrors.confirmPassword = "Confirm Password is required";
 
-    // password validation
     if (password && !validatePassword(password)) {
       newErrors.password = "Password must be at least 8 characters & contain a special character (!@#$%^&*_)";
     }
-    // check matching password
     if (password && confirmPassword && password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match!";
     }
-    // if theres is error, user unable to submit the form
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // if no error, user able to submit the form
     try {
       const response = await axios.post('http://localhost:8080/signup', {
-        username: username,
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
       });
       console.log(response.data);
 
-      // no error pop out success message
       setErrors({});
       setSuccess(true);
 
-      // clear input after submission
+      setTimeout(() => {
+        setSuccess(false);
+        navigate('/Login'); // Redirect to login after success
+      }, 1000); // 3-second delay before redirect
+
       setUsername("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Error during signup:", error);
-      if(error.status === 409){
+      if (error.response && error.response.status === 409) {
         setErrors({ email: "Email is already being used!" });
       }
     }
-
-    // timer for success message
-    setTimeout(() => setSuccess(false), 10000);
   };
 
   return (
@@ -89,7 +76,7 @@ function Signup() {
 
         {success && (
           <div className="success-message">
-            Signup Successful! Redirecting To Dashboard
+            Signup Successful! Redirecting To Login...
           </div>
         )}
 
@@ -176,6 +163,5 @@ function Signup() {
     </div>
   );
 }
-
 
 export default Signup;
