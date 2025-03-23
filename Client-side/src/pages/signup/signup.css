@@ -190,17 +190,16 @@ h2 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* responsive styling */
+
 @media (max-width: 768px) {
   .auth-container {
     flex-direction: column;
   }
   .auth-image {
-    height: 250px;
+    display: none !important;
   }
 }
 
-/* consistency of margins */
 * {
   margin: 0;
   padding: 0;
