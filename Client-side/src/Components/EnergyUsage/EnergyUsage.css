@@ -142,12 +142,18 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .card {
+    overflow-y: auto;
+    overflow-x: auto;
     width: 90%;
     height: 1300px; /* Allow content to determine height */
     min-height: 100vh; /* Ensure full viewport coverage */
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto auto;
     gap: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     grid-template-areas:
       "header"
       "EnergyUsage"

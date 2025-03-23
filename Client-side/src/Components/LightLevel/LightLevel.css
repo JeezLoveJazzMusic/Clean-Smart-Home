@@ -156,6 +156,8 @@
 
 @media (max-width: 768px) {
   .card2 {
+    overflow-y: auto;
+    overflow-x: auto;
     width: 90%;
     height: 1200px;
     min-height: 100vh; /* Ensure full viewport coverage */

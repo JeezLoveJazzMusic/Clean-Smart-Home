@@ -162,6 +162,10 @@
 
 @media (max-width: 768px) {
   .card1 {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 90%;
     height: 1200px; /* Allow content to determine height */
     min-height: 100vh; /* Ensure full viewport coverage */

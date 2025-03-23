@@ -1,6 +1,8 @@
 /*Made by Joe */
 .card3{ 
   position: relative;
+  overflow-y: auto;
+  overflow-x: auto;
   width: 1200px;
   height: 770px;
   margin: 80px auto;
