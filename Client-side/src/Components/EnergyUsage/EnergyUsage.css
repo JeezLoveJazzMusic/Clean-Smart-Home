@@ -1,10 +1,10 @@
-/*Made by Joe */
+/* General Card Styling */
 .card {
   position: relative;
-
-  width: 1200px;
-  height: 790px;
-  margin: 80px auto;
+  height: 700px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
@@ -14,26 +14,22 @@
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto auto auto;
   gap: 20px;
-  border-left: 2px solid #000000;
-  border-right: 2px solid #000000;
-  border-top: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 2px solid #000000;
   grid-template-areas:
     "header header"
     "EnergyUsage info"
     "chart info";
 }
 
-/*Made by Joe */
+/* Header Section */
 .card-header {
   grid-area: header;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1px;
+  padding-bottom: 10px;
 }
 
-/*Made by Joe */
 .card-header h2 {
   font-size: 2rem;
   font-weight: bold;
@@ -41,7 +37,7 @@
   margin: 0;
 }
 
-/*Made by Joe */
+/* Share Button */
 .share-button {
   padding: 12px 25px;
   border: none;
@@ -53,53 +49,48 @@
   transition: background-color 0.3s ease;
 }
 
-/*Made by Joe */
 .share-button:hover {
   background-color: #60A5FA;
-  color: #ffffff;
 }
 
-/*Made by Joe */
+/* Energy Usage Info */
 .EnergyUsage-info {
   grid-area: EnergyUsage;
-  padding: 10px;
+  padding: 15px;
   background: #f9f9f9;
-  border-radius: 30px;
+  border-radius: 20px;
 }
 
-/*Made by Joe */
 .EnergyUsage-info h3 {
   font-size: 1.2rem;
-  margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #333;
 }
 
-/*Made by Joe */
 .EnergyUsage-info p {
-  font-size: 1.4rem; /* Improved readability */
-  line-height: 1.6; /* Better spacing between lines */
-  margin: 8px 0; /* Consistent spacing */
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 5px 0;
 }
 
-/*Made by Joe */
+/* Chart Container */
 .chart-container {
   grid-area: chart;
   height: 350px;
   padding: 20px;
   background: #f9f9f9;
-  border-radius: 60px;
+  border-radius: 20px;
 }
 
-/*Made by Joe */
+/* Info Section */
 .info-section {
   grid-area: info;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 
-/*Made by Joe */
+/* Tips, Alerts, and Recommendations */
 .tips, .energy-alert, .recommendations {
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
@@ -108,61 +99,111 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/*Made by Joe */
 .tips ul {
   list-style-type: disc;
-  padding-left: 8px;
-  margin: 4px 0;
+  padding-left: 15px;
+  margin: 5px 0;
 }
 
-/*Made by Joe */
 .tips ul li {
-  margin-bottom: 0.9px;
+  margin-bottom: 5px;
   line-height: 1.5;
 }
 
-/*Made by Joe */
+/* Alert and Section Borders */
 .energy-alert {
-  border-left: 8px solid #ff9800;
-  border-right: 8px solid #ff9800;
+  border-left: 6px solid #ff9800;
 }
 
-/*Made by Joe */
 .recommendations {
-  border-left: 8px solid #2196f3;
-  border-right: 8px solid #2196f3;
+  border-left: 6px solid #2196f3;
 }
 
-/*Made by Joe */
 .tips {
-  border-left: 8px solid #e54c4c;
-  border-right: 8px solid #e54c4c;
+  border-left: 6px solid #e54c4c;
 }
 
-.EnergyUsage-back-btn {
-  /*Made by Joe */
-  background-color: #ddd;
-  color: black;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-top: 20px;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
+
+
 .back-ButtonInEnergyUsage {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  padding: 10px 15px;
+  padding: 8px 12px;
   font-size: 14px;
   background-color: #f87171;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    overflow-y: auto;
+    overflow-x: auto;
+    width: 90%;
+    height: 1300px; /* Allow content to determine height */
+    min-height: 100vh; /* Ensure full viewport coverage */
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-template-areas:
+      "header"
+      "EnergyUsage"
+      "chart"
+      "info";
+    overflow: hidden; /* Ensure no extra gaps */
+  }
+
+  .card-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .share-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+
+  .EnergyUsage-info {
+    padding: 10px;
+    border: 2px solid #000000;
+  }
+
+  .EnergyUsage-info h3 {
+    font-size: 1rem;
+  }
+
+  .EnergyUsage-info p {
+    font-size: 1rem;
+    word-spacing: 2px;
+  }
+
+  .chart-container {
+    height: auto; /* Allow it to resize */
+    width: 100%;
+    padding: 10px;
+  }
+
+  .info-section {
+    width: 100%;
+    gap: 15px;
+  }
+
+  .tips, .energy-alert, .recommendations {
+    padding: 10px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  .back-ButtonInEnergyUsage {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
 }
