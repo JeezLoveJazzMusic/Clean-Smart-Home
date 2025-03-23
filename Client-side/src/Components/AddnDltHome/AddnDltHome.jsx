@@ -20,20 +20,13 @@ const AddHome = () => {
   const MAX_LENGTH = 20; // Maximum character limit
 
   const [homes, setHomes] = useState(() => {
-    if (allHouses && allHouses.length) {
+   
       return allHouses.map((house) => ({
         id: house.house_id,
         name: house.house_name,
         image: selectImage(house.house_id),
         user_type: house.user_type,
       }));
-    } else {
-      return [
-        { id: 1, name: "Default Home 1", image: addHome1, user_type: "owner" },
-        { id: 2, name: "Default Home 2", image: addHome2, user_type: "owner" },
-        { id: 3, name: "Default Home 3", image: addHome3, user_type: "owner" },
-      ];
-    }
   });
 
   useEffect(() => {
@@ -195,7 +188,7 @@ const AddHome = () => {
             type="text"
             placeholder="Enter House Name (max 20 characters)"
             value={newHomeName}
-            onChange={(e) => setNewHomeName(e.target.value)}
+            onChange={(e) => setNewHomeName(e.target.value || "")}
             maxLength={MAX_LENGTH}
             required
           />
@@ -204,7 +197,7 @@ const AddHome = () => {
             type="text"
             placeholder="Enter Home Address"
             value={newHomeAddress}
-            onChange={(e) => setNewHomeAddress(e.target.value)}
+            onChange={(e) => setNewHomeAddress(e.target.value || "")}
           />
           <div className="AddnDltHome-modal-buttons">
             <button className="AddnDltHome-create-btn" onClick={handleAddHome}>

@@ -99,7 +99,6 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  grid-template-columns: repeat(6, 1fr); /* Exactly 6 columns */
   overflow-x: auto; /* Enable horizontal scrolling if needed */
   overflow-y: hidden; /* Prevent vertical scrolling */
 }
@@ -277,7 +276,8 @@
     width: 100%;
     padding: 15px;
     border-radius: 15px;
-    max-height: 100vh; /* Ensure full viewport coverage */
+    height: 200px;
+    min-height: 100vh; /* Ensure full viewport coverage */
     grid-template-columns: 1fr;
     overflow: hidden; /* Prevents content from overflowing */
     overflow-y: auto;
@@ -329,10 +329,9 @@
   margin-top: 70px;
   display: flex;
   align-items: center;
-  overflow-x: auto;
   overflow-y: auto; /* Enables vertical scrolling */
   max-height: 60vh; /* Limits height to allow scrolling */
-  width: 100%; /* Ensures it takes full container width */
+  width: 80%; /* Ensures it takes full container width */
   padding-right: 10px; /* Prevents content from hiding under scrollbar */
 
 }

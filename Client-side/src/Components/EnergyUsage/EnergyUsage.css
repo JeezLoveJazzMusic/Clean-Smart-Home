@@ -143,7 +143,7 @@
 @media (max-width: 768px) {
   .card {
     width: 90%;
-    height: 1200px; /* Allow content to determine height */
+    height: 1300px; /* Allow content to determine height */
     min-height: 100vh; /* Ensure full viewport coverage */
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto auto;
