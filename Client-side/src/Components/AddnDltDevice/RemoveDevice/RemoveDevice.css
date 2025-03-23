@@ -106,9 +106,11 @@
 }
 
 .RemoveDevice-back-button-container {
-  display: flex;
+  display: absolute; /* Adjusts button position */
   justify-content: flex-end; /* Aligns button to the right */
   margin-top: 10px; /* Adjust spacing from other elements */
+  bottom: 20px;
+  right: 20px;
 }
 
 .RemoveDevice-back-button {
@@ -123,8 +125,8 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  bottom: 80px;
-  right: 400px;
+  bottom: 20px;
+  right: 20px;
 
 }
 
@@ -206,9 +208,11 @@
   }
 
   .RemoveDevice-back-button-container {
-    display: flex;
+    display: absolute;
     justify-content: flex-end;
     margin-top: 16px;
+    bottom: 20px;
+    right: 20px;
   }
 
   .RemoveDevice-back-button {
@@ -220,5 +224,8 @@
     font-weight: bold;
     border: none;
     cursor: pointer;
+    display: absolute;
+    bottom: 20px;
+    right: 20px;
   }
 }
