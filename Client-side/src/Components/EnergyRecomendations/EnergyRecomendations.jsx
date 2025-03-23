@@ -37,11 +37,12 @@ const EnergyRecomendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const averageConsumption = state?.averageConsumption;
   const houseID = state?.currentHouse
+  const dwellersList = state?.dwellersList;
 
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/getHouseRecommendation/house/${houseID}`
+        `http://localhost:8080/getHouseRecommendation/house/${houseID}/occupants/${dwellersList.length}`
       );
       setRecommendations(response.data.recommendation);
     } catch (error) {
@@ -49,8 +50,11 @@ const EnergyRecomendations = () => {
     }
   };
 
+    
+
   useEffect(() => {
     fetchRecommendations();
+    console.log("recc dwellersList:", dwellersList);
     console.log("house recommendations:", recommendations);
   }, []);
 

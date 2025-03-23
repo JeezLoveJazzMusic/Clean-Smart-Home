@@ -29,7 +29,7 @@ ChartJS.register(
   Legend
 );
 
-function Graphs({ currentHouse }) {
+function Graphs({ currentHouse, dwellersList }) {
   const navigate = useNavigate();
   const [averageConsumption, setAverageConsumption] = useState([]);
 
@@ -104,7 +104,7 @@ const lineData = {
           </div>
           <button
             onClick={() =>
-              navigate("/EnergyRecomendations", { state: { averageConsumption, currentHouse } })
+              navigate("/EnergyRecomendations", { state: { averageConsumption, currentHouse, dwellersList } })
             }
             className="Navigate-btn"
           >
