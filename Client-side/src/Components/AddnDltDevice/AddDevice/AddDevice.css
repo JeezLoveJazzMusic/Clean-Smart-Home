@@ -92,3 +92,45 @@
   background: #b7e4c7;
   color: #1b4332;
 }
+
+@media (max-width: 600px) {
+  .popup-content {
+    width: 90vw;
+    padding: 15px;
+  }
+
+  .device-input {
+    grid-template-columns: 1fr; 
+    gap: 5px;
+  }
+
+  .device-input label {
+    font-size: 16px;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .device-input input,
+  .device-input select {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .AddDevice-button-group {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 3vh;
+  }
+
+  .AddDevice-confirm-btn,
+  .AddDevice-cancel-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .popup-content h2 {
+    font-size: 24px;
+    text-align: center;
+  }
+}

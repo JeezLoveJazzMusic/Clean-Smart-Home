@@ -137,21 +137,38 @@
     background: #95d5b2;
 }
 
-
-@media screen and (max-width: 1024px) {
-    .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); 
+@media screen and (max-width: 600px) {
+    .removeroom-modal {
+      width: 90vw; 
+      max-height: 85vh;
+      margin: 0 auto;
+      overflow-y: auto;
+      display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
-}
-
-@media screen and (max-width: 768px) {
+  
     .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); 
+      grid-template-columns: repeat(1, 1fr);
+      min-height: 400px;
     }
-}
-
-@media screen and (max-width: 480px) {
-    .removeroom-list {
-        grid-template-columns: repeat(3, 1fr); 
+  
+    .removeroom-item {
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
     }
-}
+  
+    .removeroom-name {
+      max-width: 100%;
+      white-space: normal;
+      overflow: visible;
+      text-align: left;
+    }
+  
+    .removeroom-delete-btn {
+      align-self: flex-end;
+      margin-top: 8px;
+    }
+  }
+  
