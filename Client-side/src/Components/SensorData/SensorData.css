@@ -2,7 +2,8 @@
 
 /*Fix by Joe ( change the grid  position and also classname ) */
 .sensor-data-container1 {
-  background-color: rgb(253, 253, 253);  padding: 0px;
+  background-color: rgb(253, 253, 253);  
+  padding: 0px;
   border-radius: 40px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -12,7 +13,7 @@
   margin: 0 auto;
   padding: 20px;
   align-items: center;
-  }
+}
 
 /*Fix by Joe */
 .welcome-text1 {
@@ -51,13 +52,13 @@
   align-items: left;
   background-color: #B7E4BD;
   padding: 30px;
-  width: 280px ;
+  width: 280px;
   height: 160px;
   cursor: pointer;
   border: none;
   box-shadow: none;
   text-align: left;
-  margin-right : 10px;
+  margin-right: 10px;
   border-radius: 20px;
 }
 
@@ -104,12 +105,70 @@
   align-items: center;
   grid-column: 2; /* Place the weather box in the third column */
   gap: 20px;
- 
 }
 
 /*Fix by Joe */
 .sensor-data-weather-icon {
   width: 100px;
   height: 100px;
- 
+}
+
+/* Mobile-specific styles for portrait mode */
+@media (max-width: 600px) and (orientation: portrait) {
+  .sensor-data-container1 {
+    padding: 10px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 422px;
+    height: auto;
+    margin-left: 0px;
+  }
+
+  .welcome-text1 {
+    font-size: 30px;
+  }
+
+  .sensor-data1 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .sensor-data-grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 10px;
+    height: auto;
+  }
+
+  .sensor-data-data-box {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    margin-right: 0; /* Remove margin-right */
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .label {
+    font-size: 20px;
+  }
+
+  .value {
+    font-size: 18px;
+  }
+
+  .sensor-data-weather-box {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    padding: 20px;
+  }
+
+  .sensor-data-weather-icon {
+    width: 80px;
+    height: 80px;
+  }
 }

@@ -1,72 +1,94 @@
 /* main container for the overall users section  */
 .UserDasboard-container {      /*( fix by Joe)*/
   background-color: rgb(253, 253, 253);
-    padding: 10px;
-    border-radius: 40px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    height: 100%;  /*change from 20vh to 95%( from Joe )*/
-    margin-top: 0%;
-    margin-bottom: 0%;
-  }
-  
-  h6 {
-    font-family: "Inria serif", serif;
-    text-align: left;
-    margin: 0;
-    font-size: 35px;
-    color: #000000;
-    margin-left: 20px;
-  }
-  
-  /* to show the list of users */
-  .UserDasboard-container-user-list {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-  }
-  
-  /* each individual user avatar */
-  .UserDasboard-user-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-      align-items: center;
-      justify-content: center; 
-    cursor: pointer;
-     transition: transform 0.2s ease-in-out; 
-  }
-  
-  /* image inside the user avatar */
-  .UserDasboard-user-avatar img {
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* hover effect */
-  .UserDasboard-user-avatar img:hover {
-    transform: scale(1.1);
-  }
-  
-  /* add user button */
-  .UserDasboard-add-user {     /*( fix by Joe)*/
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-    border: 3px solid black;
+  padding: 10px;
+  border-radius: 40px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;  /*change from 20vh to 95%( from Joe )*/
+  margin-top: 0%;
+  margin-bottom: 0%;
+}
+
+h6 {
+  font-family: "Inria serif", serif;
+  text-align: left;
+  margin: 0;
+  font-size: 35px;
+  color: #000000;
+  margin-left: 20px;
+}
+
+/* to show the list of users */
+.UserDasboard-container-user-list {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+/* each individual user avatar */
+.UserDasboard-user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out; 
+}
+
+/* image inside the user avatar */
+.UserDasboard-user-avatar img {
+  width: 100%;
+  height: 100%;
+}
+
+/* hover effect */
+.UserDasboard-user-avatar img:hover {
+  transform: scale(1.1);
+}
+
+/* add user button */
+.UserDasboard-add-user {     /*( fix by Joe)*/
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  border: 3px solid black;
 }
 
 /* image of the add user button *//*( fix by Joe)*/
 .UserDasboard-add-user img {    
-    width: 150%;
-    height: 190%;
-    object-fit: cover; /* Ensures the image covers the entire circle without distortion */
+  width: 150%;
+  height: 190%;
+  object-fit: cover; /* Ensures the image covers the entire circle without distortion */
+}
+
+/* Mobile-specific styles for portrait mode */
+@media (max-width: 600px) and (orientation: portrait) {
+  .UserDasboard-container {
+    padding: 10px;
+    border-radius: 40px;
+    width: 100%;
+    max-width: 422px;
+    height: auto;
+
+  }
+  h6 {
+    font-size: 25px;
+    margin-left: 10px;
+  }
+
+  .UserDasboard-container-user-list {
+    flex-direction: row;
+    gap: 5px;
+    margin-top: 10px;
+  }
 }

@@ -125,6 +125,12 @@ const AddHome = () => {
 
   return (
     <div className="AddnDltHome-container">
+            <button
+        onClick={() => navigate(-1)}
+        className="AddnDltHome-main-back-btn"
+      >
+        ⬅ Back
+      </button>
       <div className="AddnDltHome-header1">
         <h2>Home</h2>
         {!isDeleting && (
@@ -214,12 +220,6 @@ const AddHome = () => {
         </div>
       )}
 
-      <button
-        onClick={() => navigate(-1)}
-        className="AddnDltHome-main-back-btn"
-      >
-        ⬅ Back
-      </button>
     </div>
   );
 };

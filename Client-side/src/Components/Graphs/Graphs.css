@@ -65,3 +65,36 @@
   height: 50px; /* Adjust size as needed */
   margin-right: 10px; /* Add space between icon and text */
 }
+
+/* Mobile-specific styles for portrait mode */
+@media (max-width: 600px) and (orientation: portrait) {
+  .graphs-container1 {
+    padding: 10px;
+    border-radius: 40px;
+    width: 100%;
+    height: auto;
+    max-width: 422px;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .line-boxingraph {
+    width: 100%;
+    max-height: 300px; /* Adjust max height for smaller screens */
+    max-width: 422px;
+  }
+
+  .Navigate-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .iconfoaibot {
+    width: 40px;
+    height: 40px;
+  }
+}

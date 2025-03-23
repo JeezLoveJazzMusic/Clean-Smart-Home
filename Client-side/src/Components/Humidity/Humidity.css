@@ -63,6 +63,10 @@
   padding: 20px;
   background: #f9f9f9;
   border-radius: 30px;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 /*Made by Joe */
@@ -150,4 +154,71 @@
   border-radius: 5px;
   cursor: pointer;
   z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .card3 {
+    width: 90%;
+    height: 1200px; /* Allow content to determine height */
+    min-height: 100vh; /* Ensure full viewport coverage */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 15px;
+    grid-template-areas:
+      "header"
+      "Humidity"
+      "chart"
+      "info";
+  }
+
+  .card3-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .share-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .Humidity-info {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    border-radius: 20px;
+  }
+
+  .Humidity-info h3 {
+    font-size: 1rem;
+  }
+
+  .Humidity-info p {
+    font-size: 1.2rem;
+    word-spacing: 2px;
+  }
+
+  .chart-container {
+    height: 350px;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .info-section {
+    width: 100%;
+    gap: 15px;
+  }
+
+  .tips, .energy-alert, .recommendations {
+    padding: 15px;
+    height: auto;
+    text-align: center;
+  }
+
+  .back-ButtonInHumidity {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
 }
