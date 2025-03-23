@@ -140,7 +140,7 @@
 @media screen and (max-width: 600px) {
     .removeroom-modal {
       width: 90vw; 
-      max-height: 85vh;
+      max-height: 100vh;
       margin: 0 auto;
       overflow-y: auto;
       display: flex;
