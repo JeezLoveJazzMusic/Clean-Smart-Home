@@ -744,7 +744,7 @@ function parseHomeIOData(data) {
 
 // Function to store the parsed data in the database.
 async function storeParsedData(house_id, data) {
-  house_id = 27;
+  house_id = 1;
 
   // Step 1: Parse the data
   const parsedData = parseHomeIOData(data);
@@ -854,7 +854,7 @@ async function parseSmartMeterData(row) {
 
 // Store smart meter data
 async function storeSmartMeterData(parsedData) {
-  const house_id = 27;
+  const house_id = 1;
   const device_type = "smd";
   const device_number = 1;
   const state_key = "smart meter";
