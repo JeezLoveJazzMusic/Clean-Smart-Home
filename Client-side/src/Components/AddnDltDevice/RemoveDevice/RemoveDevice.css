@@ -125,8 +125,8 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  bottom: 20px;
-  right: 20px;
+  bottom: 80px;
+  right: 400px;
 
 }
 
@@ -141,10 +141,11 @@
     max-height: 85vh;
     overflow-y: auto;
     border-radius: 12px;
-    display: flex;
+    display: relac;
     flex-direction: column;
     justify-content: space-between;
     background-color: #f4f3ee;
+    position: relative;
   }
 
   .RemoveDevice-popup-title {
@@ -216,16 +217,14 @@
   }
 
   .RemoveDevice-back-button {
-    padding: 10px 18px;
-    font-size: 15px;
-    border-radius: 20px;
-    background-color: #b7e4c7;
-    color: #1b4332;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    display: absolute;
+    position: absolute;
+    margin: 10px auto;
+    padding: 8px 16px;
+    font-size: 14px;
     bottom: 20px;
     right: 20px;
+
   }
+
+
 }
