@@ -45,6 +45,8 @@ const EnergyRecomendations = () => {
     },
     suggestions: []
   });
+  const [pastEnergy, setPastEnergy] = useState();
+
   const averageConsumption = state?.averageConsumption;
   const houseID = state?.currentHouse;
   const dwellersList = state?.dwellersList;
@@ -59,6 +61,7 @@ const EnergyRecomendations = () => {
         `http://localhost:8080/getHouseRecommendation/house/${houseID}/occupants/${dwellersList.length}`
       );
       console.log("API response:", response.data);
+      setPastEnergy(response.data.pastEnergyConsumption)
       setRecommendations(response.data.recommendation);
       setIsLoading(false);
     } catch (error) {
@@ -74,7 +77,7 @@ const EnergyRecomendations = () => {
 
   /* Data for Line Chart */
   const fallbackMonths = Array.from({ length: 16 }, (_, i) => (i + 1).toString());
-  const fallbackValues = [200, 300, 260, 230, 360, 350, 250, 400, 320, 280, 230, 300, 350, 220, 340, 345];
+  const fallbackValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   const lineData = {
     labels: averageConsumption && averageConsumption.months && averageConsumption.months.length > 0
@@ -169,7 +172,8 @@ const EnergyRecomendations = () => {
             <p>Loading energy data...</p>
           ) : (
             <>
-              <p>Expected Energy Usage: {recommendations.expected_usage?.toFixed(2)} KWH</p>
+              <p>Last Month Usage: {pastEnergy} kWh</p>
+              <p>Expected Energy Usage: {recommendations.expected_usage?.toFixed(2)} kWh</p>
               <p>Carbon Emissions: {recommendations.carbon_emissions?.toFixed(2)} KG</p>
               <p>Estimated Bill: RM {recommendations.cost?.toFixed(2)}</p>
               <p>Prediction: {recommendations.prediction}</p>

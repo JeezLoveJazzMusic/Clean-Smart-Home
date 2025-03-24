@@ -75,6 +75,8 @@ const UserProfile = ({ onClose, thisUserID, thisHouse, }) => {
     <div className="profile-card">
       {/* Back Button to Close Pop-up */}
       <button onClick={onClose} className="back-UserProfileMenubtn">Back</button>
+      <button onClick={() => navigate("/login")} className="logoffbtn">Log Off</button>
+
       
       <div className="profile-image">
         <input type="file" accept="image/*" onChange={handleImageChange} hidden id="fileUpload" />

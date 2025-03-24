@@ -121,10 +121,8 @@
   opacity: 0.9;
   word-wrap: break-word; /* Break long words */
   overflow-wrap: break-word;
-  /* border-left: 2px solid #000000;
-  border-right: 2px solid #000000;
-  border-top: 2px solid #000000;
-  border-bottom: 2px solid #000000; */
+  white-space: normal; /* Allows text wrapping at spaces */
+
    border-radius: 10px;
 }
 
@@ -155,10 +153,6 @@
   justify-content: center;
   word-wrap: break-word;     /* Break long words */
   overflow-wrap: break-word;
-  border-left: 2px solid #000000;
-  border-right: 2px solid #000000;
-  border-top: 2px solid #000000;
-  border-bottom: 2px solid #000000;
    border-radius: 10px;
 }
 
@@ -362,18 +356,18 @@
 
 
   .AddnDltHome-item-container {
-    width: 100px;
+    width: 150px;
     height: 100px;
   }
 
   .AddnDltHome-item {
     font-size: 1rem;
-    width: 100px;
+    width: 150px;
     height: 100px;
   }
 
   .AddnDltHome-home-name {
-    max-width: 8ch;
+    max-width: 10ch;
     font-size: 1rem;
   }
 

@@ -2,7 +2,7 @@
 .cardforEnergyRecomendations {
     position: relative;
     width: 1350px;
-    height: 820px;
+    height: 880px;
     margin: 80px auto;
     padding: 20px;
     border-radius: 20px;
@@ -81,7 +81,7 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    height: 200px;
+    height: auto;
     
 }
 

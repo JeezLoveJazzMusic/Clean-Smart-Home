@@ -68,6 +68,22 @@ button {
   border: 1px solid black;
 }
 
+.logoffbtn{
+  background: #f8d7da;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  padding: 7px 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  top:  2px;
+  right: 5px;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
 button:hover {
   background: #a3d4a3;
 }

@@ -962,7 +962,7 @@ router.get("/getHouseRecommendation/house/:house_id/occupants/:occ_no", async (r
 
   const recommendation = analyzeEnergyUsage(prediction, pastEnergyConsumption);
 
-  res.status(200).send({ message: "Routes: House recommendation successfully retrieved", recommendation });
+  res.status(200).send({ message: "Routes: House recommendation successfully retrieved", recommendation, pastEnergyConsumption });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Routes: An error occurred while getting house recommendation" });
