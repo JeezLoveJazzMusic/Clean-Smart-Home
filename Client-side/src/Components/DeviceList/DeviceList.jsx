@@ -98,7 +98,7 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
 
   // Convert string "true"/"false" to actual boolean values when initializing state
   const processDevices = (devices) => {
-    return devices.map(device => ({
+    return (devices || []).map(device => ({
       ...device,
       // Convert string "true"/"false" to boolean
       device_power: device.device_power === "true"

@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [sendRoomData, setSendRoomData] = useState({});
+  const [sendRoomDataStatus, setSendRoomDataStatus] = useState(false);
   const [HouseDataTest, setAllUserHouseData] = useState([]); //newest changes
   const [userDetails, setUserData] = useState(null);
   const [currentRoom, setCurrentRoom] = useState("");
@@ -87,6 +88,7 @@ const Dashboard = () => {
   };
 
   const fetchDashboardData = async (houseId) => {
+    setSendRoomData(false);
     if (!houseId) return;
     console.log("Fetching data for houseID:", houseId);
     try {
@@ -111,6 +113,7 @@ const Dashboard = () => {
         }
       }
       setSendRoomData(roomData);
+      setSendRoomDataStatus(true);
       console.log("sendRoomData:", roomData);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -170,7 +173,7 @@ const Dashboard = () => {
 
       {/* Device List */}
       <div className="device-dashboard">
-        {sendRoomData && Object.keys(sendRoomData).length > 0 ? (
+        {sendRoomDataStatus ? (
         <DeviceList
           rooms={sendRoomData}
           initialRoom={Object.keys(sendRoomData)[0]}
