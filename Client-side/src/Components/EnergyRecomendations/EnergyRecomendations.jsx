@@ -133,9 +133,6 @@ const EnergyRecomendations = () => {
     <div className="cardforEnergyRecomendations">
       <div className="cardforEnergyRecomendations-header">
         <h2>Energy Recommendations</h2>
-        <button className="share-button" onClick={openShareSensorData}>
-          Share Data
-        </button>
       </div>
 
       {/* Power Usage Section */}
