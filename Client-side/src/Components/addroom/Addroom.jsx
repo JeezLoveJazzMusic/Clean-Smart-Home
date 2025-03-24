@@ -26,7 +26,7 @@ const AddRoom = ({ isOpen, onClose, currentHouse, onRoomAdded }) => {
   // Function to add a new room
   const handleConfirm = async () => {
     if (roomName.trim() === "") {
-      setError("Please enter a valid room name.");
+      alert("Error: Room name cannot be empty. Please enter a valid name.");
       return;
     }
 
