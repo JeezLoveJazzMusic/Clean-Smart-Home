@@ -69,13 +69,12 @@ const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
           ))}
         </div>
 
-        <div className="RemoveDevice-back-button-container">
         <button className="RemoveDevice-back-button" onClick={onClose}>
             Back
           </button>
           </div>
       </div>
-    </div>
+
   );
 };
 

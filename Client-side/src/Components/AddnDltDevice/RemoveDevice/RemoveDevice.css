@@ -21,6 +21,7 @@
   width: 60vw;
   max-width: 60vw;
   height: 85vh;
+  position: relative;
 }
 
 .RemoveDevice-popup-title-box {
@@ -125,8 +126,8 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  bottom: 80px;
-  right: 320px;
+  bottom: 20px;
+  right: 20px;
 
 }
 
