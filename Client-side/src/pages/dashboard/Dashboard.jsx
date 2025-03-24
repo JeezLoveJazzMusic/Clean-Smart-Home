@@ -10,7 +10,7 @@ import Graphs from "../../Components/Graphs/Graphs";
 import UserProfile from "../../Components/UserProfileMenu/UserProfileMenu"; // Import the pop-up
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import DDTlogo from "../../assets/DDT-new-logo1.png";
-import { useLocation } from "react-router-dom";
+import {useNavigate, useLocation } from "react-router-dom";
 import Loading from "../../Components/Loading/Loading";
 
 const Dashboard = () => {
@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [currentRoom, setCurrentRoom] = useState("");
   const location = useLocation();
   const { userID, houseList } = location.state || {};
+  const navigate = useNavigate();
 
   const [currentHouseId, setCurrentHouseId] = useState(null);
   const [currentRoomID, setCurrentRoomID] = useState(null);
@@ -160,7 +161,7 @@ const Dashboard = () => {
         <div className="no-house-message">
           <p>Your current account has no house. Please add a house.</p>
           <button
-            onClick={() => navigate("/AddnDltHome", { state: { allHouses, currentUserID } })}
+            onClick={() => navigate("/AddnDltHome", { state: { allHouses: HouseDataTest, currentUserID: userID } })}
             className="go-home-config-button"
           >
             Add a home
