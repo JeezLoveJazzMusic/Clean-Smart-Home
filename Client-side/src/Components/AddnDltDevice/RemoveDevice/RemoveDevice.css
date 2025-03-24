@@ -12,6 +12,7 @@
 }
 
 .RemoveDevice-popup-container {
+  position: relative;
   font-family: "Inria Serif", serif;
   font-weight: bold;
   color: #1b4332;
@@ -116,8 +117,7 @@
 .RemoveDevice-back-button {
   position: absolute;
   font-family: "Inria Serif", serif;
-  display: block;
-  margin: 20px auto 0;
+  display: flex;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
@@ -125,8 +125,8 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  bottom: 80px;
-  right: 320px;
+  bottom: 20px;
+  right: 20px;
 
 }
 
