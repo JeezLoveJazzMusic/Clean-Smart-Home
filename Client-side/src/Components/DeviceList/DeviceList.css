@@ -174,14 +174,15 @@
 
 .dropdown-option {
   padding: 5px 10px;
-  width: 150px;
+  width: 150px; /* Ensures a fixed width */
   display: flex;
   font-family: Inria, serif;
-  max-width: 15ch; /* Limits the width to approximately 10 characters */
-  word-wrap: break-word; /* Allows long words to break */
+  word-wrap: break-word; /* Helps wrap long words */
   overflow-wrap: break-word; /* Ensures breaking works in all browsers */
-  white-space: normal; /* Allows text wrapping at spaces */
+  white-space: normal; /* Allows text wrapping */
+  word-break: break-word; /* Ensures breaking for long words */
 }
+
 
 .dropdown-option:hover {
   background-color: #50cb61;
@@ -239,7 +240,8 @@
   .room-button {
     margin-bottom: 10px;
     right: 0px;
-    width: 120px;
+    width: auto;
+    
     
   }
 
@@ -277,12 +279,21 @@
   }
 
   .dropdown-menu {
-    width: 100px;
+    width: 150px;
   }
 
   .dropdown-option {
-    width: 10px;
+    width: 140px; /* Reduce width slightly for smaller screens */
+    font-size: 14px; /* Slightly smaller text for better fit */
   }
+}
+
+/* Extreme case: Force break for extra-long words */
+.dropdown-option span {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere; /* Breaks words anywhere if necessary */
+}
 
   .menu-dropdown {
     width: 150px;

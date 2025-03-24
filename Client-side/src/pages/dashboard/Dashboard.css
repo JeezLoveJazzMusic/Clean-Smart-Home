@@ -13,6 +13,8 @@
   gap: 10px;
   overflow: hidden;
   box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 /* Header styling */  /*( fix by Joe)*/

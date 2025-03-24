@@ -126,7 +126,13 @@
 
   .welcome-text1 {
     font-size: 30px;
+    max-width: 100%; /* Ensures text does not overflow the container */
+    overflow-wrap: break-word; /* Allows breaking of long words */
+    word-wrap: break-word; /* Alternative for compatibility */
+    white-space: normal; /* Ensures text wraps to a new line if needed */
+    text-align: center; /* Optional: Centers the text inside the container */
   }
+  
 
   .sensor-data1 {
     grid-template-columns: 1fr;
