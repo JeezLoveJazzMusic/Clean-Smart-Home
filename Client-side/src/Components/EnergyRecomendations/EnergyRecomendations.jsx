@@ -1,8 +1,10 @@
 /* Made by Joe */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./EnergyRecomendations.css";
 import { Line } from "react-chartjs-2";
+import axios from "axios";
 
 import {
   Chart as ChartJS,
@@ -30,20 +32,51 @@ ChartJS.register(
 // Ensure consistent naming
 const EnergyRecomendations = () => {
   const navigate = useNavigate(); // Navigate function
+  const { state } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [recommendations, setRecommendations] = useState([]);
+  const averageConsumption = state?.averageConsumption;
+  const houseID = state?.currentHouse
+  const dwellersList = state?.dwellersList;
+
+  const fetchRecommendations = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/getHouseRecommendation/house/${houseID}/occupants/${dwellersList.length}`
+      );
+      setRecommendations(response.data.recommendation);
+    } catch (error) {
+      console.error("Error fetching energy recommendations:", error);
+    }
+  };
+
+    
+
+  useEffect(() => {
+    fetchRecommendations();
+    console.log("recc dwellersList:", dwellersList);
+    console.log("house recommendations:", recommendations);
+  }, []);
 
   /* Data for Line Chart */
+  const fallbackMonths = Array.from({ length: 16 }, (_, i) => (i + 1).toString());
+  const fallbackValues = [200, 300, 260, 230, 360, 350, 250, 400, 320, 280, 230, 300, 350, 220, 340, 345];
+
   const lineData = {
-    labels: Array.from({ length: 16 }, (_, i) => (i + 1).toString()),
+    labels: averageConsumption && averageConsumption.months && averageConsumption.months.length > 0
+      ? averageConsumption.months
+      : fallbackMonths,
     datasets: [
       {
         label: "Power Usage",
-        data: [200, 300, 260, 230, 360, 350, 250, 400, 320, 280, 230, 300, 350, 220, 340, 345],
+        data: averageConsumption && averageConsumption.values && averageConsumption.values.length > 0
+          ? averageConsumption.values
+          : fallbackValues,
         borderColor: "green",
         borderWidth: 2,
         pointRadius: 5,
         pointBackgroundColor: "green",
-        fill: false, // No background fill
+        fill: false,
       },
     ],
   };
@@ -56,13 +89,13 @@ const EnergyRecomendations = () => {
       x: {
         title: {
           display: true,
-          text: "Time",
+          text: "Month",
         },
       },
       y: {
         title: {
           display: true,
-          text: "Usage",
+          text: "kWh",
         },
         beginAtZero: true,
       },

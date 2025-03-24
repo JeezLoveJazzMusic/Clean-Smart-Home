@@ -744,7 +744,7 @@ function parseHomeIOData(data) {
 
 // Function to store the parsed data in the database.
 async function storeParsedData(house_id, data) {
-  house_id = 1;
+  house_id = 27;
 
   // Step 1: Parse the data
   const parsedData = parseHomeIOData(data);
@@ -849,7 +849,7 @@ async function parseSmartMeterData(row) {
 
 // Store smart meter data
 async function storeSmartMeterData(parsedData) {
-  const house_id = 1;
+  const house_id = 27;
   const device_type = "smd";
   const device_number = 1;
   const state_key = "smart meter";
@@ -1563,30 +1563,79 @@ async function getRoomName(room_id) {
   }
 }
 
+// New version for calculating average energy usage across rooms in a house
+// New version for calculating average energy usage across rooms in an entire house using latest daily data
 async function getPreviousMonthHouseAverage(house_id, device_type) {
+  try {
+    // Step 1: Get all room IDs for the house.
+    const roomResult = await turso.execute({
+      sql: "SELECT room_id FROM rooms WHERE house_id = ?",
+      args: [house_id],
+    });
+    const roomIds = roomResult.rows.map(row => row.room_id);
+    if (!roomIds || roomIds.length === 0) {
+      console.warn("No rooms found for house:", house_id);
+      return null;
+    }
+
+    // Step 2: For each room, get the previous month average energy usage
+    // using the latest reading per day.
+    const roomAverages = await Promise.all(
+      roomIds.map(async (roomId) => {
+        const avgUsage = await getPreviousMonthRoomAverageEnergy(roomId, device_type);
+        // Log each room's average for debugging.
+        console.log(`Room ${roomId} average:`, avgUsage);
+        return avgUsage;
+      })
+    );
+
+    // Step 3: Filter out null values (rooms with no valid data).
+    const validAverages = roomAverages.filter(avg => avg !== null);
+    if (validAverages.length === 0) {
+      console.warn("No valid average energy usage found for any room.");
+      return null;
+    }
+
+    // Step 4: Sum up all valid averages and divide by the number of valid rooms.
+    const total = validAverages.reduce((sum, value) => sum + parseFloat(value), 0);
+    const overallAverage = total / validAverages.length;
+    console.log("Overall average energy usage for house:", overallAverage);
+
+    return parseFloat(overallAverage.toFixed(3));
+  } catch (error) {
+    console.error("Error computing previous month house average energy:", error.message);
+    throw error;
+  }
+}
+
+async function getPreviousMonthRoomAverageEnergy(room_id, device_type) {
   try {
     const result = await turso.execute({
       sql: `
-        SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
-        FROM device_states ds
-        JOIN devices d ON ds.device_id = d.device_id
-        WHERE d.house_id = ? AND d.device_type = ?
-          AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
-          AND ds.updated_at < DATE('now', 'start of month')
+        SELECT ROUND(AVG(last_value), 3) as avg_value
+        FROM (
+          SELECT ds.state_value AS last_value,
+                 MAX(ds.updated_at) AS latest_at,
+                 strftime('%Y-%m-%d', ds.updated_at) AS day
+          FROM device_states ds
+          JOIN devices d ON ds.device_id = d.device_id
+          WHERE d.room_id = ? AND d.device_type = ?
+            AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+            AND ds.updated_at < DATE('now', 'start of month')
+          GROUP BY day
+        )
       `,
-      args: [house_id, device_type],
+      args: [room_id, device_type],
     });
     if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
       return result.rows[0].avg_value;
     }
     return null;
-  }
-  catch (error) {
-    console.error("Error getting previous month house average:", error.message);
+  } catch (error) {
+    console.error("Error getting previous month room average:", error.message);
     throw error;
   }
 }
-
 //get previous month room average energy usage
 async function getPreviousMonthRoomAverage(room_id, device_type) {
   try {
@@ -1641,21 +1690,157 @@ async function getAverageLast12Months(house_id, device_type) {
   try {
     const result = await turso.execute({
       sql: `
-        SELECT strftime('%Y-%m', ds.updated_at) as month,
-               AVG(CAST(ds.state_value AS REAL)) as avg_value
-        FROM device_states ds
-        JOIN devices d ON ds.device_id = d.device_id
-        WHERE d.house_id = ? AND d.device_type = ?
-          AND ds.updated_at >= DATE('now', 'start of month', '-12 months')
-        GROUP BY strftime('%Y-%m', ds.updated_at)
-        ORDER BY strftime('%Y-%m', ds.updated_at) ASC
+        WITH DailyLastValues AS (
+          SELECT 
+            strftime('%Y-%m', ds.updated_at) AS month,
+            strftime('%Y-%m-%d', ds.updated_at) AS day,
+            d.room_id,
+            ds.state_value AS last_value,
+            MAX(ds.updated_at) AS latest_at
+          FROM device_states ds
+          JOIN devices d ON ds.device_id = d.device_id
+          WHERE d.house_id = ? 
+            AND d.device_type = ?
+            AND ds.updated_at >= DATE('now', 'start of month', '-12 months')
+            AND ds.updated_at < DATE('now', 'start of month', '+1 month')
+          GROUP BY month, day, d.room_id
+        )
+        SELECT 
+          month,
+          ROUND(SUM(last_value), 3) as total_value
+        FROM DailyLastValues
+        GROUP BY month
+        ORDER BY month ASC
       `,
       args: [house_id, device_type],
     });
     return result.rows;
   }
   catch (error) {
-    console.error("Error getting average energy usage for the past 12 months:", error.message);
+    console.error("Error getting total energy usage for the past 12 months:", error.message);
+    throw error;
+  }
+}
+
+//function to get current month energy usage for the house
+async function getCurrentMonthHouseAverage(house_id, device_type) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT AVG(CAST(ds.state_value AS REAL)) as avg_value
+        FROM device_states ds
+        JOIN devices d ON ds.device_id = d.device_id
+        WHERE d.house_id = ? AND d.device_type = ?
+          AND ds.updated_at >= DATE('now', 'start of month')
+      `,
+      args: [house_id, device_type],
+    });
+    if (result.rows.length > 0 && result.rows[0].avg_value !== null) {
+      return result.rows[0].avg_value;
+    }
+    return null;
+  }
+  catch (error) {
+    console.error("Error getting current month house average:", error.message);
+    throw error;
+  }
+}
+
+async function getCurrentRoomTotalEnergy(room_id, device_type) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT ROUND(SUM(last_value), 3) as total_energy
+        FROM (
+          SELECT ds.state_value AS last_value,
+                 MAX(ds.updated_at) AS latest_at,
+                 strftime('%Y-%m-%d', ds.updated_at) AS day
+          FROM device_states ds
+          JOIN devices d ON ds.device_id = d.device_id
+          WHERE d.room_id = ? 
+            AND d.device_type = ?
+            AND ds.updated_at >= DATE('now', 'start of month')
+            AND ds.updated_at < DATE('now', 'start of month', '+1 month')
+          GROUP BY day
+        )
+      `,
+      args: [room_id, device_type],
+    });
+    if (result.rows.length > 0 && result.rows[0].total_energy !== null) {
+      return result.rows[0].total_energy;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting current room total energy:", error.message);
+    throw error;
+  }
+}
+
+async function getPreviousMonthRoomTotalEnergy(room_id, device_type) {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT ROUND(SUM(last_value), 3) as total_energy
+        FROM (
+          SELECT ds.state_value AS last_value,
+                 MAX(ds.updated_at) AS latest_at,
+                 strftime('%Y-%m-%d', ds.updated_at) AS day
+          FROM device_states ds
+          JOIN devices d ON ds.device_id = d.device_id
+          WHERE d.room_id = ? AND d.device_type = ?
+            AND ds.updated_at >= DATE('now', 'start of month', '-1 month')
+            AND ds.updated_at < DATE('now', 'start of month')
+          GROUP BY day
+        )
+      `,
+      args: [room_id, device_type],
+    });
+    if (result.rows.length > 0 && result.rows[0].total_energy !== null) {
+      return result.rows[0].total_energy;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting previous month room total energy:", error.message);
+    throw error;
+  }
+}
+
+async function getPreviousMonthHouseAverageEnergy(house_id, device_type) {
+  try {
+    // Step 1: Get all room IDs for the house.
+    const roomResult = await turso.execute({
+      sql: "SELECT room_id FROM rooms WHERE house_id = ?",
+      args: [house_id],
+    });
+    const roomIds = roomResult.rows.map(row => row.room_id);
+    if (!roomIds || roomIds.length === 0) {
+      console.warn("No rooms found for house:", house_id);
+      return null;
+    }
+
+    // Step 2: For each room, get the total energy usage for the previous month.
+    const roomTotals = await Promise.all(
+      roomIds.map(async (roomId) => {
+        const totalEnergy = await getPreviousMonthRoomTotalEnergy(roomId, device_type);
+        console.log(`Room ${roomId} total energy:`, totalEnergy);
+        return totalEnergy;
+      })
+    );
+
+    // Step 3: Filter out null totals (rooms with no data).
+    const validTotals = roomTotals.filter(total => total !== null);
+    if (validTotals.length === 0) {
+      console.warn("No valid total energy usage found for any room.");
+      return null;
+    }
+
+    // Step 4: Compute the overall average energy usage for the house by averaging the room totals.
+    const sum = validTotals.reduce((acc, cur) => acc + parseFloat(cur), 0);
+    const overallAverage = sum 
+    console.log("Overall average energy usage for house:", overallAverage);
+    return parseFloat(overallAverage.toFixed(3));
+  } catch (error) {
+    console.error("Error computing previous month house average energy:", error.message);
     throw error;
   }
 }
@@ -1740,5 +1925,10 @@ module.exports = {
   getCurrentMonthRoomAverage,
   getAverageLast12Months,
   parseSmartMeterData,
-  storeSmartMeterData
+  storeSmartMeterData,
+  getCurrentMonthHouseAverage,
+  getPreviousMonthRoomAverageEnergy,
+  getCurrentRoomTotalEnergy,
+  getPreviousMonthRoomTotalEnergy,
+  getPreviousMonthHouseAverageEnergy
 };

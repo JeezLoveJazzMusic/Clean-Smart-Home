@@ -313,4 +313,8 @@ async function getPrediction(temperature, occupancy, energyUsage) {
 
 // getPrediction(34,1,500);
 
-module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData,analyzeRoomEnergy };
+
+module.exports = { addUser, removeUser, sensorMap, analyzeEnergyUsage, getSmartMeterData,analyzeRoomEnergy, getPrediction };
+
+
+

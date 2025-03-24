@@ -24,6 +24,7 @@ const Dashboard = () => {
 
   const [currentHouseId, setCurrentHouseId] = useState(null);
   const [currentRoomID, setCurrentRoomID] = useState(null);
+  const [dwellersList, setDwellersList] = useState([]);
 
 
   useEffect(() => {
@@ -90,6 +91,7 @@ const Dashboard = () => {
     try {
       const response = await axios.get(`http://localhost:8080/dashboard/house/${houseId}`);
       const { roomList, dwellersList, devicesList } = response.data;
+      setDwellersList(dwellersList);
       console.log("rooms:", roomList);
       console.log("dwellers:", dwellersList);
       console.log("devices:", devicesList);
@@ -182,7 +184,7 @@ const Dashboard = () => {
        {/* Graph Section */}
        <div className="graph-section">
        {currentHouseId ? (
-          <Graphs currentHouse={currentHouseId} />
+          <Graphs currentHouse={currentHouseId} dwellersList={dwellersList} />
         ) : (
           <div></div>
         )}
