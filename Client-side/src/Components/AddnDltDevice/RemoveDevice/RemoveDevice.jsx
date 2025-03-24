@@ -73,7 +73,7 @@ const RemoveDevice = ({ onClose, devices, onRemoveDevice }) => {
             Back
         </button>
       </div>
-
+</div>
   );
 };
 
