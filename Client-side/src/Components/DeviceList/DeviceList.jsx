@@ -80,17 +80,29 @@ const DeviceList = ({ rooms, initialRoom , onRoomChange, currentHouse, TheUserID
   }, [TheUserID, currentHouse]); // Remove dwellersList dependency
 
   useEffect(() => {
-    // If rooms is not empty (has actual rooms), update selected room
+    // If rooms is not empty (has actual rooms)
     if (Object.keys(rooms).length > 0 && rooms["Empty House"] === undefined) {
-      const firstRoom = Object.keys(rooms)[0];
-      setSelectedRoom(firstRoom);
-      setDeviceStates(processDevices(rooms[firstRoom] || []));
-      onRoomChange(firstRoom);
-      
-      // Update room ID if needed
-      const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === firstRoom);
-      if (roomInfo) {
-        setRoomID(roomInfo.room_id);
+      // If there's no selected room yet, or the selected room doesn't exist anymore
+      if (!selectedRoom || !rooms[selectedRoom]) {
+        const firstRoom = Object.keys(rooms)[0];
+        setSelectedRoom(firstRoom);
+        setDeviceStates(processDevices(rooms[firstRoom] || []));
+        onRoomChange(firstRoom);
+        
+        // Update room ID if needed
+        const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === firstRoom);
+        if (roomInfo) {
+          setRoomID(roomInfo.room_id);
+        }
+      } else {
+        // If the selected room still exists, just update its devices
+        setDeviceStates(processDevices(rooms[selectedRoom] || []));
+        
+        // Make sure room ID is set correctly
+        const roomInfo = dashboardData?.roomList?.find((r) => r.room_name === selectedRoom);
+        if (roomInfo) {
+          setRoomID(roomInfo.room_id);
+        }
       }
     }
   }, [rooms, dashboardData]);
