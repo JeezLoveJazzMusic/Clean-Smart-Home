@@ -118,9 +118,14 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.9;
   word-wrap: break-word; /* Break long words */
   overflow-wrap: break-word;
+  /* border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000; */
+   border-radius: 10px;
 }
 
 /* Create a semi-transparent overlay using a pseudo-element */
@@ -148,8 +153,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  word-wrap: break-word; /* Break long words */
+  word-wrap: break-word;     /* Break long words */
   overflow-wrap: break-word;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+   border-radius: 10px;
 }
 
 .AddnDltHome-home-name {
