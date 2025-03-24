@@ -101,15 +101,21 @@ const Dashboard = () => {
       setDashboardData({ roomList, dwellersList, devicesList });
 
       let roomData = {};
-      for (let i = 0; i < roomList.length; i++) {
-        try {
-          const response1 = await axios.get(
-            `http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${roomList[i].room_id}`
-          );
-          const { devices } = response1.data;
-          roomData[roomList[i].room_name] = devices;
-        } catch (error) {
-          console.error("Error fetching device data:", error);
+      if (roomList.length === 0) {
+        // If there are no rooms, create an Empty House placeholder
+        roomData["Empty House"] = [];
+      } else {
+        // Process normal rooms as before
+        for (let i = 0; i < roomList.length; i++) {
+          try {
+            const response1 = await axios.get(
+              `http://localhost:8080/getRoomDevices/houses/${houseId}/rooms/${roomList[i].room_id}`
+            );
+            const { devices } = response1.data;
+            roomData[roomList[i].room_name] = devices;
+          } catch (error) {
+            console.error("Error fetching device data:", error);
+          }
         }
       }
       setSendRoomData(roomData);
