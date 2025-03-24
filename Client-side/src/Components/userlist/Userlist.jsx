@@ -230,23 +230,25 @@ function UserList() {
         </div>
 
         <div className="button-container">
-          {currentUserType === "owner" && (
-            <>
-              <button35
-                className="AddUserbtn-user-btn"
-                onClick={() => setShowModal(true)}
-              >
-                Add Users <FaPlusCircle />
-              </button35>
+  {currentUserType === "owner" && (
+    <>
+      {showMenu && (
+        <button
+          className="AddUserbtn-user-btn"
+          onClick={() => setShowModal(true)}
+        >
+          Add Users <FaPlusCircle />
+        </button>
+      )}
+      {showMenu && (
+        <button className="delete-user-btn" onClick={toggleDeleteMode}>
+          {deleteMode ? "Cancel" : "Delete Users"}
+        </button>
+      )}
+    </>
+  )}
+</div>
 
-              {showMenu && (
-                <button36 className="delete-user-btn" onClick={toggleDeleteMode}>
-                  {deleteMode ? "Cancel" : "Delete Users"}
-                </button36>
-              )}
-            </>
-          )}
-        </div>
 
         <div className="user-grid">
           {users.length > 0 ? (
