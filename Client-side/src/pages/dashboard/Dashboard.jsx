@@ -11,6 +11,7 @@ import UserProfile from "../../Components/UserProfileMenu/UserProfileMenu"; // I
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import DDTlogo from "../../assets/DDT-new-logo1.png";
 import { useLocation } from "react-router-dom";
+import Loading from "../../Components/Loading/Loading";
 
 const Dashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -169,9 +170,10 @@ const Dashboard = () => {
 
       {/* Device List */}
       <div className="device-dashboard">
+        {sendRoomData && Object.keys(sendRoomData).length > 0 ? (
         <DeviceList
-          rooms={Object.keys(sendRoomData).length > 0 ? sendRoomData : { "Empty House": [] }}
-          initialRoom={Object.keys(sendRoomData).length > 0 ? Object.keys(sendRoomData)[0] : "Empty House"}
+          rooms={sendRoomData}
+          initialRoom={Object.keys(sendRoomData)[0]}
           onRoomChange={setCurrentRoom}
           currentHouse={currentHouseId}
           TheUserID={userID}
@@ -179,23 +181,33 @@ const Dashboard = () => {
           setRoomID={handleRoomSelect}
           fetchDashboardData={fetchDashboardData}
         />
+      ) : (
+        <Loading size={80} color="#3498db" />
+      )}
       </div>
 
        {/* Graph Section */}
-       <div className="graph-section">
-       {currentHouseId ? (
-          <Graphs currentHouse={currentHouseId} dwellersList={dwellersList} />
-        ) : (
-          <div></div>
-        )}
-      </div>
+        <div className="graph-section">
+          {currentHouseId && dwellersList && dwellersList.length > 0 ? (
+            <Graphs currentHouse={currentHouseId} dwellersList={dwellersList} />
+          ) : (
+            <Loading size={80} color="#3498db" />
+          )}
+        </div>
 
-      {/* User Dashboard */}
-      <div className="user-dashboard">
-        {dashboardData && dashboardData.dwellersList && (
-        <Users dwellersList={dashboardData.dwellersList} currentHouse = {currentHouseId} UserID = {userID} currentRoom = {currentRoomID}/>
-        )}
-      </div>
+        {/* User Dashboard */}
+        <div className="user-dashboard">
+          {dashboardData && dashboardData.dwellersList ? (
+            <Users 
+              dwellersList={dashboardData.dwellersList} 
+              currentHouse={currentHouseId} 
+              UserID={userID} 
+              currentRoom={currentRoomID}
+            />
+          ) : (
+            <Loading size={80} color="#3498db" />
+          )}
+        </div>
 
       {/* Pop-up Overlay */}
       {isProfileOpen && (
