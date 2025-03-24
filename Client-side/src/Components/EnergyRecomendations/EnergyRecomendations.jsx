@@ -1,4 +1,3 @@
-/* Made by Joe */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -34,28 +33,43 @@ const EnergyRecomendations = () => {
   const navigate = useNavigate(); // Navigate function
   const { state } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState({
+    prediction: "",
+    expected_usage: 0,
+    carbon_emissions: 0,
+    cost: 0,
+    savings: {
+      energy: 0,
+      cost: 0,
+      carbon: 0
+    },
+    suggestions: []
+  });
   const averageConsumption = state?.averageConsumption;
-  const houseID = state?.currentHouse
+  const houseID = state?.currentHouse;
   const dwellersList = state?.dwellersList;
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecommendations = async () => {
     try {
+      setIsLoading(true);
+      console.log("houseID:", houseID);
+      console.log("dwellersList:", dwellersList);
       const response = await axios.get(
         `http://localhost:8080/getHouseRecommendation/house/${houseID}/occupants/${dwellersList.length}`
       );
+      console.log("API response:", response.data);
       setRecommendations(response.data.recommendation);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching energy recommendations:", error);
+      setIsLoading(false);
     }
   };
-
-    
 
   useEffect(() => {
     fetchRecommendations();
     console.log("recc dwellersList:", dwellersList);
-    console.log("house recommendations:", recommendations);
   }, []);
 
   /* Data for Line Chart */
@@ -134,32 +148,50 @@ const EnergyRecomendations = () => {
       <div className="info-section1">
         <div className="tips1">
           <h9>Tips:</h9>
-          <p>(Energy Usage Tips)</p>
-          <ul>
-            <li>Reduce your Energy Usage!</li>
-            <li>Next month Energy Goal: 300 KWH (15% less)</li>
-            <li>Money to be Saved: RM10</li>
-            <li>Carbon Emission to be reduced: 15%</li>
-          </ul>
+          {isLoading ? (
+            <p>Loading recommendations...</p>
+          ) : (
+            <>
+              {recommendations.suggestions && recommendations.suggestions.length > 0 ? (
+                recommendations.suggestions.map((suggestion, index) => (
+                  <p key={index}>{suggestion}</p>
+                ))
+              ) : (
+                <p>(Energy Usage Tips)</p>
+              )}
+            </>
+          )}
         </div>
 
         <div className="energy-alert1">
           <h3>Alert:</h3>
-          <p>Previous Month Energy Usage: 345 KWH</p>
-          <p>Carbon Emissions: 172.5KG</p>
-          <p>Estimated Bill: RM 75</p>
+          {isLoading ? (
+            <p>Loading energy data...</p>
+          ) : (
+            <>
+              <p>Expected Energy Usage: {recommendations.expected_usage?.toFixed(2)} KWH</p>
+              <p>Carbon Emissions: {recommendations.carbon_emissions?.toFixed(2)} KG</p>
+              <p>Estimated Bill: RM {recommendations.cost?.toFixed(2)}</p>
+              <p>Prediction: {recommendations.prediction}</p>
+            </>
+          )}
         </div>
 
         <div className="recommendations1">
           <h3>Recommendations:</h3>
-          <p>
-            Dear User, your current energy usage level is above 850W. We
-            recommend turning off lights/appliances and using fans over AC.
-          </p>
+          {isLoading ? (
+            <p>Loading savings information...</p>
+          ) : (
+            <p>
+              Dear User, your energy prediction is to {recommendations.prediction.toLowerCase()}. 
+              By following our suggestions, you could save {recommendations.savings?.energy?.toFixed(2)} kWh of energy, 
+              RM {recommendations.savings?.cost?.toFixed(2)} on your bill, and reduce carbon emissions by {recommendations.savings?.carbon?.toFixed(2)} KG.
+            </p>
+          )}
         </div>
-      <button onClick={() => navigate(-1)} className="back-ButtonInEnergyRecommendations">
-        ⬅ Back
-      </button>
+        <button onClick={() => navigate(-1)} className="back-ButtonInEnergyRecommendations">
+          ⬅ Back
+        </button>
       </div>
 
       {/* Modal */}

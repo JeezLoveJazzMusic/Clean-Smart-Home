@@ -43,7 +43,7 @@ function Graphs({ currentHouse, dwellersList }) {
         // Transform the array of objects to separate arrays for labels and values
         const fetchedData = response.data.averageEnergyConsumption;
         const months = fetchedData.map(item => item.month);
-        const avgValues = fetchedData.map(item => item.avg_value);
+        const avgValues = fetchedData.map(item => item.total_value);
         console.log("Months:", months);
         console.log("Average Values:", avgValues);
         // Update state with the average values (and you can also store months for dynamic labels)
