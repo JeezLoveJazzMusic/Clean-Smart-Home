@@ -135,7 +135,7 @@ function SensorData({houseId, userID, roomName, roomList}) {
             <img src={energyIcon} alt="Energy" className="icon" />
             <div className="text-container">
               <p className="label">Energy</p>
-              <p className="value">{curEnergy}%</p>
+              <p className="value">{curEnergy}kWh</p>
             </div>
           </button>
 

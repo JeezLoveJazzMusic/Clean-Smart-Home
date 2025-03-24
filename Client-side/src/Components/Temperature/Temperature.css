@@ -78,8 +78,10 @@
   padding: 20px;
   background: #f9f9f9;
   border-radius: 30px;
-
-
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 /*made by Joe */
@@ -120,12 +122,13 @@
 }
 
 /*made by Joe */
-.tips, .energy-alert, .recommendations {
+.tips, .energy-alert {
   background-color: #e5e5e5;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  height: auto;
 }
 
 /*made by Joe */
@@ -183,7 +186,7 @@
       "info";
   }
 
-=
+
   .card1-header h2 {
     font-size: 1.5rem;
   }
@@ -224,7 +227,7 @@
     gap: 15px;
   }
 
-  .tips, .energy-alert, .recommendations {
+  .tips, .energy-alert {
     padding: 15px;
   }
 

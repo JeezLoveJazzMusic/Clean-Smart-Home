@@ -128,10 +128,10 @@ const EnergyUsage = () => {
         <h3>Energy Usage Comparison</h3>
         <div className="comparison-data">
           <p>
-            Previous Month: High: {prevMonth[0] || '-'}W | Avg: {prevMonth[1] || '-'}W | Low: {prevMonth[2] || '-'}W
+            Previous Month: High: {prevMonth[0] || '-'} kWh | Avg: {prevMonth[1] || '-'} kWh | Low: {prevMonth[2] || '-'} kWh
           </p>
           <p>
-            Current Month: High: {curMonth[0] || '-'}W | Avg: {curMonth[1] || '-'}W | Low: {curMonth[2] || '-'}W
+            Current Month: High: {curMonth[0] || '-'} kWh | Avg: {curMonth[1] || '-'} kWh | Low: {curMonth[2] || '-'} kWh
           </p>
         </div>
       </div>

@@ -91,12 +91,14 @@
 }
 
 /* Tips, Alerts, and Recommendations */
-.tips, .energy-alert, .recommendations {
+.tips, .energy-alert {
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  height: auto;
+
 }
 
 .tips ul {
@@ -115,9 +117,6 @@
   border-left: 6px solid #ff9800;
 }
 
-.recommendations {
-  border-left: 6px solid #2196f3;
-}
 
 .tips {
   border-left: 6px solid #e54c4c;
@@ -196,7 +195,7 @@
     gap: 15px;
   }
 
-  .tips, .energy-alert, .recommendations {
+  .tips, .energy-alert {
     padding: 10px;
     height: auto;
     margin-bottom: 10px;

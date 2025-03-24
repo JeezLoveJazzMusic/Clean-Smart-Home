@@ -105,12 +105,14 @@
 }
 
 /*Made by Joe */
-.tips, .energy-alert, .recommendations {
+.tips, .energy-alert {
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  height: auto;
+
 }
 
 /*Made by Joe */
@@ -130,12 +132,6 @@
 .energy-alert {
   border-left: 8px solid #ff9800;
   border-right: 8px solid #ff9800; 
-}
-
-/*Made by Joe */
-.recommendations {
-  border-left: 8px solid #2196f3;
-  border-right: 8px solid #2196f3;
 }
 
 /*Made by Joe */
@@ -213,7 +209,7 @@
     gap: 15px;
   }
 
-  .tips, .energy-alert, .recommendations {
+  .tips, .energy-alert {
     padding: 15px;
     height: auto;
     text-align: center;
