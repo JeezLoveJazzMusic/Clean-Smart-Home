@@ -21,6 +21,8 @@ After initialising the client-side server, it will be hosted on port:5173 on loc
 - run {npm install} 
 - run {node ./server.js}
 After initialising the server-side server, it will be hosted on port:8080 on localhost
+### Additional notes:
+- if initialising server-side results in an error indicating that it's blocked or any similar issues, it could be due to our Turso database service exceeding the usage limit of our free plan.
 
 ## Smart Recommendation System (Machine Learning) initialisation
 - navigate to root directory
