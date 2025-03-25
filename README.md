@@ -9,4 +9,24 @@ A Smart Home web app that uses HomeIO to simulate a smart home and interactable 
 - May add additional rooms and devices after creating a home
 ### ![image](https://github.com/user-attachments/assets/6b63edd3-aeeb-472e-a684-4a9c0c735330)
 
-# 
+## How to initiate the servers and run the application
+# Client-side initialisation
+- navigate to client-side directory via: cd client-side
+- run {npm install} & {npm install react-web-share --legacy-peer-deps} in the terminal
+- run {npm run dev}
+After initialising the client-side server, it will be hosted on port:5173 on localhost. Proceed to localhost:5173 to view the webpage
+
+# Server-side initialisation
+- navigate to server-side directory via: cd server-side
+- run {npm install} 
+- run {node ./server.js}
+After initialising the server-side server, it will be hosted on port:8080 on localhost
+
+# Smart Recommendation System (Machine Learning) initialisation
+- navigate to root directory
+- Install the following libraries in the terminal followed by "pip install"
+    1. Sci-kit learn
+    2. Flask
+    3. Pandas
+    4. Joblib   
+- After installing the above, run {python app.py}
