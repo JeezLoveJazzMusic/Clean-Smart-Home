@@ -10,7 +10,7 @@ import Graphs from "../../Components/Graphs/Graphs";
 import UserProfile from "../../Components/UserProfileMenu/UserProfileMenu"; // Import the pop-up
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import DDTlogo from "../../assets/DDT-new-logo1.png";
-import { useLocation } from "react-router-dom";
+import {useNavigate, useLocation } from "react-router-dom";
 import Loading from "../../Components/Loading/Loading";
 
 const Dashboard = () => {
@@ -23,11 +23,13 @@ const Dashboard = () => {
   const [currentRoom, setCurrentRoom] = useState("");
   const location = useLocation();
   const { userID, houseList } = location.state || {};
+  const navigate = useNavigate();
 
   const [currentHouseId, setCurrentHouseId] = useState(null);
   const [currentRoomID, setCurrentRoomID] = useState(null);
   const [dwellersList, setDwellersList] = useState([]);
 
+  const [completeHomeFetch, setCompleteHomeFetch] = useState(false);
 
   useEffect(() => {
     const fetchHouseList = async () => {
@@ -89,6 +91,7 @@ const Dashboard = () => {
 
   const fetchDashboardData = async (houseId) => {
     setSendRoomData(false);
+
     if (!houseId) return;
     console.log("Fetching data for houseID:", houseId);
     try {
@@ -145,91 +148,117 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    setCompleteHomeFetch(false);
     if (currentHouseId) {
       fetchDashboardData(currentHouseId);
     }
+    setCompleteHomeFetch(true);
   }, [currentHouseId]);
 
   return (
     <div className="dashboard-container">
-      {/* Header */}
-      <header className="dashboard-header">
-        <div className="logo1">
-          <img 
-          src={DDTlogo} 
-          alt="Durian Dev Technologies" 
-          className="logo-image" 
-          />
+      {!currentHouseId && (HouseDataTest.length === 0) && completeHomeFetch ? (
+        <div className="no-house-message">
+          <p>Your current account has no house. Please add a house.</p>
+          <button
+            onClick={() => navigate("/AddnDltHome", { state: { allHouses: HouseDataTest, currentUserID: userID } })}
+            className="go-home-config-button"
+          >
+            Add a home
+          </button>
         </div>
-        {/* Profile Icon with Click Event */}
-        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>
-          👤
-        </div>
-      </header>
-
-      {/* Sensor Data */}
-      <div className="sensor-data">
-        <SensorData 
-          houseId={currentHouseId} 
-          userID={userID} 
-          roomName={currentRoom} 
-          roomList={sendRoomData}
-        />
-      </div>
-
-      {/* Device List */}
-      <div className="device-dashboard">
-        {sendRoomDataStatus ? (
-        <DeviceList
-          rooms={sendRoomData}
-          initialRoom={Object.keys(sendRoomData)[0]}
-          onRoomChange={setCurrentRoom}
-          currentHouse={currentHouseId}
-          TheUserID={userID}
-          dashboardData={dashboardData}
-          setRoomID={handleRoomSelect}
-          fetchDashboardData={fetchDashboardData}
-        />
       ) : (
-        <Loading size={80} color="#3498db" />
-      )}
-      </div>
+        <>
+          {/* Header */}
+          <header className="dashboard-header">
+            <div className="logo1">
+              <img
+                src={DDTlogo}
+                alt="Durian Dev Technologies"
+                className="logo-image"
+              />
+            </div>
+            {/* Profile Icon with Click Event */}
+            <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>
+              👤
+            </div>
+          </header>
 
-       {/* Graph Section */}
-        <div className="graph-section">
-          {currentHouseId && dwellersList && dwellersList.length > 0 ? (
-            <Graphs currentHouse={currentHouseId} dwellersList={dwellersList} />
-          ) : (
-            <Loading size={80} color="#3498db" />
-          )}
-        </div>
-
-        {/* User Dashboard */}
-        <div className="user-dashboard">
-          {dashboardData && dashboardData.dwellersList ? (
-            <Users 
-              dwellersList={dashboardData.dwellersList} 
-              currentHouse={currentHouseId} 
-              UserID={userID} 
-              currentRoom={currentRoomID}
+          {/* Sensor Data */}
+          <div className="sensor-data">
+            <SensorData
+              houseId={currentHouseId}
+              userID={userID}
+              roomName={currentRoom}
+              roomList={sendRoomData}
             />
-          ) : (
-            <Loading size={80} color="#3498db" />
+          </div>
+
+          {/* Device List */}
+          <div className="device-dashboard">
+            {sendRoomDataStatus ? (
+              <DeviceList
+                rooms={sendRoomData}
+                initialRoom={Object.keys(sendRoomData)[0]}
+                onRoomChange={setCurrentRoom}
+                currentHouse={currentHouseId}
+                TheUserID={userID}
+                dashboardData={dashboardData}
+                setRoomID={(roomID) => {
+                  console.log("Room ID selected:", roomID);
+                  setCurrentRoomID(roomID);
+                  localStorage.setItem('currentRoomID', roomID.toString());
+                }}
+                fetchDashboardData={() => {}}
+              />
+            ) : (
+              <Loading size={80} color="#3498db" />
+            )}
+          </div>
+
+          {/* Graph Section */}
+          <div className="graph-section">
+            {currentHouseId ? (
+              <Graphs currentHouse={currentHouseId} dwellersList={dwellersList} />
+            ) : (
+              <Loading size={80} color="#3498db" />
+            )}
+          </div>
+
+          {/* User Dashboard */}
+          <div className="user-dashboard">
+            {dashboardData && dashboardData.dwellersList ? (
+              <Users
+                dwellersList={dashboardData.dwellersList}
+                currentHouse={currentHouseId}
+                UserID={userID}
+                currentRoom={currentRoomID}
+              />
+            ) : (
+              <Loading size={80} color="#3498db" />
+            )}
+          </div>
+
+          {/* Pop-up Overlay for User Profile */}
+          {isProfileOpen && (
+            <div className="popup-overlay">
+              <UserProfile
+                onClose={() => setIsProfileOpen(false)}
+                thisUserID={userID}
+                thisHouse={currentHouseId}
+                userData={userDetails}
+              />
+            </div>
           )}
-        </div>
 
-      {/* Pop-up Overlay */}
-      {isProfileOpen && (
-        <div className="popup-overlay">
-          <UserProfile onClose={() => setIsProfileOpen(false)} thisUserID={userID} thisHouse={currentHouseId} userData={userDetails}/>
-        </div>
+          {/* Sidebar */}
+          <Sidebar
+            allHouses={HouseDataTest}
+            currentUserID={userID}
+            setCurrentHouseId={setCurrentHouseId}
+          />
+        </>
       )}
-
-      
-
-      <div>
-        <Sidebar allHouses={HouseDataTest} currentUserID={userID} setCurrentHouseId={handleHouseSelect} />
-      </div>
     </div>
   );
 };
