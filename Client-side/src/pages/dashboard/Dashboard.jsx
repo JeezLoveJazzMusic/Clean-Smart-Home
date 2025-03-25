@@ -259,9 +259,13 @@ const Dashboard = () => {
 
           {/* Sidebar */}
           <Sidebar
-            allHouses={HouseDataTest}
-            currentUserID={userID}
-            setCurrentHouseId={setCurrentHouseId}
+             allHouses={HouseDataTest}
+             currentUserID={userID}
+             setCurrentHouseId={(houseId) => {
+               // Save to localStorage when changing houses through sidebar
+               localStorage.setItem('currentHouseId', houseId.toString());
+               setCurrentHouseId(houseId);
+             }}
           />
         </>
       )}
