@@ -46,10 +46,11 @@ After initialising the server-side server, it will be hosted on port:8080 on loc
 
 ## Device connecivity in homeIO
  When adding a device to connect to homeIO, the process is as follows:
-    1. Navigate to the room as represented in homeIO (do add the room with the exact room name as in homeIO if not exist)
-    2. Click on add device in the selected room
-    3. Enter device details as follows:
+1. Navigate to the room as represented in homeIO (do add the room with the exact     room name as in homeIO if not exist)
+2. Click on add device in the selected room
+3. Enter device details as follows:
         Device Name: Any of your choice
         Device Type: Enter according to the list mentioned above
         Device Number: Enter according to device details shown in homeIO(if applicable)
-    4. HomeIO connectivity is completed!
+ 4. HomeIO connectivity is completed!
+   
