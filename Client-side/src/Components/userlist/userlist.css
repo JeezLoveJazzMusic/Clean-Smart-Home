@@ -107,7 +107,7 @@ body {
 .delete-user-btn {
   position: absolute;
   right: 37px;
-  top: 90px;
+  top: 100px;
   width: auto;
   display: none;
   background: rgb(255, 49, 49);
@@ -304,7 +304,7 @@ body {
   .menu-btn,
   .delete-user-btn {
     padding: 8px 20px;
-    font-size: 12px;
+    font-size: 16px;
     top: 88px;
   }
 
