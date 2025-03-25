@@ -25,8 +25,14 @@ const Dashboard = () => {
   const { userID, houseList } = location.state || {};
   const navigate = useNavigate();
 
-  const [currentHouseId, setCurrentHouseId] = useState(null);
-  const [currentRoomID, setCurrentRoomID] = useState(null);
+  const [currentHouseId, setCurrentHouseId] = useState(() => {
+    const savedHouseId = localStorage.getItem('currentHouseId');
+    return savedHouseId ? parseInt(savedHouseId) : null;
+  });
+  const [currentRoomID, setCurrentRoomID] = useState(() => {
+    const savedRoomId = localStorage.getItem('currentRoomID');
+    return savedRoomId ? parseInt(savedRoomId) : null;
+  });
   const [dwellersList, setDwellersList] = useState([]);
 
   const [completeHomeFetch, setCompleteHomeFetch] = useState(false);
@@ -90,7 +96,7 @@ const Dashboard = () => {
   };
 
   const fetchDashboardData = async (houseId) => {
-    setSendRoomData(false);
+    setSendRoomDataStatus(false);
 
     if (!houseId) return;
     console.log("Fetching data for houseID:", houseId);
@@ -209,7 +215,7 @@ const Dashboard = () => {
                   setCurrentRoomID(roomID);
                   localStorage.setItem('currentRoomID', roomID.toString());
                 }}
-                fetchDashboardData={() => {}}
+                fetchDashboardData={() => fetchDashboardData(currentHouseId)}
               />
             ) : (
               <Loading size={80} color="#3498db" />
